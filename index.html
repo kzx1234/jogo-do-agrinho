@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazenda do Agrinho</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #244714;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        /* Interface Principal (HUD) */
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 3px solid #ffd700;
+            z-index: 10;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+        }
+        #hud h2 { margin: 0 0 10px 0; color: #5cb85c; font-size: 22px; text-shadow: 2px 2px #000; text-align: center;}
+        #hud p { margin: 6px 0; font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 8px;}
+        #inventario-sementes {
+            font-size: 13px; 
+            margin-top: 10px; 
+            color: #ffeb3b; 
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        /* Cenário Gráfico da Fazenda */
+        #cenario {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #629632;
+            /* Gramado texturizado */
+            background-image: 
+                radial-gradient(#56872a 15%, transparent 16%),
+                radial-gradient(#56872a 15%, transparent 16%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            border: 20px solid #5a3d28; /* Cerca de madeira ao redor da fazenda */
+        }
+
+        /* Personagens */
+        .character {
+            position: absolute;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+            transition: transform 0.1s;
+        }
+        #player {
+            background: #2196F3;
+            border: 3px solid #0d47a1;
+            z-index: 5;
+        }
+        #vendedor {
+            background: #ff9800;
+            border: 3px solid #e65100;
+            left: 75%;
+            top: 25%;
+        }
+        .balao-npc {
+            position: absolute;
+            top: -45px;
+            background: white;
+            color: #333;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+            border: 2px solid #e65100;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        /* Área Gráfica de Plantio (Canteiro de Terra) */
+        #zona-plantio {
+            position: absolute;
+            left: 15%;
+            top: 45%;
+            display: grid;
+            grid-template-columns: repeat(4, 90px);
+            grid-gap: 15px;
+            background: #4a3319;
+            padding: 20px;
+            border-radius: 15px;
+            border: 6px solid #362411;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 8px 16px rgba(0,0,0,0.3);
+        }
+        .slot {
+            width: 90px;
+            height: 90px;
+            background-color: #6e4726;
+            border: 3px dashed #362411;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .slot:hover { 
+            background-color: #825530;
+            transform: scale(1.05);
+        }
+        .slot .status { 
+            font-size: 11px; 
+            margin-top: 6px; 
+            background: rgba(0,0,0,0.7); 
+            padding: 2px 6px; 
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Janela da Loja (Modal) */
+        #loja-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 40px rgba(0,0,0,0.7);
+            z-index: 100;
+            width: 360px;
+            border: 5px solid #ff9800;
+        }
+        #loja-modal h3 { margin-top: 0; color: #e65100; text-align: center; font-size: 24px; margin-bottom: 20px; text-shadow: 1px 1px #eee;}
+        
+        .item-loja {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #f7f7f7;
+            border: 2px solid #eaeaea;
+            border-radius: 8px;
+        }
+        .item-loja span {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-comprar {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-comprar:hover { background: #45a049; transform: scale(1.05); }
+        .btn-comprar:active { transform: scale(0.95); }
+        
+        .btn-fechar {
+            width: 100%;
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .btn-fechar:hover { background: #d32f2f; }
+
+        /* Painel de Controles */
+        #controles {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            border-left: 5px solid #2196F3;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cenario">
+        <div id="hud">
+            <h2>Fazenda do Agrinho 🌾</h2>
+            <p>Moedas: <span id="moedas" style="color: #ffd700;">50</span> 🪙</p>
+            <p>Semente Selecionada: <span id="semente-selecionada" style="color: #5cb85c;">Nenhuma</span></p>
+            <div id="inventario-sementes">
+                Inventário: 🍎 Maçã(0) | 🍌 Banana(0) | 🍉 Melancia(0) | 🍊 Laranja(0)
+            </div>
+        </div>
+
+        <div id="controles">
+            <strong style="color: #2196F3; font-size: 16px;">Controles do Jogo:</strong><br>
+            • Movimentação: <b>W</b> (Frente), <b>S</b> (Trás), <b>A</b> (Esquerda), <b>D</b> (Direita)<br>
+            • Loja do Fazendeiro: Pressione <b style="color: #ff9800; font-size: 16px;">[ L ]</b> para abrir/fechar.<br>
+            • Lote de Terra: Clique para <b>Plantar / Regar / Colher</b>.
+        </div>
+
+        <div id="player" class="character">🤠</div>
+
+        <div id="vendedor" class="character">
+            👨‍🌾
+            <div class="balao-npc">Aperte L para comprar sementes!</div>
+        </div>
+
+        <div id="zona-plantio">
+            <div class="slot" onclick="interagirCanteiro(0)" id="slot-0">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(1)" id="slot-1">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(2)" id="slot-2">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(3)" id="slot-3">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(4)" id="slot-4">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(5)" id="slot-5">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(6)" id="slot-6">🟫<span class="status">Vazio</span></div>
+            <div class="slot" onclick="interagirCanteiro(7)" id="slot-7">🟫<span class="status">Vazio</span></div>
+        </div>
+    </div>
+
+    <div id="loja-modal">
+        <h3>Mercado do Agrinho 🛒</h3>
+        <div id="lista-itens"></div>
+        <button class="btn-fechar" onclick="fecharLoja()">Fechar Janela [L]</button>
+    </div>
+
+    <script>
+        // Configurações Iniciais do Jogador
+        let jogador = { x: 400, y: 150, velocidade: 5 }; 
+        let moedas = 50;
+        let sementeSelecionada = null;
+
+        let inventario = {
+            maca: 0,
+            banana: 0,
+            melancia: 0,
+            laranja: 0
+        };
+
+        // Valores e tempos das sementes
+        const frutasInfo = {
+            laranja: { nome: "Laranja", custo: 8, venda: 18, icone: "🍊", tempo: 3000 },
+            maca: { nome: "Maçã", custo: 12, venda: 28, icone: "🍎", tempo: 5000 },
+            banana: { nome: "Banana", custo: 18, venda: 42, icone: "🍌", tempo: 7000 },
+            melancia: { nome: "Melancia", custo: 25, venda: 65, icone: "🍉", tempo: 10000 }
+        };
+
+        // Estado dos 8 slots da terra
+        let canteiros = Array(8).fill(null).map(() => ({
+            status: "vazio", 
+            fruta: null,
+            timer: null
+        }));
+
+        // Mapeamento de Teclas Pressionadas simultaneamente
+        const teclas = {};
+
+        window.addEventListener('keydown', (e) => {
+            const tecla = e.key.toLowerCase();
+            teclas[tecla] = true;
+
+            // Tecla L abre ou fecha a loja de forma limpa
+            if (tecla === 'l') {
+                alternarLoja();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            teclas[e.key.toLowerCase()] = false;
+        });
+
+        // Loop principal do jogo rodando em alta performance (Movimentação WASD)
+        function loopJogo() {
+            if (teclas['w']) jogador.y -= jogador.velocidade; // W para Cima
+            if (teclas['s']) jogador.y += jogador.velocidade; // S para Trás
+            if (teclas['a']) jogador.x -= jogador.velocidade; // A para Esquerda
+            if (teclas['d']) jogador.x += jogador.velocidade; // D para Direita
+
+            // Evita que o boneco saia das bordas da fazenda
+            if (jogador.x < 20) jogador.x = 20;
+            if (jogador.y < 20) jogador.y = 20;
+            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
+            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
+
+            // Atualiza o gráfico do boneco na tela
+            document.getElementById('player').style.left = jogador.x + 'px';
+            document.getElementById('player').style.top = jogador.y + 'px';
+
+            requestAnimationFrame(loopJogo);
+        }
+
+        // Funções da Loja
+        const lojaModal = document.getElementById('loja-modal');
+
+        function alternarLoja() {
+            if (lojaModal.style.display === 'block') {
+                fecharLoja();
+            } else {
+                abrirLoja();
+            }
+        }
+
+        function abrirLoja() {
+            lojaModal.style.display = 'block';
+            renderizarLoja();
+        }
+
+        function fecharLoja() {
+            lojaModal.style.display = 'none';
+        }
+
+        function renderizarLoja() {
+            const lista = document.getElementById('lista-itens');
+            lista.innerHTML = '';
+            
+            for (let chave in frutasInfo) {
+                let fruta = frutasInfo[chave];
+                lista.innerHTML += `
+                    <div class="item-loja">
+                        <span>${fruta.icone} <b>${fruta.nome}</b></span>
+                        <button class="btn-comprar" onclick="comprarSemente('${chave}')">Comprar por ${fruta.custo} 🪙</button>
+                    </div>
+                `;
+            }
+        }
+
+        function comprarSemente(tipo) {
+            let custo = frutasInfo[tipo].custo;
+            if (moedas >= custo) {
+                moedas -= custo;
+                inventario[tipo]++;
+                sementeSelecionada = tipo; // Seleciona automaticamente para plantar rápido
+                atualizarInterface();
+            } else {
+                alert("Você não tem moedas suficientes!");
+            }
+        }
+
+        function atualizarInterface() {
+            document.getElementById('moedas').innerText = moedas;
+            document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhuma";
+            
+            document.getElementById('inventario-sementes').innerHTML = 
+                `Inventário: 🍎 Maçã(${inventario.maca}) | 🍌 Banana(${inventario.banana}) | 🍉 Melancia(${inventario.melancia}) | 🍊 Laranja(${inventario.laranja})`;
+        }
+
+        // Sistema de Plantio Completo (Cliques na terra)
+        function interagirCanteiro(id) {
+            let canteiro = canteiros[id];
+            let slotEl = document.getElementById(`slot-${id}`);
+
+            // 1. AÇÃO: PLANTAR SEMENTE
+            if (canteiro.status === "vazio") {
+                if (sementeSelecionada && inventario[sementeSelecionada] > 0) {
+                    inventario[sementeSelecionada]--;
+                    canteiro.status = "plantado";
+                    canteiro.fruta = sementeSelecionada;
+                    
+                    if(inventario[sementeSelecionada] === 0) sementeSelecionada = null;
+
+                    slotEl.innerHTML = `🌱 <span class="status" style="background:#d9534f;">Regar!</span>`;
+                    atualizarInterface();
+                } else {
+                    alert("Selecione ou compre uma semente primeiro abrindo a loja na tecla L!");
+                }
+            } 
+            // 2. AÇÃO: REGAR A PLANTA
+            else if (canteiro.status === "plantado") {
+                canteiro.status = "regado";
+                slotEl.innerHTML = `💧 <span class="status" style="background:#0275d8;">Crescendo...</span>`;
+                
+                let infoFruta = frutasInfo[canteiro.fruta];
+                
+                // Temporizador de Crescimento Real
+                canteiro.timer = setTimeout(() => {
+                    canteiro.status = "pronto";
+                    slotEl.innerHTML = `${infoFruta.icone} <span class="status" style="background:#5cb85c;">Colher!</span>`;
+                }, infoFruta.tempo);
+            } 
+            // 3. AÇÃO: COLHER E GANHAR MOEDAS
+            else if (canteiro.status === "pronto") {
+                let infoFruta = frutasInfo[canteiro.fruta];
+                moedas += infoFruta.venda;
+                
+                // Reseta a terra
+                canteiro.status = "vazio";
+                canteiro.fruta = null;
+                canteiro.timer = null;
+                
+                slotEl.innerHTML = `🟫 <span class="status">Vazio</span>`;
+                atualizarInterface();
+            }
+        }
+
+        // Inicialização do Jogo
+        requestAnimationFrame(loopJogo);
+        atualizarInterface();
+    </script>
+</body>
+</html>
