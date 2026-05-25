@@ -231,7 +231,8 @@
             <strong style="color: #2196F3; font-size: 16px;">Controles do Jogo:</strong><br>
             • Movimentação: <b>W</b> (Frente), <b>S</b> (Trás), <b>A</b> (Esquerda), <b>D</b> (Direita)<br>
             • Loja do Fazendeiro: Pressione <b style="color: #ff9800; font-size: 16px;">[ L ]</b> para abrir/fechar.<br>
-            • Lote de Terra: Clique para <b>Plantar / Regar / Colher</b>.
+            • Lote de Terra: Clique para <b>Plantar / Regar / Colher</b>.<br>
+            <span style="color: #5cb85c; font-weight: bold;">• Bônus: Ganhe +20 moedas a cada plantação!</span>
         </div>
 
         <div id="player" class="character">🤠</div>
@@ -287,14 +288,13 @@
             timer: null
         }));
 
-        // Mapeamento de Teclas Pressionadas simultaneamente
+        // Mapeamento de Teclas Pressionadas
         const teclas = {};
 
         window.addEventListener('keydown', (e) => {
             const tecla = e.key.toLowerCase();
             teclas[tecla] = true;
 
-            // Tecla L abre ou fecha a loja de forma limpa
             if (tecla === 'l') {
                 alternarLoja();
             }
@@ -304,20 +304,18 @@
             teclas[e.key.toLowerCase()] = false;
         });
 
-        // Loop principal do jogo rodando em alta performance (Movimentação WASD)
+        // Loop principal de movimentação WASD
         function loopJogo() {
-            if (teclas['w']) jogador.y -= jogador.velocidade; // W para Cima
-            if (teclas['s']) jogador.y += jogador.velocidade; // S para Trás
-            if (teclas['a']) jogador.x -= jogador.velocidade; // A para Esquerda
-            if (teclas['d']) jogador.x += jogador.velocidade; // D para Direita
+            if (teclas['w']) jogador.y -= jogador.velocidade; 
+            if (teclas['s']) jogador.y += jogador.velocidade; 
+            if (teclas['a']) jogador.x -= jogador.velocidade; 
+            if (teclas['d']) jogador.x += jogador.velocidade; 
 
-            // Evita que o boneco saia das bordas da fazenda
             if (jogador.x < 20) jogador.x = 20;
             if (jogador.y < 20) jogador.y = 20;
             if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
             if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
 
-            // Atualiza o gráfico do boneco na tela
             document.getElementById('player').style.left = jogador.x + 'px';
             document.getElementById('player').style.top = jogador.y + 'px';
 
@@ -364,7 +362,7 @@
             if (moedas >= custo) {
                 moedas -= custo;
                 inventario[tipo]++;
-                sementeSelecionada = tipo; // Seleciona automaticamente para plantar rápido
+                sementeSelecionada = tipo; 
                 atualizarInterface();
             } else {
                 alert("Você não tem moedas suficientes!");
@@ -379,7 +377,7 @@
                 `Inventário: 🍎 Maçã(${inventario.maca}) | 🍌 Banana(${inventario.banana}) | 🍉 Melancia(${inventario.melancia}) | 🍊 Laranja(${inventario.laranja})`;
         }
 
-        // Sistema de Plantio Completo (Cliques na terra)
+        // Sistema de Plantio (Cliques na terra)
         function interagirCanteiro(id) {
             let canteiro = canteiros[id];
             let slotEl = document.getElementById(`slot-${id}`);
@@ -391,6 +389,9 @@
                     canteiro.status = "plantado";
                     canteiro.fruta = sementeSelecionada;
                     
+                    // RECOMPENSA DE ADICIONAR +20 MOEDAS POR PLANTAR
+                    moedas += 20;
+
                     if(inventario[sementeSelecionada] === 0) sementeSelecionada = null;
 
                     slotEl.innerHTML = `🌱 <span class="status" style="background:#d9534f;">Regar!</span>`;
@@ -406,18 +407,16 @@
                 
                 let infoFruta = frutasInfo[canteiro.fruta];
                 
-                // Temporizador de Crescimento Real
                 canteiro.timer = setTimeout(() => {
                     canteiro.status = "pronto";
                     slotEl.innerHTML = `${infoFruta.icone} <span class="status" style="background:#5cb85c;">Colher!</span>`;
                 }, infoFruta.tempo);
             } 
-            // 3. AÇÃO: COLHER E GANHAR MOEDAS
+            // 3. AÇÃO: COLHER
             else if (canteiro.status === "pronto") {
                 let infoFruta = frutasInfo[canteiro.fruta];
                 moedas += infoFruta.venda;
                 
-                // Reseta a terra
                 canteiro.status = "vazio";
                 canteiro.fruta = null;
                 canteiro.timer = null;
