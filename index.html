@@ -32,14 +32,29 @@
         }
         #hud h2 { margin: 0 0 10px 0; color: #5cb85c; font-size: 22px; text-shadow: 2px 2px #000; text-align: center;}
         #hud p { margin: 6px 0; font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 8px;}
+        
         #inventario-sementes {
             font-size: 13px; 
             margin-top: 10px; 
-            color: #ffeb3b; 
-            font-weight: bold;
             background: rgba(255,255,255,0.1);
-            padding: 6px;
+            padding: 8px;
             border-radius: 6px;
+            display: flex;
+            gap: 10px;
+        }
+        .item-inv {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid transparent;
+            font-weight: bold;
+        }
+        /* Destaque para a semente que está selecionada */
+        .item-inv.selecionado {
+            background: #4CAF50;
+            border-color: #ffd700;
+            color: #fff;
+            box-shadow: 0 0 8px #4CAF50;
         }
 
         /* Cenário Gráfico da Fazenda */
@@ -48,13 +63,12 @@
             width: 100vw;
             height: 100vh;
             background: #629632;
-            /* Gramado texturizado */
             background-image: 
                 radial-gradient(#56872a 15%, transparent 16%),
                 radial-gradient(#56872a 15%, transparent 16%);
             background-size: 30px 30px;
             background-position: 0 0, 15px 15px;
-            border: 20px solid #5a3d28; /* Cerca de madeira ao redor da fazenda */
+            border: 20px solid #5a3d28;
         }
 
         /* Personagens */
@@ -68,7 +82,6 @@
             align-items: center;
             font-size: 32px;
             box-shadow: 0 6px 12px rgba(0,0,0,0.4);
-            transition: transform 0.1s;
         }
         #player {
             background: #2196F3;
@@ -95,7 +108,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.2);
         }
 
-        /* Área Gráfica de Plantio (Canteiro de Terra) */
+        /* Área Gráfica de Plantio */
         #zona-plantio {
             position: absolute;
             left: 15%;
@@ -152,7 +165,7 @@
             width: 360px;
             border: 5px solid #ff9800;
         }
-        #loja-modal h3 { margin-top: 0; color: #e65100; text-align: center; font-size: 24px; margin-bottom: 20px; text-shadow: 1px 1px #eee;}
+        #loja-modal h3 { margin-top: 0; color: #e65100; text-align: center; font-size: 24px; margin-bottom: 20px;}
         
         .item-loja {
             display: flex;
@@ -183,7 +196,6 @@
             transition: background 0.2s, transform 0.1s;
         }
         .btn-comprar:hover { background: #45a049; transform: scale(1.05); }
-        .btn-comprar:active { transform: scale(0.95); }
         
         .btn-fechar {
             width: 100%;
@@ -196,7 +208,6 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 15px;
-            transition: background 0.2s;
         }
         .btn-fechar:hover { background: #d32f2f; }
 
@@ -211,7 +222,6 @@
             font-size: 14px;
             line-height: 1.5;
             border-left: 5px solid #2196F3;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
     </style>
 </head>
@@ -221,25 +231,29 @@
         <div id="hud">
             <h2>Fazenda do Agrinho 🌾</h2>
             <p>Moedas: <span id="moedas" style="color: #ffd700;">50</span> 🪙</p>
-            <p>Semente Selecionada: <span id="semente-selecionada" style="color: #5cb85c;">Nenhuma</span></p>
+            <p>Semente Ativa: <span id="semente-selecionada" style="color: #5cb85c;">Nenhuma</span></p>
+            
             <div id="inventario-sementes">
-                Inventário: 🍎 Maçã(0) | 🍌 Banana(0) | 🍉 Melancia(0) | 🍊 Laranja(0)
+                <div class="item-inv" id="inv-laranja">[1] 🍊 Laranja: <span id="qtd-laranja">0</span></div>
+                <div class="item-inv" id="inv-maca">[2] 🍎 Maçã: <span id="qtd-maca">0</span></div>
+                <div class="item-inv" id="inv-banana">[3] 🍌 Banana: <span id="qtd-banana">0</span></div>
+                <div class="item-inv" id="inv-melancia">[4] 🍉 Melancia: <span id="qtd-melancia">0</span></div>
             </div>
         </div>
 
         <div id="controles">
             <strong style="color: #2196F3; font-size: 16px;">Controles do Jogo:</strong><br>
-            • Movimentação: <b>W</b> (Frente), <b>S</b> (Trás), <b>A</b> (Esquerda), <b>D</b> (Direita)<br>
-            • Loja do Fazendeiro: Pressione <b style="color: #ff9800; font-size: 16px;">[ L ]</b> para abrir/fechar.<br>
-            • Lote de Terra: Clique para <b>Plantar / Regar / Colher</b>.<br>
-            <span style="color: #5cb85c; font-weight: bold;">• Bônus: Ganhe +20 moedas a cada plantação!</span>
+            • Movimentação: <b>W, A, S, D</b><br>
+            • Abrir/Fechar Loja: Pressione <b>[ L ]</b><br>
+            • <b style="color: #ffeb3b;">Trocar Semente: Teclas [ 1 ], [ 2 ], [ 3 ] ou [ 4 ]</b><br>
+            • Canteiros: Clique para <b>Plantar (+20 🪙) / Regar / Colher</b>.
         </div>
 
         <div id="player" class="character">🤠</div>
 
         <div id="vendedor" class="character">
             👨‍🌾
-            <div class="balao-npc">Aperte L para comprar sementes!</div>
+            <div class="balao-npc">Aperte L para abrir o mercado!</div>
         </div>
 
         <div id="zona-plantio">
@@ -264,16 +278,23 @@
         // Configurações Iniciais do Jogador
         let jogador = { x: 400, y: 150, velocidade: 5 }; 
         let moedas = 50;
-        let sementeSelecionada = null;
+        let sementeSelecionada = null; // Guarda a chave ('laranja', 'maca', etc.)
 
         let inventario = {
+            laranja: 0,
             maca: 0,
             banana: 0,
-            melancia: 0,
-            laranja: 0
+            melancia: 0
         };
 
-        // Valores e tempos das sementes
+        // Mapeamento dos números para as frutas
+        const atalhosTeclado = {
+            "1": "laranja",
+            "2": "maca",
+            "3": "banana",
+            "4": "melancia"
+        };
+
         const frutasInfo = {
             laranja: { nome: "Laranja", custo: 8, venda: 18, icone: "🍊", tempo: 3000 },
             maca: { nome: "Maçã", custo: 12, venda: 28, icone: "🍎", tempo: 5000 },
@@ -281,22 +302,28 @@
             melancia: { nome: "Melancia", custo: 25, venda: 65, icone: "🍉", tempo: 10000 }
         };
 
-        // Estado dos 8 slots da terra
+        // Estado dos canteiros
         let canteiros = Array(8).fill(null).map(() => ({
             status: "vazio", 
             fruta: null,
             timer: null
         }));
 
-        // Mapeamento de Teclas Pressionadas
         const teclas = {};
 
         window.addEventListener('keydown', (e) => {
             const tecla = e.key.toLowerCase();
             teclas[tecla] = true;
 
+            // Abrir/Fechar Loja
             if (tecla === 'l') {
                 alternarLoja();
+            }
+
+            // Seleção de sementes por número (1, 2, 3 ou 4)
+            if (atalhosTeclado[e.key]) {
+                sementeSelecionada = atalhosTeclado[e.key];
+                atualizarInterface();
             }
         });
 
@@ -304,7 +331,7 @@
             teclas[e.key.toLowerCase()] = false;
         });
 
-        // Loop principal de movimentação WASD
+        // Loop de movimentação contínua
         function loopJogo() {
             if (teclas['w']) jogador.y -= jogador.velocidade; 
             if (teclas['s']) jogador.y += jogador.velocidade; 
@@ -322,7 +349,7 @@
             requestAnimationFrame(loopJogo);
         }
 
-        // Funções da Loja
+        // Sistema da Loja
         const lojaModal = document.getElementById('loja-modal');
 
         function alternarLoja() {
@@ -362,45 +389,54 @@
             if (moedas >= custo) {
                 moedas -= custo;
                 inventario[tipo]++;
-                sementeSelecionada = tipo; 
+                sementeSelecionada = tipo; // Seleciona automaticamente ao comprar
                 atualizarInterface();
             } else {
-                alert("Você não tem moedas suficientes!");
+                alert("Moedas insuficientes!");
             }
         }
 
         function atualizarInterface() {
+            // Atualiza saldos básicos
             document.getElementById('moedas').innerText = moedas;
             document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhuma";
             
-            document.getElementById('inventario-sementes').innerHTML = 
-                `Inventário: 🍎 Maçã(${inventario.maca}) | 🍌 Banana(${inventario.banana}) | 🍉 Melancia(${inventario.melancia}) | 🍊 Laranja(${inventario.laranja})`;
+            // Atualiza as quantidades exibidas nos blocos do inventário
+            document.getElementById('qtd-laranja').innerText = inventario.laranja;
+            document.getElementById('qtd-maca').innerText = inventario.maca;
+            document.getElementById('qtd-banana').innerText = inventario.banana;
+            document.getElementById('qtd-melancia').innerText = inventario.melancia;
+
+            // Remove o destaque visual de seleção de todos
+            document.querySelectorAll('.item-inv').forEach(el => el.classList.remove('selecionado'));
+
+            // Aplica o destaque verde apenas no item selecionado no momento
+            if (sementeSelecionada) {
+                document.getElementById(`inv-${sementeSelecionada}`).classList.add('selecionado');
+            }
         }
 
-        // Sistema de Plantio (Cliques na terra)
+        // Mecânica de cuidar da fazendinha
         function interagirCanteiro(id) {
             let canteiro = canteiros[id];
             let slotEl = document.getElementById(`slot-${id}`);
 
-            // 1. AÇÃO: PLANTAR SEMENTE
+            // 1. AÇÃO: PLANTAR
             if (canteiro.status === "vazio") {
                 if (sementeSelecionada && inventario[sementeSelecionada] > 0) {
                     inventario[sementeSelecionada]--;
                     canteiro.status = "plantado";
                     canteiro.fruta = sementeSelecionada;
                     
-                    // RECOMPENSA DE ADICIONAR +20 MOEDAS POR PLANTAR
-                    moedas += 20;
-
-                    if(inventario[sementeSelecionada] === 0) sementeSelecionada = null;
+                    moedas += 20; // Seu bônus de +20 moedas por plantar!
 
                     slotEl.innerHTML = `🌱 <span class="status" style="background:#d9534f;">Regar!</span>`;
                     atualizarInterface();
                 } else {
-                    alert("Selecione ou compre uma semente primeiro abrindo a loja na tecla L!");
+                    alert("Você não possui unidades dessa semente no inventário ou nenhuma semente está ativa!");
                 }
             } 
-            // 2. AÇÃO: REGAR A PLANTA
+            // 2. AÇÃO: REGAR
             else if (canteiro.status === "plantado") {
                 canteiro.status = "regado";
                 slotEl.innerHTML = `💧 <span class="status" style="background:#0275d8;">Crescendo...</span>`;
@@ -426,7 +462,7 @@
             }
         }
 
-        // Inicialização do Jogo
+        // Inicialização
         requestAnimationFrame(loopJogo);
         atualizarInterface();
     </script>
