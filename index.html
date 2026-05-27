@@ -68,7 +68,13 @@
         #vendedor {
             background: #e67e22;
             border: 2px solid #d35400;
-            left: 80%;
+            left: 75%;
+            top: 15%;
+        }
+        #central-vendas {
+            background: #2ecc71;
+            border: 2px solid #27ae60;
+            left: 85%;
             top: 15%;
         }
         .balao-npc {
@@ -78,12 +84,14 @@
             color: #fff;
             padding: 6px 12px;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             white-space: nowrap;
-            border: 1px solid #e67e22;
+            border: 1px solid #fff;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+        #vendedor .balao-npc { border-color: #e67e22; }
+        #central-vendas .balao-npc { border-color: #2ecc71; }
 
         /* Área de Plantio Centralizada */
         #zona-plantio {
@@ -251,15 +259,6 @@
         .btn-recusar { background: rgba(255, 255, 255, 0.05); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; transition: background 0.2s;}
         .btn-recusar:hover { background: rgba(231, 76, 60, 0.2); }
 
-        .contrato-vazio {
-            text-align: center;
-            color: #777;
-            padding: 20px;
-            border: 2px dashed #333;
-            border-radius: 12px;
-            font-size: 14px;
-        }
-
         /* Itens do Mercado */
         .item-loja {
             display: flex;
@@ -310,24 +309,30 @@
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
             <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">50</span> 🪙</p>
+            <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">5</span> 💧</p>
             <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
         </div>
 
         <div id="controles">
             <strong style="color: #3498db; font-size: 14px;">Comandos do Jogo:</strong><br>
             • Movimentação: <b>W, A, S, D</b><br>
-            • Fornecedor de Sementes: Pressione <b>[ L ]</b><br>
-            • <b style="color: #2ecc71;">Bolsa de Contratos Ativos: Pressione [ G ]</b><br>
+            • <b style="color: #e67e22;">Lojinha do Agricultor: Pressione [ L ]</b><br>
+            • <b style="color: #2ecc71;">Central de Vendas (Empresas): Pressione [ G ]</b><br>
             • Abrir Mochila/Estoque: Pressione <b>[ R ]</b><br>
             • Atalhos da Hotbar: Teclas <b>[ 1 ] a [ 4 ]</b><br>
-            • Canteiro: Clique para <b>Plantar / Regar / Colher</b>.
+            • Canteiro: Clique para <b>Plantar / Regar (Gasta 1💧) / Colher</b>.
         </div>
 
         <div id="player" class="character">🤠</div>
 
         <div id="vendedor" class="character">
             👨‍🌾
-            <div class="balao-npc">L: Sementes | G: Central de Vendas</div>
+            <div class="balao-npc">Lojinha do Agricultor [L]</div>
+        </div>
+
+        <div id="central-vendas" class="character">
+            🏢
+            <div class="balao-npc">Central de Vendas [G]</div>
         </div>
 
         <div id="zona-plantio">
@@ -365,8 +370,9 @@
         <h3>Mochila e Estoque 🎒</h3>
         
         <div class="mochila-secao">
-            <h4>Sementes para Plantar</h4>
+            <h4>Recursos e Sementes</h4>
             <div class="mochila-grid">
+                <div class="mochila-item"><span>💧</span><div class="info-text"><span class="label">Baldes de Água</span><span class="qtd">Qtd: <b id="mochila-agua" style="color:#3498db;">0</b></span></div></div>
                 <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Semente Laranja</span><span class="qtd">Qtd: <b id="mochila-sem-laranja">0</b></span></div></div>
                 <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Semente Maçã</span><span class="qtd">Qtd: <b id="mochila-sem-maca">0</b></span></div></div>
                 <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Semente Banana</span><span class="qtd">Qtd: <b id="mochila-sem-banana">0</b></span></div></div>
@@ -375,7 +381,7 @@
         </div>
 
         <div class="mochila-secao">
-            <h4>Frutas Colhidas (Para Venda)</h4>
+            <h4>Frutas Colhidas (Para Venda Corporativa)</h4>
             <div class="mochila-grid">
                 <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Fruta Laranja</span><span class="qtd">Estoque: <b id="mochila-fruta-laranja" style="color:#2ecc71;">0</b></span></div></div>
                 <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Fruta Maçã</span><span class="qtd">Estoque: <b id="mochila-fruta-maca" style="color:#2ecc71;">0</b></span></div></div>
@@ -387,21 +393,21 @@
     </div>
 
     <div id="loja-modal" class="modal-janela">
-        <h3>Mercado de Fornecedores 🛒</h3>
+        <h3>Lojinha do Agricultor 🛒</h3>
         <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharLoja()">Fechar Mercado [L]</button>
+        <button class="btn-fechar" onclick="fecharLoja()">Fechar Loja [L]</button>
     </div>
 
     <div id="contratos-modal" class="modal-janela">
-        <h3>Mesa de Contratos Ativos 💼</h3>
-        <div id="lista-contratos">
-            </div>
+        <h3>Mesa de Contratos Corporativos 💼</h3>
+        <div id="lista-contratos"></div>
         <button class="btn-fechar" onclick="fecharContratos()">Fechar Contratos [G]</button>
     </div>
 
     <script>
         let jogador = { x: 500, y: 150, velocidade: 5 }; 
-        let moedas = 100; 
+        let moedas = 60; 
+        let agua = 5; // Começa com 5 baldes de água
         let sementeSelecionada = "laranja"; 
 
         let estoqueSementes = { laranja: 2, maca: 0, banana: 0, melancia: 0 };
@@ -417,8 +423,6 @@
         };
 
         const empresas = ["Suco S.A.", "Hortifrúti Natural", "Atacadão de Doces", "BioFrutas Corp", "Exportadora Nacional", "Quitanda Gourmet", "NutriPolpa Indústria"];
-        
-        // Agora suportamos uma lista de até 3 contratos independentes e simultâneos
         let listaContratosAtivos = [null, null, null];
 
         let canteiros = Array(8).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
@@ -448,7 +452,7 @@
 
             if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) jogador.y = 20;
             if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
-            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
+            if (jogador.y > window.innerHeight - 75) patternY = window.innerHeight - 75;
 
             document.getElementById('player').style.left = jogador.x + 'px';
             document.getElementById('player').style.top = jogador.y + 'px';
@@ -456,7 +460,7 @@
             requestAnimationFrame(loopJogo);
         }
 
-        // Modais
+        // Controle dos Modais
         const mochilaModal = document.getElementById('mochila-modal');
         function alternarMochila() { 
             if (mochilaModal.style.display === 'block') { fecharMochila(); } 
@@ -464,13 +468,4 @@
         }
         function fecharMochila() { mochilaModal.style.display = 'none'; }
 
-        const lojaModal = document.getElementById('loja-modal');
-        function alternarLoja() { 
-            if (lojaModal.style.display === 'block') { fecharLoja(); } 
-            else { fecharMochila(); fecharContratos(); lojaModal.style.display = 'block'; renderizarLoja(); }
-        }
-        function fecharLoja() { lojaModal.style.display = 'none'; }
-
-        const contratosModal = document.getElementById('contratos-modal');
-        function alternarContratos() {
-            if (contratosModal.style.display === 'block') { 
+        const lojaMo
