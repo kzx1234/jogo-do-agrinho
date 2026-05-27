@@ -18,72 +18,20 @@
             color: #fff;
         }
 
-        /* Interface Principal (HUD) */
-        #hud {
+        /* HUD de Status (Canto Superior Esquerdo) */
+        #hud-status {
             position: absolute;
             top: 20px;
             left: 20px;
             background: rgba(0, 0, 0, 0.85);
-            padding: 15px 25px;
-            border-radius: 12px;
+            padding: 12px 20px;
+            border-radius: 10px;
             border: 3px solid #ffd700;
             z-index: 10;
-            box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-            max-width: 420px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
-        #hud-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 5px;
-        }
-        #hud h2 { margin: 0; color: #5cb85c; font-size: 22px; text-shadow: 2px 2px #000;}
-        
-        /* Botão de Minimizar */
-        #btn-minimizar {
-            background: #ffd700;
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            width: 24px;
-            height: 24px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #btn-minimizar:hover { background: #ffea63; }
-
-        #hud p { margin: 6px 0; font-size: 16px; font-weight: bold; display: flex; align-items: center; gap: 8px;}
-        
-        #inventario-sementes {
-            font-size: 13px; 
-            margin-top: 10px; 
-            background: rgba(255,255,255,0.1);
-            padding: 8px;
-            border-radius: 6px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .item-inv {
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid transparent;
-            font-weight: bold;
-        }
-        .item-inv.selecionado {
-            background: #4CAF50;
-            border-color: #ffd700;
-            color: #fff;
-            box-shadow: 0 0 8px #4CAF50;
-        }
+        #hud-status h2 { margin: 0 0 5px 0; color: #5cb85c; font-size: 18px; text-shadow: 1px 1px #000; }
+        #hud-status p { margin: 3px 0; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 5px; }
 
         /* Cenário Gráfico da Fazenda */
         #cenario {
@@ -140,8 +88,8 @@
         #zona-plantio {
             position: absolute;
             left: 50%;
-            top: 55%;
-            transform: translate(-50%, -50%); /* Centraliza perfeitamente no meio */
+            top: 48%;
+            transform: translate(-50%, -50%);
             display: grid;
             grid-template-columns: repeat(4, 90px);
             grid-gap: 15px;
@@ -178,67 +126,131 @@
             font-weight: bold;
         }
 
-        /* Janela da Loja (Modal) */
-        #loja-modal {
+        /* Hotbar Estilo Minecraft */
+        #hotbar-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #8f8f8f;
+            border: 4px solid #3c3c3c;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+            border-radius: 4px;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .hotbar-slot {
+            width: 60px;
+            height: 60px;
+            background: #8b8b8b;
+            border: 4px inset #dfdfdf;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            position: relative;
+            cursor: pointer;
+        }
+        .hotbar-slot .slot-num {
+            position: absolute;
+            top: 2px;
+            left: 4px;
+            font-size: 11px;
+            color: #ddd;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .hotbar-slot .slot-qtd {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 14px;
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 2px 2px #000;
+        }
+        /* Slot Selecionado (Borda Branca do Minecraft) */
+        .hotbar-slot.ativo {
+            border: 4px solid #ffffff;
+            background: #9e9e9e;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        /* Janelas Modais (Mochila e Loja) */
+        .modal-janela {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #ffffff;
+            background: #c6c6c6; /* Cor cinza clássica dos menus do Minecraft */
+            border: 5px solid #3c3c3c;
             color: #333;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 0 40px rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7);
             z-index: 100;
-            width: 360px;
-            border: 5px solid #ff9800;
+            width: 380px;
         }
-        #loja-modal h3 { margin-top: 0; color: #e65100; text-align: center; font-size: 24px; margin-bottom: 20px;}
+        .modal-janela h3 { margin-top: 0; color: #222; text-align: center; font-size: 20px; border-bottom: 3px solid #555; padding-bottom: 8px;}
         
+        /* Layout Grid da Mochila */
+        .mochila-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 15px;
+            margin-top: 15px;
+            background: #8b8b8b;
+            padding: 15px;
+            border: 4px inset #3c3c3c;
+        }
+        .mochila-item {
+            background: #8b8b8b;
+            border: 3px inset #dfdfdf;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .mochila-item span.icon { font-size: 28px; }
+        .mochila-item span.qtd { position: absolute; bottom: 2px; right: 4px; font-weight: bold; color: #fff; text-shadow: 1px 1px #000; font-size: 13px;}
+        .mochila-item span.label { font-size: 9px; color: #222; font-weight: bold; margin-top: 2px;}
+
+        /* Itens da Loja */
         .item-loja {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding: 12px;
-            background: #f7f7f7;
-            border: 2px solid #eaeaea;
-            border-radius: 8px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #9e9e9e;
+            border: 3px inset #dfdfdf;
         }
-        .item-loja span {
-            font-size: 16px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+        .item-loja span { font-size: 15px; font-weight: bold; color: #111; }
         .btn-comprar {
-            background: #4CAF50;
+            background: #5cb85c;
             color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            border: 2px solid #3c3c3c;
+            padding: 6px 12px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
-            transition: background 0.2s, transform 0.1s;
         }
-        .btn-comprar:hover { background: #45a049; transform: scale(1.05); }
+        .btn-comprar:hover { background: #4cae4c; }
         
         .btn-fechar {
             width: 100%;
-            background: #f44336;
+            background: #d9534f;
             color: white;
-            border: none;
-            padding: 12px;
+            border: 2px solid #3c3c3c;
+            padding: 10px;
             margin-top: 15px;
-            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 15px;
         }
-        .btn-fechar:hover { background: #d32f2f; }
 
         /* Painel de Controles */
         #controles {
@@ -248,8 +260,8 @@
             background: rgba(0, 0, 0, 0.85);
             padding: 15px;
             border-radius: 8px;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 13px;
+            line-height: 1.4;
             border-left: 5px solid #2196F3;
         }
     </style>
@@ -257,38 +269,26 @@
 <body>
 
     <div id="cenario">
-        <div id="hud">
-            <div id="hud-header">
-                <h2>Fazenda do Agrinho 🌾</h2>
-                <button id="btn-minimizar" onclick="alternarVisibilidadeHUD()">−</button>
-            </div>
-            
-            <div id="hud-conteudo">
-                <p>Moedas: <span id="moedas" style="color: #ffd700;">50</span> 🪙</p>
-                <p>Semente Ativa: <span id="semente-selecionada" style="color: #5cb85c;">Nenhuma</span></p>
-                
-                <div id="inventario-sementes">
-                    <div class="item-inv" id="inv-laranja">[1] 🍊 Laranja: <span id="qtd-laranja">0</span></div>
-                    <div class="item-inv" id="inv-maca">[2] 🍎 Maçã: <span id="qtd-maca">0</span></div>
-                    <div class="item-inv" id="inv-banana">[3] 🍌 Banana: <span id="qtd-banana">0</span></div>
-                    <div class="item-inv" id="inv-melancia">[4] 🍉 Melancia: <span id="qtd-melancia">0</span></div>
-                </div>
-            </div>
+        <div id="hud-status">
+            <h2>Fazenda do Agrinho 🌾</h2>
+            <p>Moedas: <span id="moedas" style="color: #ffd700;">50</span> 🪙</p>
+            <p>Item Mão: <span id="semente-selecionada" style="color: #ffeb3b;">Nenhum</span></p>
         </div>
 
         <div id="controles">
-            <strong style="color: #2196F3; font-size: 16px;">Controles do Jogo:</strong><br>
-            • Movimentação: <b>W, A, S, D</b><br>
-            • Abrir/Fechar Loja: Pressione <b>[ L ]</b><br>
-            • Trocar Semente: Teclas <b>[ 1 ], [ 2 ], [ 3 ] ou [ 4 ]</b><br>
-            • Canteiros: Clique para <b>Plantar (+20 🪙) / Regar / Colher</b>.
+            <strong style="color: #2196F3; font-size: 15px;">Comandos da Fazenda:</strong><br>
+            • Andar: <b>W, A, S, D</b><br>
+            • Abrir Loja: Pressione <b>[ L ]</b><br>
+            • <b style="color: #ff9800;">Abrir Mochila/Inventário: Pressione [ R ]</b><br>
+            • Selecionar Sementes da Hotbar: Teclas <b>[ 1 ], [ 2 ], [ 3 ], [ 4 ]</b><br>
+            • Canteiro: Clique para <b>Plantar (+20 🪙) / Regar / Colher</b>.
         </div>
 
         <div id="player" class="character">🤠</div>
 
         <div id="vendedor" class="character">
             👨‍🌾
-            <div class="balao-npc">Aperte L para abrir o mercado!</div>
+            <div class="balao-npc">Aperte L para negociar sementes!</div>
         </div>
 
         <div id="zona-plantio">
@@ -301,20 +301,69 @@
             <div class="slot" onclick="interagirCanteiro(6)" id="slot-6">🟫<span class="status">Vazio</span></div>
             <div class="slot" onclick="interagirCanteiro(7)" id="slot-7">🟫<span class="status">Vazio</span></div>
         </div>
+
+        <div id="hotbar-container">
+            <div class="hotbar-slot" id="slot-hot-laranja" onclick="selecionarPorClique('laranja')">
+                <span class="slot-num">1</span>
+                <span class="icon">🍊</span>
+                <span class="slot-qtd" id="hot-qtd-laranja">0</span>
+            </div>
+            <div class="hotbar-slot" id="slot-hot-maca" onclick="selecionarPorClique('maca')">
+                <span class="slot-num">2</span>
+                <span class="icon">🍎</span>
+                <span class="slot-qtd" id="hot-qtd-maca">0</span>
+            </div>
+            <div class="hotbar-slot" id="slot-hot-banana" onclick="selecionarPorClique('banana')">
+                <span class="slot-num">3</span>
+                <span class="icon">🍌</span>
+                <span class="slot-qtd" id="hot-qtd-banana">0</span>
+            </div>
+            <div class="hotbar-slot" id="slot-hot-melancia" onclick="selecionarPorClique('melancia')">
+                <span class="slot-num">4</span>
+                <span class="icon">🍉</span>
+                <span class="slot-qtd" id="hot-qtd-melancia">0</span>
+            </div>
+        </div>
     </div>
 
-    <div id="loja-modal">
+    <div id="mochila-modal" class="modal-janela">
+        <h3>Mochila do Fazendeiro 🎒</h3>
+        <div class="mochila-grid">
+            <div class="mochila-item">
+                <span class="icon">🍊</span>
+                <span class="qtd" id="mochila-qtd-laranja">0</span>
+                <span class="label">Laranja [1]</span>
+            </div>
+            <div class="mochila-item">
+                <span class="icon">🍎</span>
+                <span class="qtd" id="mochila-qtd-maca">0</span>
+                <span class="label">Maçã [2]</span>
+            </div>
+            <div class="mochila-item">
+                <span class="icon">🍌</span>
+                <span class="qtd" id="mochila-qtd-banana">0</span>
+                <span class="label">Banana [3]</span>
+            </div>
+            <div class="mochila-item">
+                <span class="icon">🍉</span>
+                <span class="qtd" id="mochila-qtd-melancia">0</span>
+                <span class="label">Melancia [4]</span>
+            </div>
+        </div>
+        <button class="btn-fechar" onclick="fecharMochila()">Fechar Inventário [R]</button>
+    </div>
+
+    <div id="loja-modal" class="modal-janela">
         <h3>Mercado do Agrinho 🛒</h3>
         <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharLoja()">Fechar Janela [L]</button>
+        <button class="btn-fechar" onclick="fecharLoja()">Fechar Mercado [L]</button>
     </div>
 
     <script>
-        // Configurações Iniciais do Jogador (Spawna longe do HUD)
+        // Configurações do Personagem
         let jogador = { x: 500, y: 150, velocidade: 5 }; 
         let moedas = 50;
-        let sementeSelecionada = null;
-        let hudMinimizado = false;
+        let sementeSelecionada = "laranja"; // Inicia com a laranja selecionada por padrão
 
         let inventario = {
             laranja: 0,
@@ -349,10 +398,17 @@
             const tecla = e.key.toLowerCase();
             teclas[tecla] = true;
 
+            // Tecla L - Alternar Loja
             if (tecla === 'l') {
                 alternarLoja();
             }
 
+            // Tecla R - Alternar Mochila
+            if (tecla === 'r') {
+                alternarMochila();
+            }
+
+            // Teclas de Seleção 1, 2, 3, 4
             if (atalhosTeclado[e.key]) {
                 sementeSelecionada = atalhosTeclado[e.key];
                 atualizarInterface();
@@ -380,52 +436,41 @@
             requestAnimationFrame(loopJogo);
         }
 
-        // Função para minimizar/maximizar o HUD de moedas e plantas
-        function alternarVisibilidadeHUD() {
-            const conteudo = document.getElementById('hud-conteudo');
-            const btn = document.getElementById('btn-minimizar');
-            
-            if (hudMinimizado) {
-                conteudo.style.display = 'block';
-                btn.innerText = '−';
-                hudMinimizado = false;
+        // Sistema da Mochila (R)
+        const mochilaModal = document.getElementById('mochila-modal');
+        function alternarMochila() {
+            if (mochilaModal.style.display === 'block') {
+                fecharMochila();
             } else {
-                conteudo.style.display = 'none';
-                btn.innerText = '+';
-                hudMinimizado = true;
+                fecharLoja(); // Fecha a loja caso esteja aberta
+                mochilaModal.style.display = 'block';
+                atualizarInterface();
             }
         }
+        function fecharMochila() { mochilaModal.style.display = 'none'; }
 
-        // Sistema da Loja
+        // Sistema da Loja (L)
         const lojaModal = document.getElementById('loja-modal');
-
         function alternarLoja() {
             if (lojaModal.style.display === 'block') {
                 fecharLoja();
             } else {
-                abrirLoja();
+                fecharMochila(); // Fecha a mochila caso esteja aberta
+                lojaModal.style.display = 'block';
+                renderizarLoja();
             }
         }
-
-        function abrirLoja() {
-            lojaModal.style.display = 'block';
-            renderizarLoja();
-        }
-
-        function fecharLoja() {
-            lojaModal.style.display = 'none';
-        }
+        function fecharLoja() { lojaModal.style.display = 'none'; }
 
         function renderizarLoja() {
             const lista = document.getElementById('lista-itens');
             lista.innerHTML = '';
-            
             for (let chave in frutasInfo) {
                 let fruta = frutasInfo[chave];
                 lista.innerHTML += `
                     <div class="item-loja">
                         <span>${fruta.icone} <b>${fruta.nome}</b></span>
-                        <button class="btn-comprar" onclick="comprarSemente('${chave}')">Comprar por ${fruta.custo} 🪙</button>
+                        <button class="btn-comprar" onclick="comprarSemente('${chave}')">Comprar (${fruta.custo} 🪙)</button>
                     </div>
                 `;
             }
@@ -443,19 +488,33 @@
             }
         }
 
+        function selecionarPorClique(tipo) {
+            sementeSelecionada = tipo;
+            atualizarInterface();
+        }
+
         function atualizarInterface() {
+            // Atualiza Moedas e Texto de Mão
             document.getElementById('moedas').innerText = moedas;
-            document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhuma";
+            document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhum";
             
-            document.getElementById('qtd-laranja').innerText = inventario.laranja;
-            document.getElementById('qtd-maca').innerText = inventario.maca;
-            document.getElementById('qtd-banana').innerText = inventario.banana;
-            document.getElementById('qtd-melancia').innerText = inventario.melancia;
+            // Atualiza quantidades na Hotbar e na Mochila
+            for (let chave in inventario) {
+                document.getElementById(`hot-qtd-laranja`).innerText = inventario.laranja;
+                document.getElementById(`hot-qtd-maca`).innerText = inventario.maca;
+                document.getElementById(`hot-qtd-banana`).innerText = inventario.banana;
+                document.getElementById(`hot-qtd-melancia`).innerText = inventario.melancia;
 
-            document.querySelectorAll('.item-inv').forEach(el => el.classList.remove('selecionado'));
+                document.getElementById(`mochila-qtd-laranja`).innerText = inventario.laranja;
+                document.getElementById(`mochila-qtd-maca`).innerText = inventario.maca;
+                document.getElementById(`mochila-qtd-banana`).innerText = inventario.banana;
+                document.getElementById(`mochila-qtd-melancia`).innerText = inventario.melancia;
+            }
 
+            // Atualiza Borda de Seleção Ativa na Hotbar do Minecraft
+            document.querySelectorAll('.hotbar-slot').forEach(el => el.classList.remove('ativo'));
             if (sementeSelecionada) {
-                document.getElementById(`inv-${sementeSelecionada}`).classList.add('selecionado');
+                document.getElementById(`slot-hot-${sementeSelecionada}`).classList.add('ativo');
             }
         }
 
@@ -469,12 +528,12 @@
                     canteiro.status = "plantado";
                     canteiro.fruta = sementeSelecionada;
                     
-                    moedas += 20; // Bônus de moedas por plantar!
+                    moedas += 20; // Bônus automático por plantar!
 
                     slotEl.innerHTML = `🌱 <span class="status" style="background:#d9534f;">Regar!</span>`;
                     atualizarInterface();
                 } else {
-                    alert("Você não possui unidades dessa semente ou nenhuma semente está ativa!");
+                    alert("Acabaram as sementes desse slot! Abra o Mercado na tecla [L] para comprar mais!");
                 }
             } 
             else if (canteiro.status === "plantado") {
