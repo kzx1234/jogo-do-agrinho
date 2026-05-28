@@ -58,6 +58,7 @@
             transition: border-color 0.3s;
         }
         .input-grupo input:focus { border-color: #2ecc71; }
+        
         .btn-login {
             width: 100%;
             background: #2ecc71;
@@ -72,7 +73,23 @@
             margin-top: 10px;
         }
         .btn-login:hover { background: #27ae60; }
-        .alternar-modo { margin-top: 15px; font-size: 13px; color: #888; cursor: pointer; }
+
+        .btn-sem-login {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #eee;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        .btn-sem-login:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+
+        .alternar-modo { margin-top: 18px; font-size: 13px; color: #888; cursor: pointer; }
         .alternar-modo span { color: #2ecc71; font-weight: bold; }
 
         /* HUD de Status Moderno */
@@ -371,16 +388,20 @@
             <h1 id="login-titulo">Entrar na Fazenda</h1>
             <p id="login-subtitulo">Digite seus dados locais para carregar seu progresso.</p>
             
-            <div class="input-grupo">
-                <label>E-mail</label>
-                <input type="email" id="login-email" placeholder="exemplo@fazenda.com">
-            </div>
-            <div class="input-grupo">
-                <label>Senha</label>
-                <input type="password" id="login-senha" placeholder="••••••••">
+            <div id="campos-autenticacao">
+                <div class="input-grupo">
+                    <label>E-mail</label>
+                    <input type="email" id="login-email" placeholder="exemplo@fazenda.com">
+                </div>
+                <div class="input-grupo">
+                    <label>Senha</label>
+                    <input type="password" id="login-senha" placeholder="••••••••">
+                </div>
             </div>
 
             <button class="btn-login" id="btn-acao-login" onclick="executarAutenticacao()">Entrar e Jogar</button>
+            <button class="btn-sem-login" onclick="entrarSemLogin()">Jogar sem Login (Não Salva)</button>
+            
             <div class="alternar-modo" id="btn-alternar" onclick="alternarModoLogin()">Não tem conta? <span>Criar nova conta</span></div>
         </div>
     </div>
@@ -389,7 +410,7 @@
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
             <p style="font-size: 12px; color: #aaa; margin-bottom: 5px;">Produtor: <span id="hud-usuario" style="color: #3498db; font-weight: bold;">---</span></p>
-            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">50</span> 🪙</p>
+            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">60</span> 🪙</p>
             <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">5</span> 💧</p>
             <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
             <button class="btn-sair" onclick="logout()">Sair da Conta 🚪</button>
@@ -465,18 +486,4 @@
             <div class="mochila-grid">
                 <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Fruta Laranja</span><span class="qtd">Estoque: <b id="mochila-fruta-laranja" style="color:#2ecc71;">0</b></span></div></div>
                 <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Fruta Maçã</span><span class="qtd">Estoque: <b id="mochila-fruta-maca" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Fruta Banana</span><span class="qtd">Estoque: <b id="mochila-fruta-banana" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Fruta Melancia</span><span class="qtd">Estoque: <b id="mochila-fruta-melancia" style="color:#2ecc71;">0</b></span></div></div>
-            </div>
-        </div>
-        <button class="btn-fechar" onclick="fecharMochila()">Fechar Mochila [R]</button>
-    </div>
-
-    <div id="loja-modal" class="modal-janela">
-        <h3>Lojinha do Agricultor 🛒</h3>
-        <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharLoja()">Fechar Loja [L]</button>
-    </div>
-
-    <div id="contratos-modal" class="modal-janela">
-        <h
+                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Fruta Banana</span><span class="qtd">Estoque: <b id="mochi
