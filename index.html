@@ -34,6 +34,51 @@
         #hud-status h2 { margin: 0 0 8px 0; color: #2ecc71; font-size: 20px; font-weight: 600; }
         #hud-status p { margin: 4px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; color: #e0e0e0; }
 
+        /* Botão para ir pras Arenas */
+        .btn-navegacao-arena {
+            position: absolute;
+            top: 20px;
+            left: 320px;
+            background: #2ecc71;
+            color: white;
+            border: 2px solid #27ae60;
+            padding: 15px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-navegacao-arena:hover {
+            background: #27ae60;
+            transform: scale(1.03);
+        }
+
+        /* Botão de Voltar da Arena */
+        #btn-voltar-sede {
+            display: none;
+            position: absolute;
+            top: 20px;
+            left: 320px;
+            background: #e74c3c;
+            color: white;
+            border: 2px solid #c0392b;
+            padding: 15px 25px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transition: all 0.2s ease;
+        }
+        #btn-voltar-sede:hover {
+            background: #c0392b;
+            transform: scale(1.03);
+        }
+
         /* Cenário Gráfico da Fazenda */
         #cenario {
             position: relative;
@@ -46,6 +91,22 @@
             background-size: 30px 30px;
             background-position: 0 0, 15px 15px;
             border: 16px solid #3d281a;
+        }
+
+        /* Título da Arena Atual */
+        #titulo-arena-hud {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: rgba(0,0,0,0.6);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            z-index: 10;
         }
 
         /* Personagens */
@@ -93,7 +154,7 @@
         #vendedor .balao-npc { border-color: #e67e22; }
         #central-vendas .balao-npc { border-color: #2ecc71; }
 
-        /* Área de Plantio Centralizada */
+        /* Área de Plantio Centralizada (Sede - 8 Slots) */
         #zona-plantio {
             position: absolute;
             left: 50%;
@@ -108,6 +169,23 @@
             border: 4px solid #1f140c;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 12px 24px rgba(0,0,0,0.4);
         }
+
+        /* GIGANTE Área de Plantio das Arenas (20 slots) */
+        #zona-plantio-arena {
+            display: none;
+            position: absolute;
+            left: 50%;
+            top: 52%;
+            transform: translate(-50%, -50%);
+            grid-template-columns: repeat(5, 95px);
+            grid-gap: 12px;
+            background: #23170e;
+            padding: 25px;
+            border-radius: 20px;
+            border: 6px dashed #ffd700;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 16px 32px rgba(0,0,0,0.6);
+        }
+
         .slot {
             width: 95px;
             height: 95px;
@@ -130,9 +208,13 @@
             font-size: 11px; 
             margin-top: 6px; 
             background: rgba(0, 0, 0, 0.75); 
-            padding: 3px 8px; 
+            padding: 3px 6px; 
             border-radius: 20px;
             font-weight: bold;
+            text-align: center;
+            width: 85%;
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         /* Hotbar Moderna */
@@ -205,6 +287,30 @@
         }
         .modal-janela h3 { margin-top: 0; color: #fff; text-align: center; font-size: 22px; font-weight: 600; margin-bottom: 15px;}
         
+        /* Grid de Seleção de Arenas */
+        .arenas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 12px;
+            margin-top: 15px;
+        }
+        .btn-arena-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 15px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .btn-arena-card:hover {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: #2ecc71;
+            transform: translateY(-2px);
+        }
+
         /* Grid da Mochila */
         .mochila-secao {
             background: rgba(255,255,255,0.02);
@@ -313,6 +419,10 @@
             <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
         </div>
 
+        <button class="btn-navegacao-arena" id="btn-ir-arena" onclick="abrirMenuArenas()">Ir para Expansões Rurais (Plantações Grandes) 🌱</button>
+        <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Voltar para Sede (Lojas/Contratos)</button>
+        <div id="titulo-arena-hud">Sede Principal</div>
+
         <div id="controles">
             <strong style="color: #3498db; font-size: 14px;">Comandos do Jogo:</strong><br>
             • Movimentação: <b>W, A, S, D</b><br>
@@ -346,6 +456,8 @@
             <div class="slot" onclick="interagirCanteiro(7)" id="slot-7">🟫<span class="status">Vazio</span></div>
         </div>
 
+        <div id="zona-plantio-arena"></div>
+
         <div id="hotbar-container">
             <div class="hotbar-slot" id="slot-hot-laranja" onclick="selecionarPorClique('laranja')">
                 <span class="slot-num">1</span><span>🍊</span>
@@ -366,9 +478,15 @@
         </div>
     </div>
 
+    <div id="arenas-modal" class="modal-janela">
+        <h3>Zonas de Expansão Rural 🚜</h3>
+        <p style="text-align:center; font-size:13px; color:#aaa;">Cada zona possui um latifúndio com 20 espaços prontos para plantar!</p>
+        <div class="arenas-grid" id="grid-botoes-arenas"></div>
+        <button class="btn-fechar" onclick="fecharMenuArenas()">Fechar Menu</button>
+    </div>
+
     <div id="mochila-modal" class="modal-janela">
         <h3>Mochila e Estoque 🎒</h3>
-        
         <div class="mochila-secao">
             <h4>Recursos e Sementes</h4>
             <div class="mochila-grid">
@@ -379,93 +497,9 @@
                 <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Semente Melancia</span><span class="qtd">Qtd: <b id="mochila-sem-melancia">0</b></span></div></div>
             </div>
         </div>
-
         <div class="mochila-secao">
             <h4>Frutas Colhidas (Para Venda Corporativa)</h4>
             <div class="mochila-grid">
                 <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Fruta Laranja</span><span class="qtd">Estoque: <b id="mochila-fruta-laranja" style="color:#2ecc71;">0</b></span></div></div>
                 <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Fruta Maçã</span><span class="qtd">Estoque: <b id="mochila-fruta-maca" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Fruta Banana</span><span class="qtd">Estoque: <b id="mochila-fruta-banana" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Fruta Melancia</span><span class="qtd">Estoque: <b id="mochila-fruta-melancia" style="color:#2ecc71;">0</b></span></div></div>
-            </div>
-        </div>
-        <button class="btn-fechar" onclick="fecharMochila()">Fechar Mochila [R]</button>
-    </div>
-
-    <div id="loja-modal" class="modal-janela">
-        <h3>Lojinha do Agricultor 🛒</h3>
-        <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharLoja()">Fechar Loja [L]</button>
-    </div>
-
-    <div id="contratos-modal" class="modal-janela">
-        <h3>Mesa de Contratos Corporativos 💼</h3>
-        <div id="lista-contratos"></div>
-        <button class="btn-fechar" onclick="fecharContratos()">Fechar Contratos [G]</button>
-    </div>
-
-    <script>
-        let jogador = { x: 500, y: 150, velocidade: 5 }; 
-        let moedas = 60; 
-        let agua = 5; 
-        let sementeSelecionada = "laranja"; 
-
-        let estoqueSementes = { laranja: 2, maca: 0, banana: 0, melancia: 0 };
-        let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
-
-        const atalhosTeclado = { "1": "laranja", "2": "maca", "3": "banana", "4": "melancia" };
-
-        const frutasInfo = {
-            laranja: { nome: "Laranja", custo: 2, icone: "🍊", tempo: 3000 },
-            maca: { nome: "Maçã", custo: 4, icone: "🍎", tempo: 5000 },
-            banana: { nome: "Banana", custo: 6, icone: "🍌", tempo: 7000 },
-            melancia: { nome: "Melancia", custo: 9, icone: "🍉", tempo: 10000 }
-        };
-
-        const empresas = ["Suco S.A.", "Hortifrúti Natural", "Atacadão de Doces", "BioFrutas Corp", "Exportadora Nacional", "Quitanda Gourmet", "NutriPolpa Indústria"];
-        let listaContratosAtivos = [null, null, null];
-
-        let canteiros = Array(8).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
-        const teclas = {};
-
-        window.addEventListener('keydown', (e) => {
-            const tecla = e.key.toLowerCase();
-            teclas[tecla] = true;
-
-            if (tecla === 'l') alternarLoja();
-            if (tecla === 'r') alternarMochila();
-            if (tecla === 'g') alternarContratos();
-
-            if (atalhosTeclado[e.key]) {
-                sementeSelecionada = atalhosTeclado[e.key];
-                atualizarInterface();
-            }
-        });
-
-        window.addEventListener('keyup', (e) => { teclas[e.key.toLowerCase()] = false; });
-
-        function loopJogo() {
-            if (teclas['w']) jogador.y -= jogador.velocidade; 
-            if (teclas['s']) jogador.y += jogador.velocidade; 
-            if (teclas['a']) jogador.x -= jogador.velocidade; 
-            if (teclas['d']) jogador.x += jogador.velocidade; 
-
-            if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) jogador.y = 20;
-            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
-            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
-
-            document.getElementById('player').style.left = jogador.x + 'px';
-            document.getElementById('player').style.top = jogador.y + 'px';
-
-            requestAnimationFrame(loopJogo);
-        }
-
-        // Controle dos Modais
-        const mochilaModal = document.getElementById('mochila-modal');
-        function alternarMochila() { 
-            if (mochilaModal.style.display === 'block') { fecharMochila(); } 
-            else { fecharLoja(); fecharContratos(); mochilaModal.style.display = 'block'; atualizarInterface(); }
-        }
-        function fecharMochila() { mochilaModal.style.display = 'none'; }
-
-        const lojaModal = document.getElementById
+                <div class="mochila-item
