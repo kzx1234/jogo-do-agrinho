@@ -308,7 +308,7 @@
     <div id="cenario">
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
-            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">50</span> 🪙</p>
+            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">60</span> 🪙</p>
             <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">5</span> 💧</p>
             <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
         </div>
@@ -407,7 +407,7 @@
     <script>
         let jogador = { x: 500, y: 150, velocidade: 5 }; 
         let moedas = 60; 
-        let agua = 5; // Começa com 5 baldes de água
+        let agua = 5; 
         let sementeSelecionada = "laranja"; 
 
         let estoqueSementes = { laranja: 2, maca: 0, banana: 0, melancia: 0 };
@@ -452,7 +452,7 @@
 
             if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) jogador.y = 20;
             if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
-            if (jogador.y > window.innerHeight - 75) patternY = window.innerHeight - 75;
+            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
 
             document.getElementById('player').style.left = jogador.x + 'px';
             document.getElementById('player').style.top = jogador.y + 'px';
@@ -468,4 +468,4 @@
         }
         function fecharMochila() { mochilaModal.style.display = 'none'; }
 
-        const lojaMo
+        const lojaModal = document.getElementById
