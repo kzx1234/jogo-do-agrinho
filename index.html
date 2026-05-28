@@ -34,29 +34,35 @@
         #hud-status h2 { margin: 0 0 8px 0; color: #2ecc71; font-size: 20px; font-weight: 600; }
         #hud-status p { margin: 4px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; color: #e0e0e0; }
 
-        /* Botão para ir pras Arenas */
-        .btn-navegacao-arena {
+        /* Botões de Navegação Superior */
+        .container-navegacao {
             position: absolute;
             top: 20px;
             left: 320px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        .btn-navegacao {
             background: #2ecc71;
             color: white;
             border: 2px solid #27ae60;
-            padding: 15px 25px;
-            font-size: 15px;
+            padding: 15px 20px;
+            font-size: 14px;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
-            z-index: 10;
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             transition: all 0.2s ease;
         }
-        .btn-navegacao-arena:hover {
+        .btn-navegacao:hover {
             background: #27ae60;
             transform: scale(1.03);
         }
+        #btn-ir-animais { background: #e67e22; border-color: #d35400; }
+        #btn-ir-animais:hover { background: #d35400; }
 
-        /* Botão de Voltar da Arena */
+        /* Botão de Voltar */
         #btn-voltar-sede {
             display: none;
             position: absolute;
@@ -74,12 +80,9 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.3);
             transition: all 0.2s ease;
         }
-        #btn-voltar-sede:hover {
-            background: #c0392b;
-            transform: scale(1.03);
-        }
+        #btn-voltar-sede:hover { background: #c0392b; transform: scale(1.03); }
 
-        /* Cenário Gráfico da Fazenda */
+        /* Cenário */
         #cenario {
             position: relative;
             width: 100vw;
@@ -93,7 +96,6 @@
             border: 16px solid #3d281a;
         }
 
-        /* Título da Arena Atual */
         #titulo-arena-hud {
             display: none;
             position: absolute;
@@ -109,7 +111,7 @@
             z-index: 10;
         }
 
-        /* Personagens */
+        /* Personagens e NPCs */
         .character {
             position: absolute;
             width: 55px;
@@ -121,23 +123,12 @@
             font-size: 32px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
-        #player {
-            background: #3498db;
-            border: 2px solid #2980b9;
-            z-index: 5;
-        }
-        #vendedor {
-            background: #e67e22;
-            border: 2px solid #d35400;
-            left: 35%;
-            top: 45%;
-        }
-        #central-vendas {
-            background: #2ecc71;
-            border: 2px solid #27ae60;
-            left: 55%;
-            top: 45%;
-        }
+        #player { background: #3498db; border: 2px solid #2980b9; z-index: 5; }
+        #vendedor { background: #e67e22; border: 2px solid #d35400; left: 20%; top: 45%; }
+        #ambulante { background: #f1c40f; border: 2px solid #f39c12; left: 36%; top: 55%; }
+        #engenheiro { background: #9b59b6; border: 2px solid #8e44ad; left: 50%; top: 30%; }
+        #central-vendas { background: #2ecc71; border: 2px solid #27ae60; left: 66%; top: 45%; }
+        
         .balao-npc {
             position: absolute;
             top: -45px;
@@ -152,10 +143,12 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         #vendedor .balao-npc { border-color: #e67e22; }
+        #ambulante .balao-npc { border-color: #f1c40f; color: #f1c40f; }
+        #engenheiro .balao-npc { border-color: #9b59b6; }
         #central-vendas .balao-npc { border-color: #2ecc71; }
 
-        /* GIGANTE Área de Plantio das Arenas (20 slots) */
-        #zona-plantio-arena {
+        /* Grades de Plantio e Animais */
+        #zona-plantio-arena, #zona-pecuaria {
             display: none;
             position: absolute;
             left: 50%;
@@ -169,6 +162,7 @@
             border: 6px dashed #ffd700;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 16px 32px rgba(0,0,0,0.6);
         }
+        #zona-pecuaria { background: #543d2b; border-color: #e67e22; grid-template-columns: repeat(3, 110px); }
 
         .slot {
             width: 95px;
@@ -184,24 +178,23 @@
             position: relative;
             transition: all 0.2s ease;
         }
-        .slot:hover { 
-            background-color: #5c3f28;
-            transform: scale(1.04);
-        }
+        .slot:hover { background-color: #5c3f28; transform: scale(1.04); }
+        .slot.slot-bicho { width: 110px; height: 110px; background-color: #70523a; }
+        
         .slot .status { 
-            font-size: 11px; 
+            font-size: 10px; 
             margin-top: 6px; 
             background: rgba(0, 0, 0, 0.75); 
             padding: 3px 6px; 
             border-radius: 20px;
             font-weight: bold;
             text-align: center;
-            width: 85%;
+            width: 90%;
             white-space: nowrap;
             overflow: hidden;
         }
 
-        /* Hotbar Moderna */
+        /* Hotbar */
         #hotbar-container {
             position: absolute;
             bottom: 25px;
@@ -250,7 +243,7 @@
             box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
         }
 
-        /* Janelas Modais Modernas */
+        /* Modais */
         .modal-janela {
             display: none;
             position: fixed;
@@ -265,156 +258,43 @@
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             z-index: 100;
-            width: 460px;
+            width: 480px;
             max-height: 85vh;
             overflow-y: auto;
         }
-        .modal-janela h3 { margin-top: 0; color: #fff; text-align: center; font-size: 22px; font-weight: 600; margin-bottom: 15px;}
+        .modal-janela h3 { margin-top: 0; text-align: center; font-size: 22px; margin-bottom: 15px;}
         
-        /* Grid de Seleção de Arenas */
-        .arenas-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 12px;
-            margin-top: 15px;
-        }
+        .arenas-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 12px; margin-top: 15px; }
         .btn-arena-card {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 15px;
-            border-radius: 12px;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.2s;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
+            padding: 15px; border-radius: 12px; color: #fff; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.2s;
         }
-        .btn-arena-card:hover {
-            background: rgba(46, 204, 113, 0.2);
-            border-color: #2ecc71;
-            transform: translateY(-2px);
-        }
-        .btn-arena-card.bloqueado {
-            border-color: #e74c3c;
-            background: rgba(231, 76, 60, 0.05);
-        }
-        .btn-arena-card.bloqueado:hover {
-            background: rgba(231, 76, 60, 0.2);
-            border-color: #e74c3c;
-        }
+        .btn-arena-card:hover { background: rgba(46, 204, 113, 0.2); border-color: #2ecc71; transform: translateY(-2px); }
+        .btn-arena-card.bloqueado { border-color: #e74c3c; background: rgba(231, 76, 60, 0.05); }
 
-        /* Grid da Mochila */
-        .mochila-secao {
-            background: rgba(255,255,255,0.02);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .mochila-secao h4 { margin: 0 0 10px 0; font-size: 13px; color: #aaa; text-transform: uppercase; letter-spacing: 1px;}
+        .mochila-secao { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        .mochila-secao h4 { margin: 0 0 10px 0; font-size: 13px; color: #aaa; text-transform: uppercase;}
         .mochila-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 10px; }
-        .mochila-item {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .mochila-item span.icon { font-size: 28px; }
-        .mochila-item .info-text { display: flex; flex-direction: column; }
-        .mochila-item .info-text .label { font-size: 13px; font-weight: 600; color: #fff; }
-        .mochila-item .info-text .qtd { font-size: 12px; color: #aaa; }
+        .mochila-item { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; }
 
-        /* Lista de Múltiplos Contratos */
-        #lista-contratos {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-        .contrato-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 15px;
-            transition: border-color 0.3s;
-        }
-        .contrato-box.completavel {
-            border-color: rgba(46, 204, 113, 0.5);
-            background: rgba(46, 204, 113, 0.03);
-        }
-        .contrato-header { display: flex; justify-content: space-between; font-weight: bold; color: #3498db; margin-bottom: 10px; font-size: 15px;}
+        #lista-contratos { display: flex; flex-direction: column; gap: 15px; }
+        .contrato-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; }
+        .contrato-box.completavel { border-color: rgba(46, 204, 113, 0.5); background: rgba(46, 204, 113, 0.03); }
+        .contrato-header { display: flex; justify-content: space-between; font-weight: bold; color: #3498db; margin-bottom: 10px; }
         .contrato-box.completavel .contrato-header { color: #2ecc71; }
-        .contrato-requisitos { font-size: 14px; margin-bottom: 12px; color: #ddd; line-height: 1.6;}
-        .contrato-botoes { display: flex; gap: 10px; }
         
-        .btn-aceitar { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; transition: background 0.2s;}
-        .btn-aceitar:hover { background: #27ae60; }
+        .btn-aceitar { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; }
         .btn-aceitar:disabled { background: #555; color: #aaa; cursor: not-allowed; }
-        
-        .btn-recusar { background: rgba(255, 255, 255, 0.05); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; transition: background 0.2s;}
-        .btn-recusar:hover { background: rgba(231, 76, 60, 0.2); }
+        .btn-recusar { background: rgba(255, 255, 255, 0.05); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; }
 
-        /* Itens do Mercado */
-        .item-loja {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-        }
-        .item-loja span { font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; }
         .btn-comprar { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-comprar:hover { background: #2980b9; }
-        
-        .btn-fechar {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.08);
-            color: #ff7675;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            margin-top: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-fechar:hover { background: rgba(255, 70, 70, 0.15); }
+        .btn-comprar:disabled { background: #555; cursor: not-allowed; }
+        .btn-vender-unidade { background: #e67e22; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .btn-vender-unidade:hover { background: #d35400; }
+        .btn-fechar { width: 100%; background: rgba(255, 255, 255, 0.08); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; margin-top: 15px; border-radius: 10px; cursor: pointer; }
 
-        /* Painel de Controles */
-        #controles {
-            position: absolute;
-            bottom: 25px;
-            left: 20px;
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(8px);
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.5;
-            border-left: 4px solid #3498db;
-            color: #ccc;
-        }
-
-        /* Estilos do Painel ADM */
-        .adm-section {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .adm-section h4 { margin: 0 0 10px 0; font-size: 13px; color: #ffd700; text-transform: uppercase;}
-        .adm-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; gap: 10px;}
-        .adm-input { background: #111; border: 1px solid #444; color: #fff; padding: 6px; border-radius: 6px; width: 90px; text-align: center; font-weight: bold;}
-        .adm-btn { background: #2980b9; border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold;}
-        .adm-btn:hover { background: #3498db; }
-        .adm-btn-add { background: #27ae60;}
-        .adm-btn-add:hover { background: #2ecc71;}
+        #controles { position: absolute; bottom: 25px; left: 20px; background: rgba(15, 15, 15, 0.85); padding: 15px; border-radius: 12px; font-size: 13px; border-left: 4px solid #3498db; }
     </style>
 </head>
 <body>
@@ -423,593 +303,151 @@
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
             <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">150</span> 🪙</p>
-            <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">10</span> 💧</p>
-            <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
+            <p>Água / Ração: <span id="hud-agua" style="color: #3498db; font-weight: bold;">10</span> 💧 | <span id="hud-racao" style="color: #f1c40f; font-weight: bold;">0</span> 🌾</p>
+            <p>Selecionado: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
         </div>
 
-        <button class="btn-navegacao-arena" id="btn-ir-arena" onclick="abrirMenuArenas()">Ir para Expansões Rurais [H] 🌱</button>
-        <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Voltar para Sede (Lojas/Contratos)</button>
+        <div class="container-navegacao" id="menu-navegacao">
+            <button class="btn-navegacao" onclick="abrirMenuArenas()">Expansões Rurais [H] 🌱</button>
+            <button class="btn-navegacao" id="btn-ir-animais" onclick="irParaPecuaria()">Rancho de Animais 🐾</button>
+        </div>
+        <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Voltar para Sede Principal</button>
+        
         <div id="titulo-arena-hud">Sede Principal</div>
 
         <div id="controles">
-            <strong style="color: #3498db; font-size: 14px;">Comandos do Jogo:</strong><br>
+            <strong style="color: #3498db; font-size: 14px;">Comandos Principais:</strong><br>
             • Movimentação: <b>W, A, S, D</b><br>
-            • <b style="color: #e67e22;">Lojinha do Agricultor: Pressione [ L ]</b><br>
-            • <b style="color: #2ecc71;">Central de Vendas: Pressione [ G ]</b><br>
-            • <b style="color: #2ecc71;">Zonas Rurais Extra: Botão ou Pressione [ H ]</b><br>
-            • Abrir Mochila/Estoque: Pressione <b>[ R ]</b><br>
-            • <b style="color: #ffd700;">Painel de Controle ADM: Pressione [ K ]</b><br>
-            • Canteiro: Clique para <b>Plantar / Regar / Colher</b>.
+            • Lojinha: <b>[ L ]</b> | Ambulante: <b>[ V ]</b> | Oficina: <b>[ U ]</b><br>
+            • Central de Vendas / Contratos: <b>[ G ]</b><br>
+            • Inventário / Mochila: <b>[ R ]</b><br>
+            • Seleção de Sementes/Animais: Teclas <b>1, 2, 3, 4</b>
         </div>
-
-        <button onclick="solicitarAcessoADM()" style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #888; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; z-index: 10;">Painel ADM ⚙️</button>
 
         <div id="player" class="character" style="left: 150px; top: 150px;">🤠</div>
-
-        <div id="vendedor" class="character">
-            👨‍🌾
-            <div class="balao-npc">Lojinha do Agricultor [L]</div>
-        </div>
-
-        <div id="central-vendas" class="character">
-            🏢
-            <div class="balao-npc">Central de Vendas [G]</div>
-        </div>
+        <div id="vendedor" class="character">👨‍🌾<div class="balao-npc">Sementes [L]</div></div>
+        <div id="ambulante" class="character">💰<div class="balao-npc">Ambulante [V]</div></div>
+        <div id="engenheiro" class="character">🛠️<div class="balao-npc">Upgrades [U]</div></div>
+        <div id="central-vendas" class="character">🏢<div class="balao-npc">Contratos [G]</div></div>
 
         <div id="zona-plantio-arena"></div>
 
+        <div id="zona-pecuaria"></div>
+
         <div id="hotbar-container">
-            <div class="hotbar-slot" id="slot-hot-laranja" onclick="selecionarPorClique('laranja')">
-                <span class="slot-num">1</span><span>🍊</span>
-                <span class="slot-qtd" id="hot-qtd-laranja">0</span>
-            </div>
-            <div class="hotbar-slot" id="slot-hot-maca" onclick="selecionarPorClique('maca')">
-                <span class="slot-num">2</span><span>🍎</span>
-                <span class="slot-qtd" id="hot-qtd-maca">0</span>
-            </div>
-            <div class="hotbar-slot" id="slot-hot-banana" onclick="selecionarPorClique('banana')">
-                <span class="slot-num">3</span><span>🍌</span>
-                <span class="slot-qtd" id="hot-qtd-banana">0</span>
-            </div>
-            <div class="hotbar-slot" id="slot-hot-melancia" onclick="selecionarPorClique('melancia')">
-                <span class="slot-num">4</span><span>🍉</span>
-                <span class="slot-qtd" id="hot-qtd-melancia">0</span>
-            </div>
+            <div class="hotbar-slot" id="slot-hot-laranja" onclick="selecionarSlot('laranja')"><span class="slot-num">1</span><span id="txt-ico-1">🍊</span><span class="slot-qtd" id="hot-qtd-1">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-maca" onclick="selecionarSlot('maca')"><span class="slot-num">2</span><span id="txt-ico-2">🍎</span><span class="slot-qtd" id="hot-qtd-2">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-banana" onclick="selecionarSlot('banana')"><span class="slot-num">3</span><span id="txt-ico-3">🍌</span><span class="slot-qtd" id="hot-qtd-3">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-melancia" onclick="selecionarSlot('melancia')"><span class="slot-num">4</span><span id="txt-ico-4">🍉</span><span class="slot-qtd" id="hot-qtd-4">0</span></div>
         </div>
-    </div>
-
-    <div id="adm-modal" class="modal-janela" style="border-color: #ffd700;">
-        <h3>Painel de Controle ADM 🛠️</h3>
-        <div class="adm-section">
-            <h4>Recursos Globais</h4>
-            <div class="adm-row">
-                <span>Moedas atuais:</span>
-                <div>
-                    <input type="number" id="adm-input-moedas" class="adm-input" value="10000">
-                    <button class="adm-btn" onclick="admDefinirMoedas()">Definir</button>
-                </div>
-            </div>
-            <div class="adm-row">
-                <span>Baldes de Água:</span>
-                <div>
-                    <input type="number" id="adm-input-agua" class="adm-input" value="500">
-                    <button class="adm-btn" onclick="admDefinirAgua()">Definir</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="adm-section">
-            <h4>Dar Sementes (+50)</h4>
-            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                <button class="adm-btn adm-btn-add" onclick="admDarSementes('laranja')">🍊 Laranja</button>
-                <button class="adm-btn adm-btn-add" onclick="admDarSementes('maca')">🍎 Maçã</button>
-                <button class="adm-btn adm-btn-add" onclick="admDarSementes('banana')">🍌 Banana</button>
-                <button class="adm-btn adm-btn-add" onclick="admDarSementes('melancia')">🍉 Melancia</button>
-            </div>
-        </div>
-
-        <div class="adm-section">
-            <h4>Dar Frutas Prontas (+50)</h4>
-            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                <button class="adm-btn adm-btn-add" style="background:#8e44ad;" onclick="admDarFrutas('laranja')">🍊 Laranja</button>
-                <button class="adm-btn adm-btn-add" style="background:#8e44ad;" onclick="admDarFrutas('maca')">🍎 Maçã</button>
-                <button class="adm-btn adm-btn-add" style="background:#8e44ad;" onclick="admDarFrutas('banana')">🍌 Banana</button>
-                <button class="adm-btn adm-btn-add" style="background:#8e44ad;" onclick="admDarFrutas('melancia')">🍉 Melancia</button>
-            </div>
-        </div>
-        <button class="btn-fechar" style="color: #ffd700;" onclick="fecharADM()">Fechar Painel ADM</button>
     </div>
 
     <div id="arenas-modal" class="modal-janela">
         <h3>Zonas de Expansão Rural 🚜</h3>
-        <p style="text-align:center; font-size:13px; color:#aaa;">Desbloqueie latifúndios extras com 20 canteiros de alta produção!</p>
+        <p style="text-align:center; font-size:13px; color:#aaa;">Custo de expansão: 3.000 moedas cada.</p>
         <div class="arenas-grid" id="grid-botoes-arenas"></div>
-        <button class="btn-fechar" onclick="fecharMenuArenas()">Fechar Menu</button>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Menu</button>
     </div>
 
-    <div id="mochila-modal" class="modal-janela">
-        <h3>Mochila e Estoque 🎒</h3>
-        <div class="mochila-secao">
-            <h4>Recursos e Sementes</h4>
-            <div class="mochila-grid">
-                <div class="mochila-item"><span>💧</span><div class="info-text"><span class="label">Baldes de Água</span><span class="qtd">Qtd: <b id="mochila-agua" style="color:#3498db;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Semente Laranja</span><span class="qtd">Qtd: <b id="mochila-sem-laranja">0</b></span></div></div>
-                <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Semente Maçã</span><span class="qtd">Qtd: <b id="mochila-sem-maca">0</b></span></div></div>
-                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Semente Banana</span><span class="qtd">Qtd: <b id="mochila-sem-banana">0</b></span></div></div>
-                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Semente Melancia</span><span class="qtd">Qtd: <b id="mochila-sem-melancia">0</b></span></div></div>
-            </div>
-        </div>
-        <div class="mochila-secao">
-            <h4>Frutas Colhidas</h4>
-            <div class="mochila-grid">
-                <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Fruta Laranja</span><span class="qtd">Estoque: <b id="mochila-fruta-laranja" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Fruta Maçã</span><span class="qtd">Estoque: <b id="mochila-fruta-maca" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Fruta Banana</span><span class="qtd">Estoque: <b id="mochila-fruta-banana" style="color:#2ecc71;">0</b></span></div></div>
-                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Fruta Melancia</span><span class="qtd">Estoque: <b id="mochila-fruta-melancia" style="color:#2ecc71;">0</b></span></div></div>
-            </div>
-        </div>
-        <button class="btn-fechar" onclick="fecharMochila()">Fechar Mochila [R]</button>
+    <div id="upgrades-modal" class="modal-janela">
+        <h3>Oficina de Tecnologia Agrícola 🛠️</h3>
+        <div id="lista-upgrades"></div>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Oficina</button>
     </div>
 
     <div id="loja-modal" class="modal-janela">
         <h3>Lojinha do Agricultor 🛒</h3>
         <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharLoja()">Fechar Loja [L]</button>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Loja</button>
+    </div>
+
+    <div id="ambulante-modal" class="modal-janela">
+        <h3>Comprador Ambulante 💰</h3>
+        <p style="text-align:center; font-size:13px; color:#f1c40f; margin-bottom:15px;">Vendo direto aqui você ganha exatamente 10 moedas de lucro por fruta!</p>
+        <div id="lista-vendas-individuais"></div>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Negociações</button>
     </div>
 
     <div id="contratos-modal" class="modal-janela">
         <h3>Mesa de Contratos Corporativos 💼</h3>
         <div id="lista-contratos"></div>
-        <button class="btn-fechar" onclick="fecharContratos()">Fechar Contratos [G]</button>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Contratos</button>
+    </div>
+
+    <div id="mochila-modal" class="modal-janela">
+        <h3>Mochila e Estoque 🎒</h3>
+        <div class="mochila-secao">
+            <h4>Insumos</h4>
+            <div class="mochila-grid">
+                <div class="mochila-item"><span>💧</span><div><span class="label">Água</span><br><b id="m-agua">0</b></div></div>
+                <div class="mochila-item"><span>🌾</span><div><span class="label">Ração</span><br><b id="m-racao">0</b></div></div>
+            </div>
+        </div>
+        <div class="mochila-secao">
+            <h4>Produtos Prontos</h4>
+            <div class="mochila-grid" id="mochila-produtos-grid"></div>
+        </div>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Mochila</button>
     </div>
 
     <script>
         let jogador = { x: 150, y: 150, velocidad: 5 }; 
         let moedas = 150; 
         let agua = 10; 
+        let racao = 0;
         let sementeSelecionada = "laranja"; 
+        let modoAtual = "plantio"; 
 
-        let estoqueSementes = { laranja: 5, maca: 0, banana: 0, melancia: 0 };
-        let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
+        let upgrades = { botas: false, baldeGrande: false, fertilizante: false };
 
-        let arenaAtual = null; 
-        let arenasDados = {}; 
-        
-        // Controle de Expansões (Apenas a 1 começa livre/true)
-        let arenasDesbloqueadas = {
-            1: true, 2: false, 3: false, 4: false, 5: false,
-            6: false, 7: false, 8: false, 9: false, 10: false
-        };
-        const CUSTO_DESBLOQUEIO = 5000;
-
-        for (let a = 1; a <= 10; a++) {
-            arenasDados[a] = Array(20).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
-        }
-
-        const atalhosTeclado = { "1": "laranja", "2": "maca", "3": "banana", "4": "melancia" };
-
-        // ECONOMIA EQUILIBRADA - PREÇOS DAS SEMENTES E ÁGUA ADAPTADOS
         const frutasInfo = {
             laranja: { nome: "Laranja", custo: 15, icone: "🍊", tempo: 4000, valorVendaBase: 75 },
             maca: { nome: "Maçã", custo: 30, icone: "🍎", tempo: 6000, valorVendaBase: 140 },
             banana: { nome: "Banana", custo: 55, icone: "🍌", tempo: 9000, valorVendaBase: 250 },
             melancia: { nome: "Melancia", custo: 90, icone: "🍉", tempo: 13000, valorVendaBase: 420 }
         };
-        const PRECO_AGUA = 5;
 
-        const empresas = ["Suco S.A.", "Hortifrúti Natural", "Atacadão de Doces", "BioFrutas Corp", "Exportadora Nacional", "Quitanda Gourmet", "NutriPolpa Indústria"];
+        const animaisInfo = {
+            galinha: { nome: "Galinha", custo: 150, icone: "🐔", tempo: 15000, valorVendaBase: 800 },
+            porco: { nome: "Porco", custo: 400, icone: "🐷", tempo: 25000, valorVendaBase: 2200 },
+            vaca: { nome: "Vaca", custo: 900, icone: "🐮", tempo: 40000, valorVendaBase: 5000 }
+        };
+
+        let estoqueSementes = { laranja: 5, maca: 0, banana: 0, melancia: 0 };
+        let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
+        
+        let estoqueFilhotes = { galinha: 0, porco: 0, vaca: 0 };
+        let estoqueAnimaisAdultos = { galinha: 0, porco: 0, vaca: 0 };
+
+        let arenaAtual = null; 
+        let pecuariaDesbloqueada = false; 
+        
+        let arenasDesbloqueadas = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+        const CUSTO_EXPANSAO = 3000;
+        const CUSTO_PECUARIA = 20000;
+
+        let arenasDados = {};
+        for (let a = 1; a <= 10; a++) {
+            arenasDados[a] = Array(20).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
+        }
+        let pecuariaSlots = Array(9).fill(null).map(() => ({ status: "vazio", animal: null, timer: null }));
+
         let listaContratosAtivos = [null, null, null];
-
+        const empresas = ["Frigorífico Real", "Granja Ideal", "Laticínios Ouro", "Natura Alimentos", "BioAgro Corp"];
         const teclas = {};
 
         window.addEventListener('keydown', (e) => {
-            const tecla = e.key.toLowerCase();
-            teclas[tecla] = true;
+            const t = e.key.toLowerCase();
+            teclas[t] = true;
 
-            if (tecla === 'h') alternarMenuArenasTeclado();
-            if (tecla === 'k') solicitarAcessoADM();
-
+            if (t === 'h') abrirMenuArenas();
             if (arenaAtual === null) {
-                if (tecla === 'l') alternarLoja();
-                if (tecla === 'g') alternarContratos();
+                if (t === 'l') abrirLoja();
+                if (t === 'v') abrirAmbulante();
+                if (t === 'g') abrirContratos();
+                if (t === 'u') abrirUpgrades();
             }
-            
-            if (tecla === 'r') alternarMochila();
+            if (t === 'r') abrirMochila();
 
-            if (atalhosTeclado[e.key]) {
-                sementeSelecionada = atalhosTeclado[e.key];
-                atualizarInterface();
-            }
-        });
-
-        window.addEventListener('keyup', (e) => { teclas[e.key.toLowerCase()] = false; });
-
-        function loopJogo() {
-            if (teclas['w']) jogador.y -= jogador.velocidad; 
-            if (teclas['s']) jogador.y += jogador.velocidad; 
-            if (teclas['a']) jogador.x -= jogador.velocidad; 
-            if (teclas['d']) jogador.x += jogador.velocidad; 
-
-            if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) jogador.y = 20;
-            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
-            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
-
-            document.getElementById('player').style.left = jogador.x + 'px';
-            document.getElementById('player').style.top = jogador.y + 'px';
-
-            requestAnimationFrame(loopJogo);
-        }
-
-        const admModal = document.getElementById('adm-modal');
-        function solicitarAcessoADM() {
-            let resposta = prompt("Digite a senha do Painel ADM:");
-            if (resposta === "kaua@2024") {
-                fecharLoja(); fecharContratos(); fecharMochila(); fecharMenuArenas();
-                admModal.style.display = 'block';
-            } else if (resposta !== null) {
-                alert("Senha incorreta!");
-            }
-        }
-        function fecharADM() { admModal.style.display = 'none'; }
-
-        function admDefinirMoedas() {
-            let valor = parseInt(document.getElementById('adm-input-moedas').value);
-            if (!isNaN(valor)) { moedas = valor; atualizarInterface(); }
-        }
-        function admDefinirAgua() {
-            let valor = parseInt(document.getElementById('adm-input-agua').value);
-            if (!isNaN(valor)) { agua = valor; atualizarInterface(); }
-        }
-        function admDarSementes(tipo) {
-            estoqueSementes[tipo] += 50;
-            atualizarInterface();
-        }
-        function admDarFrutas(tipo) {
-            estoqueFrutas[tipo] += 50;
-            atualizarInterface();
-            if (contratosModal.style.display === 'block') renderizarTodosContratos();
-        }
-
-        function alternarMenuArenasTeclado() {
-            if (document.getElementById('arenas-modal').style.display === 'block') fecharMenuArenas();
-            else abrirMenuArenas();
-        }
-
-        function abrirMenuArenas() {
-            fecharLoja(); fecharContratos(); fecharMochila(); fecharADM();
-            renderizarMenuArenas();
-            document.getElementById('arenas-modal').style.display = 'block';
-        }
-
-        function renderizarMenuArenas() {
-            const grid = document.getElementById('grid-botoes-arenas');
-            grid.innerHTML = '';
-            
-            for (let i = 1; i <= 10; i++) {
-                if (arenasDesbloqueadas[i]) {
-                    grid.innerHTML += `
-                        <button class="btn-arena-card" onclick="viajarParaArena(${i})">
-                            Zona Expansão #${i}<br>
-                            <span style="font-size:11px; font-weight:normal; color:#2ecc71;">🔓 Desbloqueada (20 Canteiros)</span>
-                        </button>`;
-                } else {
-                    grid.innerHTML += `
-                        <button class="btn-arena-card bloqueado" onclick="desbloquearArena(${i})">
-                            Zona Expansão #${i}<br>
-                            <span style="font-size:11px; font-weight:bold; color:#e74c3c;">🔒 Bloqueada<br>Comprar: 5.000 🪙</span>
-                        </button>`;
-                }
-            }
-        }
-
-        function desbloquearArena(numero) {
-            if (moedas >= CUSTO_DESBLOQUEIO) {
-                moedas -= CUSTO_DESBLOQUEIO;
-                arenasDesbloqueadas[numero] = true;
-                alert(`Sucesso! Você expandiu suas terras rurais e comprou a Zona #${numero}! 🚜`);
-                renderizarMenuArenas();
-                atualizarInterface();
-            } else {
-                alert(`Moedas insuficientes! Você precisa de 5.000 moedas para comprar esta Zona Rural.`);
-            }
-        }
-
-        function fecharMenuArenas() { document.getElementById('arenas-modal').style.display = 'none'; }
-
-        function viajarParaArena(numero) {
-            if (!arenasDesbloqueadas[numero]) return;
-            arenaAtual = numero;
-            fecharMenuArenas();
-
-            document.getElementById('vendedor').style.display = 'none';
-            document.getElementById('central-vendas').style.display = 'none';
-            document.getElementById('btn-ir-arena').style.display = 'none';
-            
-            document.getElementById('btn-voltar-sede').style.display = 'block';
-            document.getElementById('titulo-arena-hud').style.display = 'block';
-            document.getElementById('titulo-arena-hud').innerText = `Zona Rural #${numero} 🚜`;
-
-            renderizarEstruturaArena20Slots();
-            document.getElementById('zona-plantio-arena').style.display = 'grid';
-        }
-
-        function voltarParaSede() {
-            arenaAtual = null;
-            
-            document.getElementById('vendedor').style.display = 'flex';
-            document.getElementById('central-vendas').style.display = 'flex';
-            document.getElementById('btn-ir-arena').style.display = 'block';
-            
-            document.getElementById('btn-voltar-sede').style.display = 'none';
-            document.getElementById('titulo-arena-hud').style.display = 'none';
-            document.getElementById('zona-plantio-arena').style.display = 'none';
-        }
-
-        function renderizarEstruturaArena20Slots() {
-            const container = document.getElementById('zona-plantio-arena');
-            container.innerHTML = '';
-            
-            let canteirosAtuais = arenasDados[arenaAtual];
-
-            canteirosAtuais.forEach((canteiro, idx) => {
-                let conteudoHTML = `🟫<span class="status">Vazio</span>`;
-                
-                if (canteiro.status === "plantado") {
-                    conteudoHTML = `🌱 <span class="status" style="background:#e67e22;">Colocar Água!</span>`;
-                } else if (canteiro.status === "regado") {
-                    conteudoHTML = `💧 <span class="status" style="background:#3498db;">Crescendo...</span>`;
-                } else if (canteiro.status === "pronto") {
-                    let infoFruta = frutasInfo[canteiro.fruta];
-                    conteudoHTML = `${infoFruta.icone} <span class="status" style="background:#2ecc71;">Colher!</span>`;
-                }
-
-                container.innerHTML += `<div class="slot" onclick="interagirCanteiroArena(${idx})" id="arena-slot-${idx}">${conteudoHTML}</div>`;
-            });
-        }
-
-        const mochilaModal = document.getElementById('mochila-modal');
-        function alternarMochila() { 
-            if (mochilaModal.style.display === 'block') { fecharMochila(); } 
-            else { fecharLoja(); fecharContratos(); fecharMenuArenas(); fecharADM(); mochilaModal.style.display = 'block'; atualizarInterface(); }
-        }
-        function fecharMochila() { mochilaModal.style.display = 'none'; }
-
-        const lojaModal = document.getElementById('loja-modal');
-        function alternarLoja() { 
-            if (lojaModal.style.display === 'block') { fecharLoja(); } 
-            else { fecharMochila(); fecharContratos(); fecharMenuArenas(); fecharADM(); lojaModal.style.display = 'block'; renderizarLoja(); }
-        }
-        function fecharLoja() { lojaModal.style.display = 'none'; }
-
-        const contratosModal = document.getElementById('contratos-modal');
-        function alternarContratos() {
-            if (contratosModal.style.display === 'block') { fecharContratos(); }
-            else { fecharMochila(); fecharLoja(); fecharMenuArenas(); fecharADM(); contratosModal.style.display = 'block'; renderizarTodosContratos(); }
-        }
-        function fecharContratos() { contratosModal.style.display = 'none'; }
-
-        function renderizarLoja() {
-            const lista = document.getElementById('lista-itens');
-            lista.innerHTML = `
-                <div class="item-loja" style="border-color: rgba(52, 152, 219, 0.4);">
-                    <span>💧 <b>Balde de Água</b></span>
-                    <button class="btn-comprar" style="background: #3498db;" onclick="comprarAgua()">Comprar por ${PRECO_AGUA} 🪙</button>
-                </div>
-            `;
-            for (let chave in frutasInfo) {
-                let fruta = frutasInfo[chave];
-                lista.innerHTML += `
-                    <div class="item-loja">
-                        <span>${fruta.icone} <b>Semente de ${fruta.nome}</b></span>
-                        <button class="btn-comprar" onclick="comprarSemente('${chave}')">Comprar por ${fruta.custo} 🪙</button>
-                    </div>
-                `;
-            }
-        }
-
-        function comprarSemente(tipo) {
-            let custo = frutasInfo[tipo].custo;
-            if (moedas >= custo) {
-                moedas -= custo;
-                estoqueSementes[tipo]++;
-                atualizarInterface();
-                renderizarLoja();
-            } else {
-                alert("Moedas insuficientes!");
-            }
-        }
-
-        function comprarAgua() {
-            if (moedas >= PRECO_AGUA) {
-                moedas -= PRECO_AGUA;
-                agua++;
-                atualizarInterface();
-                renderizarLoja();
-            } else {
-                alert("Moedas insuficientes para comprar água!");
-            }
-        }
-
-        // GERADOR DE PROPOSTAS BALANÇADAS COM OS VALORES DE INVESTIMENTO
-        function gerarContratoUnico(index) {
-            let empresa = empresas[Math.floor(Math.random() * empresas.length)];
-            let pedido = {};
-            let valorTotal = 0;
-            
-            let chavesFrutas = Object.keys(frutasInfo);
-            let frutaPrincipal = chavesFrutas[Math.floor(Math.random() * chavesFrutas.length)];
-            let qtdPrincipal = Math.floor(Math.random() * 8) + 6; 
-            pedido[frutaPrincipal] = qtdPrincipal;
-            
-            valorTotal += qtdPrincipal * frutasInfo[frutaPrincipal].valorVendaBase;
-
-            chavesFrutas.forEach(fruta => {
-                if (fruta !== frutaPrincipal && Math.random() > 0.4) {
-                    let qtdSecundaria = Math.floor(Math.random() * 4) + 1; 
-                    pedido[fruta] = qtdSecundaria;
-                    valorTotal += qtdSecundaria * frutasInfo[fruta].valorVendaBase;
-                }
-            });
-
-            // Bônus corporativo justo (proposta paga entre 10% a 30% a mais do que a venda direta)
-            let multiplicadorProposta = (Math.random() * 0.2) + 1.10; 
-            valorTotal = Math.round(valorTotal * multiplicadorProposta);
-
-            listaContratosAtivos[index] = { empresa, pedido, valor: valorTotal };
-        }
-
-        function renderizarTodosContratos() {
-            const container = document.getElementById('lista-contratos');
-            container.innerHTML = '';
-
-            for (let i = 0; i < 3; i++) {
-                if (listaContratosAtivos[i] === null) gerarContratoUnico(i);
-            }
-
-            listaContratosAtivos.forEach((contrato, index) => {
-                if (!contrato) return;
-
-                let requisitosTexto = '';
-                let podeCompletar = true;
-
-                for (let fruta in contrato.pedido) {
-                    let qtdNecessaria = contrato.pedido[fruta];
-                    let qtdAtual = estoqueFrutas[fruta] || 0;
-                    if (qtdAtual < qtdNecessaria) podeCompletar = false;
-                    
-                    let corStatus = qtdAtual >= qtdNecessaria ? '#2ecc71' : '#e74c3c';
-                    requisitosTexto += `• ${frutasInfo[fruta].icone} ${frutasInfo[fruta].nome}: <b style="color: ${corStatus}">${qtdAtual}/${qtdNecessaria}</b><br>`;
-                }
-
-                let boxClasse = podeCompletar ? 'contrato-box completavel' : 'contrato-box';
-                let botaoAtributo = podeCompletar ? '' : 'disabled';
-
-                container.innerHTML += `
-                    <div class="${boxClasse}">
-                        <div class="contrato-header">
-                            <span>🏢 ${contrato.empresa} (Lote ${index + 1})</span>
-                            <span style="color: #ffd700;">Proposta: ${contrato.valor} 🪙</span>
-                        </div>
-                        <div class="contrato-requisitos">
-                            <strong>Demandas do Contrato:</strong><br>
-                            ${requisitosTexto}
-                        </div>
-                        <div class="contrato-botoes">
-                            <button class="btn-aceitar" ${botaoAtributo} onclick="aceitarContratoEspecifico(${index})">Vender Lote</button>
-                            <button class="btn-recusar" onclick="recusarContratoEspecifico(${index})">Recusar Contrato</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function aceitarContratoEspecifico(index) {
-            let contrato = listaContratosAtivos[index];
-            if (!contrato) return;
-
-            for (let fruta in contrato.pedido) {
-                if (estoqueFrutas[fruta] < contrato.pedido[fruta]) return;
-            }
-
-            for (let fruta in contrato.pedido) {
-                estoqueFrutas[fruta] -= contrato.pedido[fruta];
-            }
-            moedas += contrato.valor;
-            alert(`Lote vendido com sucesso para ${contrato.empresa}! Lucro de +${contrato.valor} 🪙 recebido.`);
-            
-            listaContratosAtivos[index] = null;
-            renderizarTodosContratos();
-            atualizarInterface();
-        }
-
-        function recusarContratoEspecifico(index) {
-            gerarContratoUnico(index);
-            renderizarTodosContratos();
-        }
-
-        function selecionarPorClique(tipo) {
-            sementeSelecionada = tipo;
-            atualizarInterface();
-        }
-
-        function atualizarInterface() {
-            document.getElementById('moedas').innerText = moedas;
-            document.getElementById('hud-agua').innerText = agua;
-            document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhum";
-            
-            document.getElementById(`hot-qtd-laranja`).innerText = estoqueSementes.laranja;
-            document.getElementById(`hot-qtd-maca`).innerText = estoqueSementes.maca;
-            document.getElementById(`hot-qtd-banana`).innerText = estoqueSementes.banana;
-            document.getElementById(`hot-qtd-melancia`).innerText = estoqueSementes.melancia;
-
-            document.getElementById(`mochila-agua`).innerText = agua;
-            document.getElementById(`mochila-sem-laranja`).innerText = estoqueSementes.laranja;
-            document.getElementById(`mochila-sem-maca`).innerText = estoqueSementes.maca;
-            document.getElementById(`mochila-sem-banana`).innerText = estoqueSementes.banana;
-            document.getElementById(`mochila-sem-melancia`).innerText = estoqueSementes.melancia;
-
-            document.getElementById(`mochila-fruta-laranja`).innerText = estoqueFrutas.laranja;
-            document.getElementById(`mochila-fruta-maca`).innerText = estoqueFrutas.maca;
-            document.getElementById(`mochila-fruta-banana`).innerText = estoqueFrutas.banana;
-            document.getElementById(`mochila-fruta-melancia`).innerText = estoqueFrutas.melancia;
-
-            document.querySelectorAll('.hotbar-slot').forEach(el => el.classList.remove('ativo'));
-            if (sementeSelecionada) {
-                document.getElementById(`slot-hot-${sementeSelecionada}`).classList.add('ativo');
-            }
-        }
-
-        function interagirCanteiroArena(id) {
-            let canteirosDaArena = arenasDados[arenaAtual];
-            if (!canteirosDaArena) return;
-            let canteiro = canteirosDaArena[id];
-            let slotEl = document.getElementById(`arena-slot-${id}`);
-
-            if (canteiro.status === "vazio") {
-                if (sementeSelecionada && estoqueSementes[sementeSelecionada] > 0) {
-                    estoqueSementes[sementeSelecionada]--;
-                    canteiro.status = "plantado";
-                    canteiro.fruta = sementeSelecionada;
-                    
-                    slotEl.innerHTML = `🌱 <span class="status" style="background:#e67e22;">Colocar Água!</span>`;
-                    atualizarInterface();
-                } else {
-                    alert("Você não possui sementes de " + sementeSelecionada + "! Compre com o Agricultor na Sede.");
-                }
-            } 
-            else if (canteiro.status === "plantado") {
-                if (agua > 0) {
-                    agua--; 
-                    canteiro.status = "regado";
-                    slotEl.innerHTML = `💧 <span class="status" style="background:#3498db;">Crescendo...</span>`;
-                    
-                    let infoFruta = frutasInfo[canteiro.fruta];
-                    atualizarInterface();
-                    
-                    canteiro.timer = setTimeout(() => {
-                        canteiro.status = "pronto";
-                        if (arenaAtual && document.getElementById(`arena-slot-${id}`)) {
-                            document.getElementById(`arena-slot-${id}`).innerHTML = `${infoFruta.icone} <span class="status" style="background:#2ecc71;">Colher!</span>`;
-                        }
-                    }, infoFruta.tempo);
-                } else {
-                    alert("Você ficou sem água! Compre mais baldes na Lojinha da Sede Principal.");
-                }
-            } 
-            else if (canteiro.status === "pronto") {
-                estoqueFrutas[canteiro.fruta]++;
-                canteiro.status = "vazio";
-                canteiro.fruta = null;
-                canteiro.timer = null;
-                
-                slotEl.innerHTML = `🟫 <span class="status">Vazio</span>`;
-                atualizarInterface();
-            }
-        }
-
-        // Inicialização do Jogo
-        atualizarInterface();
-        loopJogo();
-    </script>
-</body>
-</html>
+            if (modoAtual === "plantio" && ["1","2","3","4"].includes(e.key)) {
+                cons
