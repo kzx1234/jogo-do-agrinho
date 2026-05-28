@@ -79,17 +79,14 @@
             transform: scale(1.03);
         }
 
-        /* Cenário Gráfico da Fazenda */
+        /* NOVO CENÁRIO COM TEXTURA DE GRAMA PIXEL ART */
         #cenario {
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: #4d7a27;
-            background-image: 
-                radial-gradient(#436b22 15%, transparent 16%),
-                radial-gradient(#436b22 15%, transparent 16%);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
+            background-image: url('https://img.itch.zone/aW1nLzEzMDMyNzI2LnBuZw==/original/6v66gG.png');
+            background-size: 64px 64px;
+            background-repeat: repeat;
             border: 16px solid #3d281a;
         }
 
@@ -154,7 +151,7 @@
         #vendedor .balao-npc { border-color: #e67e22; }
         #central-vendas .balao-npc { border-color: #2ecc71; }
 
-        /* Área de Plantio Centralizada (Sede - 8 Slots) */
+        /* NOVA ÁREA DE PLANTIO COM TEXTURA DE TERRA TRALHADA */
         #zona-plantio {
             position: absolute;
             left: 50%;
@@ -163,14 +160,15 @@
             display: grid;
             grid-template-columns: repeat(4, 95px);
             grid-gap: 15px;
-            background: #2e1f13;
+            background-image: url('https://img.itch.zone/aW1nLzEzMDMyNzMwLnBuZw==/original/7%2F7fPr.png');
+            background-size: 48px 48px;
             padding: 20px;
             border-radius: 16px;
-            border: 4px solid #1f140c;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 12px 24px rgba(0,0,0,0.4);
+            border: 6px solid #4a3319;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6), 0 12px 24px rgba(0,0,0,0.5);
         }
 
-        /* GIGANTE Área de Plantio das Arenas (20 slots) */
+        /* GIGANTE Área de Plantio das Arenas com Textura de Terra Fofa */
         #zona-plantio-arena {
             display: none;
             position: absolute;
@@ -179,18 +177,20 @@
             transform: translate(-50%, -50%);
             grid-template-columns: repeat(5, 95px);
             grid-gap: 12px;
-            background: #23170e;
+            background-image: url('https://img.itch.zone/aW1nLzEzMDMyNzMwLnBuZw==/original/7%2F7fPr.png');
+            background-size: 48px 48px;
             padding: 25px;
             border-radius: 20px;
             border: 6px dashed #ffd700;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 16px 32px rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.7), 0 16px 32px rgba(0,0,0,0.6);
         }
 
+        /* ESTILO DOS TEXTURAS DE CANTEIROS INDIVIDUAIS */
         .slot {
             width: 95px;
             height: 95px;
-            background-color: #4f3521;
-            border: 2px dashed #2e1f13;
+            background-color: rgba(92, 63, 40, 0.6);
+            border: 2px solid #2e1f13;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -201,13 +201,13 @@
             transition: all 0.2s ease;
         }
         .slot:hover { 
-            background-color: #5c3f28;
+            background-color: rgba(110, 77, 50, 0.8);
             transform: scale(1.04);
         }
         .slot .status { 
             font-size: 11px; 
             margin-top: 6px; 
-            background: rgba(0, 0, 0, 0.75); 
+            background: rgba(0, 0, 0, 0.85); 
             padding: 3px 6px; 
             border-radius: 20px;
             font-weight: bold;
@@ -215,6 +215,7 @@
             width: 85%;
             white-space: nowrap;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         /* Hotbar Moderna */
@@ -223,7 +224,7 @@
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 15, 15, 0.8);
+            background: rgba(15, 15, 15, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255,255,255,0.1);
             padding: 6px;
@@ -335,7 +336,7 @@
         .mochila-item .info-text .label { font-size: 13px; font-weight: 600; color: #fff; }
         .mochila-item .info-text .qtd { font-size: 12px; color: #aaa; }
 
-        /* Lista de Múltiplos Contratos */
+        /* Lista de Contratos */
         #lista-contratos {
             display: flex;
             flex-direction: column;
@@ -511,12 +512,3 @@
             </div>
             <div class="adm-row">
                 <span>Baldes de Água:</span>
-                <div>
-                    <input type="number" id="adm-input-agua" class="adm-input" value="500">
-                    <button class="adm-btn" onclick="admDefinirAgua()">Definir</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="adm-section">
-      
