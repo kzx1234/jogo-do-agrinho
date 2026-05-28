@@ -294,6 +294,14 @@
             border-color: #2ecc71;
             transform: translateY(-2px);
         }
+        .btn-arena-card.bloqueado {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.05);
+        }
+        .btn-arena-card.bloqueado:hover {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+        }
 
         /* Grid da Mochila */
         .mochila-secao {
@@ -414,12 +422,12 @@
     <div id="cenario">
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
-            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">60</span> 🪙</p>
-            <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">5</span> 💧</p>
+            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">150</span> 🪙</p>
+            <p>Água Disponível: <span id="hud-agua" style="color: #3498db; font-weight: bold;">10</span> 💧</p>
             <p>Semente em Mão: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
         </div>
 
-        <button class="btn-navegacao-arena" id="btn-ir-arena" onclick="abrirMenuArenas()">Ir para Expansões Rurais (Plantações Grandes) [H] 🌱</button>
+        <button class="btn-navegacao-arena" id="btn-ir-arena" onclick="abrirMenuArenas()">Ir para Expansões Rurais [H] 🌱</button>
         <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Voltar para Sede (Lojas/Contratos)</button>
         <div id="titulo-arena-hud">Sede Principal</div>
 
@@ -427,7 +435,7 @@
             <strong style="color: #3498db; font-size: 14px;">Comandos do Jogo:</strong><br>
             • Movimentação: <b>W, A, S, D</b><br>
             • <b style="color: #e67e22;">Lojinha do Agricultor: Pressione [ L ]</b><br>
-            • <b style="color: #2ecc71;">Central de Vendas (Empresas): Pressione [ G ]</b><br>
+            • <b style="color: #2ecc71;">Central de Vendas: Pressione [ G ]</b><br>
             • <b style="color: #2ecc71;">Zonas Rurais Extra: Botão ou Pressione [ H ]</b><br>
             • Abrir Mochila/Estoque: Pressione <b>[ R ]</b><br>
             • <b style="color: #ffd700;">Painel de Controle ADM: Pressione [ K ]</b><br>
@@ -477,7 +485,7 @@
             <div class="adm-row">
                 <span>Moedas atuais:</span>
                 <div>
-                    <input type="number" id="adm-input-moedas" class="adm-input" value="1000">
+                    <input type="number" id="adm-input-moedas" class="adm-input" value="10000">
                     <button class="adm-btn" onclick="admDefinirMoedas()">Definir</button>
                 </div>
             </div>
@@ -514,7 +522,7 @@
 
     <div id="arenas-modal" class="modal-janela">
         <h3>Zonas de Expansão Rural 🚜</h3>
-        <p style="text-align:center; font-size:13px; color:#aaa;">Cada zona possui um latifúndio com 20 espaços prontos para plantar!</p>
+        <p style="text-align:center; font-size:13px; color:#aaa;">Desbloqueie latifúndios extras com 20 canteiros de alta produção!</p>
         <div class="arenas-grid" id="grid-botoes-arenas"></div>
         <button class="btn-fechar" onclick="fecharMenuArenas()">Fechar Menu</button>
     </div>
@@ -557,15 +565,22 @@
 
     <script>
         let jogador = { x: 150, y: 150, velocidad: 5 }; 
-        let moedas = 60; 
-        let agua = 5; 
+        let moedas = 150; 
+        let agua = 10; 
         let sementeSelecionada = "laranja"; 
 
-        let estoqueSementes = { laranja: 2, maca: 0, banana: 0, melancia: 0 };
+        let estoqueSementes = { laranja: 5, maca: 0, banana: 0, melancia: 0 };
         let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
 
         let arenaAtual = null; 
         let arenasDados = {}; 
+        
+        // Controle de Expansões (Apenas a 1 começa livre/true)
+        let arenasDesbloqueadas = {
+            1: true, 2: false, 3: false, 4: false, 5: false,
+            6: false, 7: false, 8: false, 9: false, 10: false
+        };
+        const CUSTO_DESBLOQUEIO = 5000;
 
         for (let a = 1; a <= 10; a++) {
             arenasDados[a] = Array(20).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
@@ -573,12 +588,14 @@
 
         const atalhosTeclado = { "1": "laranja", "2": "maca", "3": "banana", "4": "melancia" };
 
+        // ECONOMIA EQUILIBRADA - PREÇOS DAS SEMENTES E ÁGUA ADAPTADOS
         const frutasInfo = {
-            laranja: { nome: "Laranja", custo: 2, icone: "🍊", tempo: 3000 },
-            maca: { nome: "Maçã", custo: 4, icone: "🍎", tempo: 5000 },
-            banana: { nome: "Banana", custo: 6, icone: "🍌", tempo: 7000 },
-            melancia: { nome: "Melancia", custo: 9, icone: "🍉", tempo: 10000 }
+            laranja: { nome: "Laranja", custo: 15, icone: "🍊", tempo: 4000, valorVendaBase: 75 },
+            maca: { nome: "Maçã", custo: 30, icone: "🍎", tempo: 6000, valorVendaBase: 140 },
+            banana: { nome: "Banana", custo: 55, icone: "🍌", tempo: 9000, valorVendaBase: 250 },
+            melancia: { nome: "Melancia", custo: 90, icone: "🍉", tempo: 13000, valorVendaBase: 420 }
         };
+        const PRECO_AGUA = 5;
 
         const empresas = ["Suco S.A.", "Hortifrúti Natural", "Atacadão de Doces", "BioFrutas Corp", "Exportadora Nacional", "Quitanda Gourmet", "NutriPolpa Indústria"];
         let listaContratosAtivos = [null, null, null];
@@ -660,18 +677,47 @@
 
         function abrirMenuArenas() {
             fecharLoja(); fecharContratos(); fecharMochila(); fecharADM();
+            renderizarMenuArenas();
+            document.getElementById('arenas-modal').style.display = 'block';
+        }
+
+        function renderizarMenuArenas() {
             const grid = document.getElementById('grid-botoes-arenas');
             grid.innerHTML = '';
             
             for (let i = 1; i <= 10; i++) {
-                grid.innerHTML += `<button class="btn-arena-card" onclick="viajarParaArena(${i})">Zona Expansão #${i}<br><span style="font-size:11px; font-weight:normal; color:#2ecc71;">20 Canteiros</span></button>`;
+                if (arenasDesbloqueadas[i]) {
+                    grid.innerHTML += `
+                        <button class="btn-arena-card" onclick="viajarParaArena(${i})">
+                            Zona Expansão #${i}<br>
+                            <span style="font-size:11px; font-weight:normal; color:#2ecc71;">🔓 Desbloqueada (20 Canteiros)</span>
+                        </button>`;
+                } else {
+                    grid.innerHTML += `
+                        <button class="btn-arena-card bloqueado" onclick="desbloquearArena(${i})">
+                            Zona Expansão #${i}<br>
+                            <span style="font-size:11px; font-weight:bold; color:#e74c3c;">🔒 Bloqueada<br>Comprar: 5.000 🪙</span>
+                        </button>`;
+                }
             }
-            document.getElementById('arenas-modal').style.display = 'block';
+        }
+
+        function desbloquearArena(numero) {
+            if (moedas >= CUSTO_DESBLOQUEIO) {
+                moedas -= CUSTO_DESBLOQUEIO;
+                arenasDesbloqueadas[numero] = true;
+                alert(`Sucesso! Você expandiu suas terras rurais e comprou a Zona #${numero}! 🚜`);
+                renderizarMenuArenas();
+                atualizarInterface();
+            } else {
+                alert(`Moedas insuficientes! Você precisa de 5.000 moedas para comprar esta Zona Rural.`);
+            }
         }
 
         function fecharMenuArenas() { document.getElementById('arenas-modal').style.display = 'none'; }
 
         function viajarParaArena(numero) {
+            if (!arenasDesbloqueadas[numero]) return;
             arenaAtual = numero;
             fecharMenuArenas();
 
@@ -746,8 +792,8 @@
             const lista = document.getElementById('lista-itens');
             lista.innerHTML = `
                 <div class="item-loja" style="border-color: rgba(52, 152, 219, 0.4);">
-                    <span>💧 <b>Balde de Água (Obrigatório p/ Regar)</b></span>
-                    <button class="btn-comprar" style="background: #3498db;" onclick="comprarAgua()">Comprar por 1 🪙</button>
+                    <span>💧 <b>Balde de Água</b></span>
+                    <button class="btn-comprar" style="background: #3498db;" onclick="comprarAgua()">Comprar por ${PRECO_AGUA} 🪙</button>
                 </div>
             `;
             for (let chave in frutasInfo) {
@@ -767,14 +813,15 @@
                 moedas -= custo;
                 estoqueSementes[tipo]++;
                 atualizarInterface();
+                renderizarLoja();
             } else {
                 alert("Moedas insuficientes!");
             }
         }
 
         function comprarAgua() {
-            if (moedas >= 1) {
-                moedas -= 1;
+            if (moedas >= PRECO_AGUA) {
+                moedas -= PRECO_AGUA;
                 agua++;
                 atualizarInterface();
                 renderizarLoja();
@@ -783,6 +830,7 @@
             }
         }
 
+        // GERADOR DE PROPOSTAS BALANÇADAS COM OS VALORES DE INVESTIMENTO
         function gerarContratoUnico(index) {
             let empresa = empresas[Math.floor(Math.random() * empresas.length)];
             let pedido = {};
@@ -793,18 +841,18 @@
             let qtdPrincipal = Math.floor(Math.random() * 8) + 6; 
             pedido[frutaPrincipal] = qtdPrincipal;
             
-            const valoresDeVendaBase = { laranja: 18, maca: 26, banana: 38, melancia: 55 };
-            valorTotal += qtdPrincipal * valoresDeVendaBase[frutaPrincipal];
+            valorTotal += qtdPrincipal * frutasInfo[frutaPrincipal].valorVendaBase;
 
             chavesFrutas.forEach(fruta => {
                 if (fruta !== frutaPrincipal && Math.random() > 0.4) {
                     let qtdSecundaria = Math.floor(Math.random() * 4) + 1; 
                     pedido[fruta] = qtdSecundaria;
-                    valorTotal += qtdSecundaria * valoresDeVendaBase[fruta];
+                    valorTotal += qtdSecundaria * frutasInfo[fruta].valorVendaBase;
                 }
             });
 
-            let multiplicadorProposta = (Math.random() * 0.5) + 0.85; 
+            // Bônus corporativo justo (proposta paga entre 10% a 30% a mais do que a venda direta)
+            let multiplicadorProposta = (Math.random() * 0.2) + 1.10; 
             valorTotal = Math.round(valorTotal * multiplicadorProposta);
 
             listaContratosAtivos[index] = { empresa, pedido, valor: valorTotal };
@@ -840,15 +888,15 @@
                     <div class="${boxClasse}">
                         <div class="contrato-header">
                             <span>🏢 ${contrato.empresa} (Lote ${index + 1})</span>
-                            <span>Proposta: ${contrato.valor} 🪙</span>
+                            <span style="color: #ffd700;">Proposta: ${contrato.valor} 🪙</span>
                         </div>
                         <div class="contrato-requisitos">
-                            <strong>Demandas:</strong><br>
+                            <strong>Demandas do Contrato:</strong><br>
                             ${requisitosTexto}
                         </div>
                         <div class="contrato-botoes">
                             <button class="btn-aceitar" ${botaoAtributo} onclick="aceitarContratoEspecifico(${index})">Vender Lote</button>
-                            <button class="btn-recusar" onclick="recusarContratoEspecifico(${index})">Recusar</button>
+                            <button class="btn-recusar" onclick="recusarContratoEspecifico(${index})">Recusar Contrato</button>
                         </div>
                     </div>
                 `;
@@ -867,7 +915,7 @@
                 estoqueFrutas[fruta] -= contrato.pedido[fruta];
             }
             moedas += contrato.valor;
-            alert(`Lote vendido para ${contrato.empresa}! Ganhou +${contrato.valor} 🪙`);
+            alert(`Lote vendido com sucesso para ${contrato.empresa}! Lucro de +${contrato.valor} 🪙 recebido.`);
             
             listaContratosAtivos[index] = null;
             renderizarTodosContratos();
@@ -926,7 +974,7 @@
                     slotEl.innerHTML = `🌱 <span class="status" style="background:#e67e22;">Colocar Água!</span>`;
                     atualizarInterface();
                 } else {
-                    alert("Você não possui sementes de " + sementeSelecionada + "! Vá para a Sede ou use o ADM.");
+                    alert("Você não possui sementes de " + sementeSelecionada + "! Compre com o Agricultor na Sede.");
                 }
             } 
             else if (canteiro.status === "plantado") {
@@ -940,12 +988,12 @@
                     
                     canteiro.timer = setTimeout(() => {
                         canteiro.status = "pronto";
-                        if (document.getElementById(`arena-slot-${id}`)) {
+                        if (arenaAtual && document.getElementById(`arena-slot-${id}`)) {
                             document.getElementById(`arena-slot-${id}`).innerHTML = `${infoFruta.icone} <span class="status" style="background:#2ecc71;">Colher!</span>`;
                         }
                     }, infoFruta.tempo);
                 } else {
-                    alert("Você não possui Baldes de Água! Adicione no painel ADM ou compre na Sede.");
+                    alert("Você ficou sem água! Compre mais baldes na Lojinha da Sede Principal.");
                 }
             } 
             else if (canteiro.status === "pronto") {
@@ -959,7 +1007,7 @@
             }
         }
 
-        // Inicialização do Game Loop
+        // Inicialização do Jogo
         atualizarInterface();
         loopJogo();
     </script>
