@@ -436,7 +436,7 @@
 
         <button onclick="solicitarAcessoADM()" style="position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.5); border: 1px solid #444; color: #888; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; z-index: 10;">Painel ADM ⚙️</button>
 
-        <div id="player" class="character">🤠</div>
+        <div id="player" class="character" style="left: 150px; top: 150px;">🤠</div>
 
         <div id="vendedor" class="character">
             👨‍🌾
@@ -513,4 +513,455 @@
     </div>
 
     <div id="arenas-modal" class="modal-janela">
-        <h3>Zonas de Expansão Rur
+        <h3>Zonas de Expansão Rural 🚜</h3>
+        <p style="text-align:center; font-size:13px; color:#aaa;">Cada zona possui um latifúndio com 20 espaços prontos para plantar!</p>
+        <div class="arenas-grid" id="grid-botoes-arenas"></div>
+        <button class="btn-fechar" onclick="fecharMenuArenas()">Fechar Menu</button>
+    </div>
+
+    <div id="mochila-modal" class="modal-janela">
+        <h3>Mochila e Estoque 🎒</h3>
+        <div class="mochila-secao">
+            <h4>Recursos e Sementes</h4>
+            <div class="mochila-grid">
+                <div class="mochila-item"><span>💧</span><div class="info-text"><span class="label">Baldes de Água</span><span class="qtd">Qtd: <b id="mochila-agua" style="color:#3498db;">0</b></span></div></div>
+                <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Semente Laranja</span><span class="qtd">Qtd: <b id="mochila-sem-laranja">0</b></span></div></div>
+                <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Semente Maçã</span><span class="qtd">Qtd: <b id="mochila-sem-maca">0</b></span></div></div>
+                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Semente Banana</span><span class="qtd">Qtd: <b id="mochila-sem-banana">0</b></span></div></div>
+                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Semente Melancia</span><span class="qtd">Qtd: <b id="mochila-sem-melancia">0</b></span></div></div>
+            </div>
+        </div>
+        <div class="mochila-secao">
+            <h4>Frutas Colhidas</h4>
+            <div class="mochila-grid">
+                <div class="mochila-item"><span>🍊</span><div class="info-text"><span class="label">Fruta Laranja</span><span class="qtd">Estoque: <b id="mochila-fruta-laranja" style="color:#2ecc71;">0</b></span></div></div>
+                <div class="mochila-item"><span>🍎</span><div class="info-text"><span class="label">Fruta Maçã</span><span class="qtd">Estoque: <b id="mochila-fruta-maca" style="color:#2ecc71;">0</b></span></div></div>
+                <div class="mochila-item"><span>🍌</span><div class="info-text"><span class="label">Fruta Banana</span><span class="qtd">Estoque: <b id="mochila-fruta-banana" style="color:#2ecc71;">0</b></span></div></div>
+                <div class="mochila-item"><span>🍉</span><div class="info-text"><span class="label">Fruta Melancia</span><span class="qtd">Estoque: <b id="mochila-fruta-melancia" style="color:#2ecc71;">0</b></span></div></div>
+            </div>
+        </div>
+        <button class="btn-fechar" onclick="fecharMochila()">Fechar Mochila [R]</button>
+    </div>
+
+    <div id="loja-modal" class="modal-janela">
+        <h3>Lojinha do Agricultor 🛒</h3>
+        <div id="lista-itens"></div>
+        <button class="btn-fechar" onclick="fecharLoja()">Fechar Loja [L]</button>
+    </div>
+
+    <div id="contratos-modal" class="modal-janela">
+        <h3>Mesa de Contratos Corporativos 💼</h3>
+        <div id="lista-contratos"></div>
+        <button class="btn-fechar" onclick="fecharContratos()">Fechar Contratos [G]</button>
+    </div>
+
+    <script>
+        let jogador = { x: 150, y: 150, velocidad: 5 }; 
+        let moedas = 60; 
+        let agua = 5; 
+        let sementeSelecionada = "laranja"; 
+
+        let estoqueSementes = { laranja: 2, maca: 0, banana: 0, melancia: 0 };
+        let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
+
+        let arenaAtual = null; 
+        let arenasDados = {}; 
+
+        for (let a = 1; a <= 10; a++) {
+            arenasDados[a] = Array(20).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
+        }
+
+        const atalhosTeclado = { "1": "laranja", "2": "maca", "3": "banana", "4": "melancia" };
+
+        const frutasInfo = {
+            laranja: { nome: "Laranja", custo: 2, icone: "🍊", tempo: 3000 },
+            maca: { nome: "Maçã", custo: 4, icone: "🍎", tempo: 5000 },
+            banana: { nome: "Banana", custo: 6, icone: "🍌", tempo: 7000 },
+            melancia: { nome: "Melancia", custo: 9, icone: "🍉", tempo: 10000 }
+        };
+
+        const empresas = ["Suco S.A.", "Hortifrúti Natural", "Atacadão de Doces", "BioFrutas Corp", "Exportadora Nacional", "Quitanda Gourmet", "NutriPolpa Indústria"];
+        let listaContratosAtivos = [null, null, null];
+
+        const teclas = {};
+
+        window.addEventListener('keydown', (e) => {
+            const tecla = e.key.toLowerCase();
+            teclas[tecla] = true;
+
+            if (tecla === 'h') alternarMenuArenasTeclado();
+            if (tecla === 'k') solicitarAcessoADM();
+
+            if (arenaAtual === null) {
+                if (tecla === 'l') alternarLoja();
+                if (tecla === 'g') alternarContratos();
+            }
+            
+            if (tecla === 'r') alternarMochila();
+
+            if (atalhosTeclado[e.key]) {
+                sementeSelecionada = atalhosTeclado[e.key];
+                atualizarInterface();
+            }
+        });
+
+        window.addEventListener('keyup', (e) => { teclas[e.key.toLowerCase()] = false; });
+
+        function loopJogo() {
+            if (teclas['w']) jogador.y -= jogador.velocidad; 
+            if (teclas['s']) jogador.y += jogador.velocidad; 
+            if (teclas['a']) jogador.x -= jogador.velocidad; 
+            if (teclas['d']) jogador.x += jogador.velocidad; 
+
+            if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) jogador.y = 20;
+            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
+            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
+
+            document.getElementById('player').style.left = jogador.x + 'px';
+            document.getElementById('player').style.top = jogador.y + 'px';
+
+            requestAnimationFrame(loopJogo);
+        }
+
+        const admModal = document.getElementById('adm-modal');
+        function solicitarAcessoADM() {
+            let resposta = prompt("Digite a senha do Painel ADM:");
+            if (resposta === "kaua@2024") {
+                fecharLoja(); fecharContratos(); fecharMochila(); fecharMenuArenas();
+                admModal.style.display = 'block';
+            } else if (resposta !== null) {
+                alert("Senha incorreta!");
+            }
+        }
+        function fecharADM() { admModal.style.display = 'none'; }
+
+        function admDefinirMoedas() {
+            let valor = parseInt(document.getElementById('adm-input-moedas').value);
+            if (!isNaN(valor)) { moedas = valor; atualizarInterface(); }
+        }
+        function admDefinirAgua() {
+            let valor = parseInt(document.getElementById('adm-input-agua').value);
+            if (!isNaN(valor)) { agua = valor; atualizarInterface(); }
+        }
+        function admDarSementes(tipo) {
+            estoqueSementes[tipo] += 50;
+            atualizarInterface();
+        }
+        function admDarFrutas(tipo) {
+            estoqueFrutas[tipo] += 50;
+            atualizarInterface();
+            if (contratosModal.style.display === 'block') renderizarTodosContratos();
+        }
+
+        function alternarMenuArenasTeclado() {
+            if (document.getElementById('arenas-modal').style.display === 'block') fecharMenuArenas();
+            else abrirMenuArenas();
+        }
+
+        function abrirMenuArenas() {
+            fecharLoja(); fecharContratos(); fecharMochila(); fecharADM();
+            const grid = document.getElementById('grid-botoes-arenas');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                grid.innerHTML += `<button class="btn-arena-card" onclick="viajarParaArena(${i})">Zona Expansão #${i}<br><span style="font-size:11px; font-weight:normal; color:#2ecc71;">20 Canteiros</span></button>`;
+            }
+            document.getElementById('arenas-modal').style.display = 'block';
+        }
+
+        function fecharMenuArenas() { document.getElementById('arenas-modal').style.display = 'none'; }
+
+        function viajarParaArena(numero) {
+            arenaAtual = numero;
+            fecharMenuArenas();
+
+            document.getElementById('vendedor').style.display = 'none';
+            document.getElementById('central-vendas').style.display = 'none';
+            document.getElementById('btn-ir-arena').style.display = 'none';
+            
+            document.getElementById('btn-voltar-sede').style.display = 'block';
+            document.getElementById('titulo-arena-hud').style.display = 'block';
+            document.getElementById('titulo-arena-hud').innerText = `Zona Rural #${numero} 🚜`;
+
+            renderizarEstruturaArena20Slots();
+            document.getElementById('zona-plantio-arena').style.display = 'grid';
+        }
+
+        function voltarParaSede() {
+            arenaAtual = null;
+            
+            document.getElementById('vendedor').style.display = 'flex';
+            document.getElementById('central-vendas').style.display = 'flex';
+            document.getElementById('btn-ir-arena').style.display = 'block';
+            
+            document.getElementById('btn-voltar-sede').style.display = 'none';
+            document.getElementById('titulo-arena-hud').style.display = 'none';
+            document.getElementById('zona-plantio-arena').style.display = 'none';
+        }
+
+        function renderizarEstruturaArena20Slots() {
+            const container = document.getElementById('zona-plantio-arena');
+            container.innerHTML = '';
+            
+            let canteirosAtuais = arenasDados[arenaAtual];
+
+            canteirosAtuais.forEach((canteiro, idx) => {
+                let conteudoHTML = `🟫<span class="status">Vazio</span>`;
+                
+                if (canteiro.status === "plantado") {
+                    conteudoHTML = `🌱 <span class="status" style="background:#e67e22;">Colocar Água!</span>`;
+                } else if (canteiro.status === "regado") {
+                    conteudoHTML = `💧 <span class="status" style="background:#3498db;">Crescendo...</span>`;
+                } else if (canteiro.status === "pronto") {
+                    let infoFruta = frutasInfo[canteiro.fruta];
+                    conteudoHTML = `${infoFruta.icone} <span class="status" style="background:#2ecc71;">Colher!</span>`;
+                }
+
+                container.innerHTML += `<div class="slot" onclick="interagirCanteiroArena(${idx})" id="arena-slot-${idx}">${conteudoHTML}</div>`;
+            });
+        }
+
+        const mochilaModal = document.getElementById('mochila-modal');
+        function alternarMochila() { 
+            if (mochilaModal.style.display === 'block') { fecharMochila(); } 
+            else { fecharLoja(); fecharContratos(); fecharMenuArenas(); fecharADM(); mochilaModal.style.display = 'block'; atualizarInterface(); }
+        }
+        function fecharMochila() { mochilaModal.style.display = 'none'; }
+
+        const lojaModal = document.getElementById('loja-modal');
+        function alternarLoja() { 
+            if (lojaModal.style.display === 'block') { fecharLoja(); } 
+            else { fecharMochila(); fecharContratos(); fecharMenuArenas(); fecharADM(); lojaModal.style.display = 'block'; renderizarLoja(); }
+        }
+        function fecharLoja() { lojaModal.style.display = 'none'; }
+
+        const contratosModal = document.getElementById('contratos-modal');
+        function alternarContratos() {
+            if (contratosModal.style.display === 'block') { fecharContratos(); }
+            else { fecharMochila(); fecharLoja(); fecharMenuArenas(); fecharADM(); contratosModal.style.display = 'block'; renderizarTodosContratos(); }
+        }
+        function fecharContratos() { contratosModal.style.display = 'none'; }
+
+        function renderizarLoja() {
+            const lista = document.getElementById('lista-itens');
+            lista.innerHTML = `
+                <div class="item-loja" style="border-color: rgba(52, 152, 219, 0.4);">
+                    <span>💧 <b>Balde de Água (Obrigatório p/ Regar)</b></span>
+                    <button class="btn-comprar" style="background: #3498db;" onclick="comprarAgua()">Comprar por 1 🪙</button>
+                </div>
+            `;
+            for (let chave in frutasInfo) {
+                let fruta = frutasInfo[chave];
+                lista.innerHTML += `
+                    <div class="item-loja">
+                        <span>${fruta.icone} <b>Semente de ${fruta.nome}</b></span>
+                        <button class="btn-comprar" onclick="comprarSemente('${chave}')">Comprar por ${fruta.custo} 🪙</button>
+                    </div>
+                `;
+            }
+        }
+
+        function comprarSemente(tipo) {
+            let custo = frutasInfo[tipo].custo;
+            if (moedas >= custo) {
+                moedas -= custo;
+                estoqueSementes[tipo]++;
+                atualizarInterface();
+            } else {
+                alert("Moedas insuficientes!");
+            }
+        }
+
+        function comprarAgua() {
+            if (moedas >= 1) {
+                moedas -= 1;
+                agua++;
+                atualizarInterface();
+                renderizarLoja();
+            } else {
+                alert("Moedas insuficientes para comprar água!");
+            }
+        }
+
+        function gerarContratoUnico(index) {
+            let empresa = empresas[Math.floor(Math.random() * empresas.length)];
+            let pedido = {};
+            let valorTotal = 0;
+            
+            let chavesFrutas = Object.keys(frutasInfo);
+            let frutaPrincipal = chavesFrutas[Math.floor(Math.random() * chavesFrutas.length)];
+            let qtdPrincipal = Math.floor(Math.random() * 8) + 6; 
+            pedido[frutaPrincipal] = qtdPrincipal;
+            
+            const valoresDeVendaBase = { laranja: 18, maca: 26, banana: 38, melancia: 55 };
+            valorTotal += qtdPrincipal * valoresDeVendaBase[frutaPrincipal];
+
+            chavesFrutas.forEach(fruta => {
+                if (fruta !== frutaPrincipal && Math.random() > 0.4) {
+                    let qtdSecundaria = Math.floor(Math.random() * 4) + 1; 
+                    pedido[fruta] = qtdSecundaria;
+                    valorTotal += qtdSecundaria * valoresDeVendaBase[fruta];
+                }
+            });
+
+            let multiplicadorProposta = (Math.random() * 0.5) + 0.85; 
+            valorTotal = Math.round(valorTotal * multiplicadorProposta);
+
+            listaContratosAtivos[index] = { empresa, pedido, valor: valorTotal };
+        }
+
+        function renderizarTodosContratos() {
+            const container = document.getElementById('lista-contratos');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 3; i++) {
+                if (listaContratosAtivos[i] === null) gerarContratoUnico(i);
+            }
+
+            listaContratosAtivos.forEach((contrato, index) => {
+                if (!contrato) return;
+
+                let requisitosTexto = '';
+                let podeCompletar = true;
+
+                for (let fruta in contrato.pedido) {
+                    let qtdNecessaria = contrato.pedido[fruta];
+                    let qtdAtual = estoqueFrutas[fruta] || 0;
+                    if (qtdAtual < qtdNecessaria) podeCompletar = false;
+                    
+                    let corStatus = qtdAtual >= qtdNecessaria ? '#2ecc71' : '#e74c3c';
+                    requisitosTexto += `• ${frutasInfo[fruta].icone} ${frutasInfo[fruta].nome}: <b style="color: ${corStatus}">${qtdAtual}/${qtdNecessaria}</b><br>`;
+                }
+
+                let boxClasse = podeCompletar ? 'contrato-box completavel' : 'contrato-box';
+                let botaoAtributo = podeCompletar ? '' : 'disabled';
+
+                container.innerHTML += `
+                    <div class="${boxClasse}">
+                        <div class="contrato-header">
+                            <span>🏢 ${contrato.empresa} (Lote ${index + 1})</span>
+                            <span>Proposta: ${contrato.valor} 🪙</span>
+                        </div>
+                        <div class="contrato-requisitos">
+                            <strong>Demandas:</strong><br>
+                            ${requisitosTexto}
+                        </div>
+                        <div class="contrato-botoes">
+                            <button class="btn-aceitar" ${botaoAtributo} onclick="aceitarContratoEspecifico(${index})">Vender Lote</button>
+                            <button class="btn-recusar" onclick="recusarContratoEspecifico(${index})">Recusar</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function aceitarContratoEspecifico(index) {
+            let contrato = listaContratosAtivos[index];
+            if (!contrato) return;
+
+            for (let fruta in contrato.pedido) {
+                if (estoqueFrutas[fruta] < contrato.pedido[fruta]) return;
+            }
+
+            for (let fruta in contrato.pedido) {
+                estoqueFrutas[fruta] -= contrato.pedido[fruta];
+            }
+            moedas += contrato.valor;
+            alert(`Lote vendido para ${contrato.empresa}! Ganhou +${contrato.valor} 🪙`);
+            
+            listaContratosAtivos[index] = null;
+            renderizarTodosContratos();
+            atualizarInterface();
+        }
+
+        function recusarContratoEspecifico(index) {
+            gerarContratoUnico(index);
+            renderizarTodosContratos();
+        }
+
+        function selecionarPorClique(tipo) {
+            sementeSelecionada = tipo;
+            atualizarInterface();
+        }
+
+        function atualizarInterface() {
+            document.getElementById('moedas').innerText = moedas;
+            document.getElementById('hud-agua').innerText = agua;
+            document.getElementById('semente-selecionada').innerText = sementeSelecionada ? frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone : "Nenhum";
+            
+            document.getElementById(`hot-qtd-laranja`).innerText = estoqueSementes.laranja;
+            document.getElementById(`hot-qtd-maca`).innerText = estoqueSementes.maca;
+            document.getElementById(`hot-qtd-banana`).innerText = estoqueSementes.banana;
+            document.getElementById(`hot-qtd-melancia`).innerText = estoqueSementes.melancia;
+
+            document.getElementById(`mochila-agua`).innerText = agua;
+            document.getElementById(`mochila-sem-laranja`).innerText = estoqueSementes.laranja;
+            document.getElementById(`mochila-sem-maca`).innerText = estoqueSementes.maca;
+            document.getElementById(`mochila-sem-banana`).innerText = estoqueSementes.banana;
+            document.getElementById(`mochila-sem-melancia`).innerText = estoqueSementes.melancia;
+
+            document.getElementById(`mochila-fruta-laranja`).innerText = estoqueFrutas.laranja;
+            document.getElementById(`mochila-fruta-maca`).innerText = estoqueFrutas.maca;
+            document.getElementById(`mochila-fruta-banana`).innerText = estoqueFrutas.banana;
+            document.getElementById(`mochila-fruta-melancia`).innerText = estoqueFrutas.melancia;
+
+            document.querySelectorAll('.hotbar-slot').forEach(el => el.classList.remove('ativo'));
+            if (sementeSelecionada) {
+                document.getElementById(`slot-hot-${sementeSelecionada}`).classList.add('ativo');
+            }
+        }
+
+        function interagirCanteiroArena(id) {
+            let canteirosDaArena = arenasDados[arenaAtual];
+            if (!canteirosDaArena) return;
+            let canteiro = canteirosDaArena[id];
+            let slotEl = document.getElementById(`arena-slot-${id}`);
+
+            if (canteiro.status === "vazio") {
+                if (sementeSelecionada && estoqueSementes[sementeSelecionada] > 0) {
+                    estoqueSementes[sementeSelecionada]--;
+                    canteiro.status = "plantado";
+                    canteiro.fruta = sementeSelecionada;
+                    
+                    slotEl.innerHTML = `🌱 <span class="status" style="background:#e67e22;">Colocar Água!</span>`;
+                    atualizarInterface();
+                } else {
+                    alert("Você não possui sementes de " + sementeSelecionada + "! Vá para a Sede ou use o ADM.");
+                }
+            } 
+            else if (canteiro.status === "plantado") {
+                if (agua > 0) {
+                    agua--; 
+                    canteiro.status = "regado";
+                    slotEl.innerHTML = `💧 <span class="status" style="background:#3498db;">Crescendo...</span>`;
+                    
+                    let infoFruta = frutasInfo[canteiro.fruta];
+                    atualizarInterface();
+                    
+                    canteiro.timer = setTimeout(() => {
+                        canteiro.status = "pronto";
+                        if (document.getElementById(`arena-slot-${id}`)) {
+                            document.getElementById(`arena-slot-${id}`).innerHTML = `${infoFruta.icone} <span class="status" style="background:#2ecc71;">Colher!</span>`;
+                        }
+                    }, infoFruta.tempo);
+                } else {
+                    alert("Você não possui Baldes de Água! Adicione no painel ADM ou compre na Sede.");
+                }
+            } 
+            else if (canteiro.status === "pronto") {
+                estoqueFrutas[canteiro.fruta]++;
+                canteiro.status = "vazio";
+                canteiro.fruta = null;
+                canteiro.timer = null;
+                
+                slotEl.innerHTML = `🟫 <span class="status">Vazio</span>`;
+                atualizarInterface();
+            }
+        }
+
+        // Inicialização do Game Loop
+        atualizarInterface();
+        loopJogo();
+    </script>
+</body>
+</html>
