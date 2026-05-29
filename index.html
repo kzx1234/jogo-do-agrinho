@@ -94,6 +94,7 @@
             background-size: 30px 30px;
             background-position: 0 0, 15px 15px;
             border: 16px solid #3d281a;
+            outline: none; /* Remove a borda de foco padrão */
         }
 
         #titulo-arena-hud {
@@ -299,7 +300,7 @@
 </head>
 <body>
 
-    <div id="cenario">
+    <div id="cenario" tabindex="0">
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
             <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">150</span> 🪙</p>
@@ -436,6 +437,13 @@
         const empresas = ["Frigorífico Real", "Granja Ideal", "Laticínios Ouro", "Natura Alimentos", "BioAgro Corp"];
         const teclas = {};
 
+        // GARANTE O FOCO NO JOGO AO CARREGAR
+        window.currentTargetKeyboard = document.getElementById('cenario');
+        window.onload = function() {
+            window.currentTargetKeyboard.focus();
+        };
+
+        // EVENTOS DE TECLADO CORRIGIDOS
         window.addEventListener('keydown', (e) => {
             const t = e.key.toLowerCase();
             teclas[t] = true;
@@ -450,4 +458,375 @@
             if (t === 'r') abrirMochila();
 
             if (modoAtual === "plantio" && ["1","2","3","4"].includes(e.key)) {
-                cons
+                const arr = ["laranja", "maca", "banana", "melancia"];
+                sementeSelecionada = arr[parseInt(e.key) - 1];
+                atualizarInterface();
+            } else if (modoAtual === "pecuaria" && ["1","2","3"].includes(e.key)) {
+                const arr = ["galinha", "porco", "vaca"];
+                sementeSelecionada = arr[parseInt(e.key) - 1];
+                atualizarInterface();
+            }
+        });
+        
+        window.addEventListener('keyup', (e) => { 
+            teclas[e.key.toLowerCase()] = false; 
+        });
+
+        function loopJogo() {
+            let v = upgrades.botas ? 9 : 5;
+            if (teclas['w']) jogador.y -= v; if (teclas['s']) jogador.y += v;
+            if (teclas['a']) jogador.x -= v; if (teclas['d']) jogador.x += v;
+
+            if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) pointerY = 20;
+            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
+            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
+
+            document.getElementById('player').style.left = jogador.x + 'px';
+            document.getElementById('player').style.top = jogador.y + 'px';
+            requestAnimationFrame(loopJogo);
+        }
+
+        // FECHAR MODAIS DEVOLVENDO O FOCO PARA A MOVIMENTAÇÃO
+        function fecharModais() {
+            document.querySelectorAll('.modal-janela').forEach(m => m.style.display = 'none');
+            window.currentTargetKeyboard.focus(); // Devolve o foco das teclas para a tela do jogo
+        }
+
+        function abrirMenuArenas() {
+            if (arenaAtual !== null) return;
+            fecharModais();
+            const grid = document.getElementById('grid-botoes-arenas');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                if (arenasDesbloqueadas[i]) {
+                    grid.innerHTML += `<button class="btn-arena-card" onclick="viajarParaArena(${i})">Zona #${i}<br><span style="color:#2ecc71;font-size:11px;">🔓 Livre</span></button>`;
+                } else {
+                    grid.innerHTML += `<button class="btn-arena-card bloqueado" onclick="comprarArena(${i})">Zona #${i}<br><span style="color:#e74c3c;font-size:11px;">🔒 Bloqueada<br>${CUSTO_EXPANSAO} 🪙</span></button>`;
+                }
+            }
+            document.getElementById('arenas-modal').style.display = 'block';
+        }
+
+        function comprarArena(num) {
+            if (moedas >= CUSTO_EXPANSAO) {
+                moedas -= CUSTO_EXPANSAO;
+                arenasDesbloqueadas[num] = true;
+                atualizarInterface(); abrirMenuArenas();
+            } else { alert("Moedas insuficientes!"); }
+        }
+
+        function viajarParaArena(num) {
+            arenaAtual = num; modoAtual = "plantio"; fecharModais();
+            ajustarElementosCenariaVisibility(false);
+            document.getElementById('titulo-arena-hud').innerText = `Zona Rural #${num} 🌱`;
+            renderizarCanteirosPlantio();
+            document.getElementById('zona-plantio-arena').style.display = 'grid';
+        }
+
+        function irParaPecuaria() {
+            if (!pecuariaDesbloqueada) {
+                if (moedas >= CUSTO_PECUARIA) {
+                    moedas -= CUSTO_PECUARIA;
+                    pecuariaDesbloqueada = true;
+                    alert("Rancho de Animais Desbloqueado com sucesso! 🐮🐷");
+                    atualizarInterface();
+                } else {
+                    alert(`O Rancho de Animais está trancado! Pague as ${CUSTO_PECUARIA} moedas necessárias para desbloquear.`);
+                    return;
+                }
+            }
+            arenaAtual = "pecuaria"; modoAtual = "pecuaria"; sementeSelecionada = "galinha"; fecharModais();
+            ajustarElementosCenariaVisibility(false);
+            document.getElementById('titulo-arena-hud').innerText = `Rancho de Pecuária 🐾`;
+            renderizarCanteirosPecuaria();
+            document.getElementById('zona-pecuaria').style.display = 'grid';
+            atualizarInterface();
+        }
+
+        function voltarParaSede() {
+            arenaAtual = null; modoAtual = "plantio"; sementeSelecionada = "laranja";
+            ajustarElementosCenariaVisibility(true);
+            document.getElementById('zona-plantio-arena').style.display = 'none';
+            document.getElementById('zona-pecuaria').style.display = 'none';
+            fecharModais();
+            atualizarInterface();
+        }
+
+        function ajustarElementosCenariaVisibility(mostrar) {
+            let displayVal = mostrar ? 'flex' : 'none';
+            document.getElementById('vendedor').style.display = displayVal;
+            document.getElementById('ambulante').style.display = displayVal;
+            document.getElementById('engenheiro').style.display = displayVal;
+            document.getElementById('central-vendas').style.display = displayVal;
+            document.getElementById('menu-navegacao').style.display = mostrar ? 'flex' : 'none';
+            document.getElementById('btn-voltar-sede').style.display = mostrar ? 'none' : 'block';
+            document.getElementById('titulo-arena-hud').style.display = mostrar ? 'none' : 'block';
+        }
+
+        function abrirLoja() {
+            fecharModais();
+            let container = document.getElementById('lista-itens');
+            container.innerHTML = `
+                <div class="item-loja"><span>💧 Balde de Água</span><button class="btn-comprar" onclick="comprarItem('agua')">Comprar por ${upgrades.baldeGrande?'25':'5'} 🪙 (+${upgrades.baldeGrande?'5':'1'})</button></div>
+                <div class="item-loja"><span>🌾 Sako de Ração</span><button class="btn-comprar" style="background:#f1c40f;" onclick="comprarItem('racao')">Comprar por 20 🪙</button></div>
+                <hr style="border:1px solid rgba(255,255,255,0.05)">
+            `;
+            for(let key in frutasInfo) {
+                container.innerHTML += `<div class="item-loja"><span>${frutasInfo[key].icone} Semente ${frutasInfo[key].nome}</span><button class="btn-comprar" onclick="comprarItem('sem_'+key)">${frutasInfo[key].custo} 🪙</button></div>`;
+            }
+            for(let key in animaisInfo) {
+                container.innerHTML += `<div class="item-loja"><span>${animaisInfo[key].icone} Filhote de ${animaisInfo[key].nome}</span><button class="btn-comprar" style="background:#e67e22;" onclick="comprarItem('ani_'+key)">${animaisInfo[key].custo} 🪙</button></div>`;
+            }
+            document.getElementById('loja-modal').style.display = 'block';
+        }
+
+        function comprarItem(id) {
+            if (id === 'agua') {
+                let cost = upgrades.baldeGrande ? 25 : 5;
+                if (moedas >= cost) { moedas -= cost; agua += upgrades.baldeGrande ? 5 : 1; }
+            } else if (id === 'racao') {
+                if (moedas >= 20) { moedas -= 20; racao += 1; }
+            } else if (id.startsWith('sem_')) {
+                let t = id.split('_')[1];
+                if (moedas >= frutasInfo[t].custo) { moedas -= frutasInfo[t].custo; estoqueSementes[t]++; }
+            } else if (id.startsWith('ani_')) {
+                let t = id.split('_')[1];
+                if (moedas >= animaisInfo[t].custo) { moedas -= animaisInfo[t].custo; estoqueFilhotes[t]++; }
+            }
+            atualizarInterface(); abrirLoja();
+        }
+
+        function abrirAmbulante() {
+            fecharModais();
+            let container = document.getElementById('lista-vendas-individuais');
+            container.innerHTML = '';
+            
+            for(let key in frutasInfo) {
+                let precoVendaIndividual = frutasInfo[key].custo + 10; 
+                let qtdDisponivel = estoqueFrutas[key];
+                
+                container.innerHTML += `
+                    <div class="item-loja">
+                        <span>${frutasInfo[key].icone} <b>${frutasInfo[key].nome}</b> (Possui: ${qtdDisponivel})</span>
+                        <button class="btn-vender-unidade" ${qtdDisponivel <= 0 ? 'disabled style="background:#555;"' : ''} onclick="venderFrutaIndividual('${key}')">
+                            Vender 1 por +${precoVendaIndividual} 🪙
+                        </button>
+                    </div>
+                `;
+            }
+            document.getElementById('ambulante-modal').style.display = 'block';
+        }
+
+        function venderFrutaIndividual(tipo) {
+            if(estoqueFrutas[tipo] > 0) {
+                estoqueFrutas[tipo]--;
+                let ganho = frutasInfo[tipo].custo + 10;
+                moedas += ganho;
+                atualizarInterface();
+                abrirAmbulante();
+            }
+        }
+
+        function abrirUpgrades() {
+            fecharModais();
+            let container = document.getElementById('lista-upgrades');
+            container.innerHTML = `
+                <div class="item-loja"><span>👟 Botas de Velocidade (Passivo)</span><button class="btn-comprar" ${upgrades.botas?'disabled':''} onclick="comprarUpgrade('botas')">${upgrades.botas?'Adquirido':'1.500 🪙'}</button></div>
+                <div class="item-loja"><span>🪣 Super Balde Hidráulico (+5 águas)</span><button class="btn-comprar" ${upgrades.baldeGrande?'disabled':''} onclick="comprarUpgrade('baldeGrande')">${upgrades.baldeGrande?'Adquirido':'2.000 🪙'}</button></div>
+                <div class="item-loja"><span>🧪 Fertilizante Bio-Acelerador (-30% Tempo)</span><button class="btn-comprar" ${upgrades.fertilizante?'disabled':''} onclick="comprarUpgrade('fertilizante')">${upgrades.fertilizante?'Adquirido':'3.500 🪙'}</button></div>
+            `;
+            document.getElementById('upgrades-modal').style.display = 'block';
+        }
+
+        function comprarUpgrade(id) {
+            let custos = { botas: 1500, baldeGrande: 2000, fertilizante: 3500 };
+            if (moedas >= custos[id]) {
+                moedas -= custos[id]; upgrades[id] = true;
+                atualizarInterface(); abrirUpgrades();
+            } else { alert("Moedas insuficientes!"); }
+        }
+
+        function renderizarCanteirosPlantio() {
+            const container = document.getElementById('zona-plantio-arena');
+            container.innerHTML = '';
+            arenasDados[arenaAtual].forEach((c, idx) => {
+                let html = `🟫<span class="status">Vazio</span>`;
+                if (c.status === "plantado") html = `🌱 <span class="status" style="background:#e67e22;">Regar!</span>`;
+                else if (c.status === "regado") html = `💧 <span class="status" style="background:#3498db;">Crescendo</span>`;
+                else if (c.status === "pronto") html = `${frutasInfo[c.fruta].icone} <span class="status" style="background:#2ecc71;">Colher</span>`;
+                container.innerHTML += `<div class="slot" onclick="clickSlotPlantio(${idx})">${html}</div>`;
+            });
+        }
+
+        function clickSlotPlantio(idx) {
+            let c = arenasDados[arenaAtual][idx];
+            if (c.status === "vazio" && estoqueSementes[sementeSelecionada] > 0) {
+                estoqueSementes[sementeSelecionada]--; c.status = "plantado"; c.fruta = sementeSelecionada;
+            } else if (c.status === "plantado" && agua > 0) {
+                agua--; c.status = "regado";
+                let t = upgrades.fertilizante ? frutasInfo[c.fruta].tempo * 0.7 : frutasInfo[c.fruta].tempo;
+                c.timer = setTimeout(() => { c.status = "pronto"; if(arenaAtual===arenaAtual) renderizarCanteirosPlantio(); }, t);
+            } else if (c.status === "pronto") {
+                estoqueFrutas[c.fruta]++; c.status = "vazio"; c.fruta = null;
+            }
+            renderizarCanteirosPlantio(); atualizarInterface();
+        }
+
+        function renderizarCanteirosPecuaria() {
+            const container = document.getElementById('zona-pecuaria');
+            container.innerHTML = '';
+            pecuariaSlots.forEach((c, idx) => {
+                let html = `🪵<span class="status">Cercado Vazio</span>`;
+                if (c.status === "filhote") html = `🐣 <span class="status" style="background:#e67e22;">Alimentar!</span>`;
+                else if (c.status === "alimentado") html = `⏳ <span class="status" style="background:#3498db;">Engordando</span>`;
+                else if (c.status === "adulto") html = `${animaisInfo[c.animal].icone} <span class="status" style="background:#2ecc71;">Recolher</span>`;
+                container.innerHTML += `<div class="slot slot-bicho" onclick="clickSlotPecuaria(${idx})">${html}</div>`;
+            });
+        }
+
+        function clickSlotPecuaria(idx) {
+            let c = pecuariaSlots[idx];
+            if (c.status === "vazio" && estoqueFilhotes[sementeSelecionada] > 0) {
+                estoqueFilhotes[sementeSelecionada]--; c.status = "filhote"; c.animal = sementeSelecionada;
+            } else if (c.status === "filhote" && racao > 0) {
+                racao--; c.status = "alimentado";
+                let t = animaisInfo[c.animal].tempo;
+                c.timer = setTimeout(() => { c.status = "adulto"; if(arenaAtual==='pecuaria') renderizarCanteirosPecuaria(); }, t);
+            } else if (c.status === "adulto") {
+                estoqueAnimaisAdultos[c.animal]++; c.status = "vazio"; c.animal = null;
+            }
+            renderizarCanteirosPecuaria(); atualizarInterface();
+        }
+
+        function abrirContratos() {
+            fecharModais();
+            const container = document.getElementById('lista-contratos');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 3; i++) {
+                if (listaContratosAtivos[i] === null) {
+                    let emp = empresas[Math.floor(Math.random() * empresas.length)];
+                    let isPecuaria = pecuariaDesbloqueada && Math.random() > 0.5;
+                    let pedido = {}, val = 0;
+
+                    if (isPecuaria) {
+                        let k = Object.keys(animaisInfo)[Math.floor(Math.random()*3)];
+                        let q = Math.floor(Math.random()*3)+1;
+                        pedido["ani_" + k] = q; val = q * animaisInfo[k].valorVendaBase * 1.25;
+                    } else {
+                        let k = Object.keys(frutasInfo)[Math.floor(Math.random()*4)];
+                        let q = Math.floor(Math.random()*6)+5;
+                        pedido["frt_" + k] = q; val = q * frutasInfo[k].valorVendaBase * 1.15;
+                    }
+                    listaContratosAtivos[i] = { emp, pedido, valor: Math.round(val) };
+                }
+            }
+
+            listaContratosAtivos.forEach((c, idx) => {
+                let reqs = '', pode = true;
+                for(let key in c.pedido) {
+                    let qNeed = c.pedido[key], qHave = 0, name = "", ico = "";
+                    if(key.startsWith("frt_")) {
+                        let t = key.split('_')[1]; qHave = estoqueFrutas[t]; name = frutasInfo[t].nome; ico = frutasInfo[t].icone;
+                    } else {
+                        let t = key.split('_')[1]; qHave = estoqueAnimaisAdultos[t]; name = "Adulto de " + animaisInfo[t].nome; ico = animaisInfo[t].icone;
+                    }
+                    if(qHave < qNeed) pode = false;
+                    reqs += `• ${ico} ${name}: <b style="color:${qHave>=qNeed?'#2ecc71':'#e74c3c'}">${qHave}/${qNeed}</b><br>`;
+                }
+
+                container.innerHTML += `
+                    <div class="contrato-box ${pode?'completavel':''}">
+                        <div class="contrato-header"><span>🏢 ${c.emp}</span><span style="color:#ffd700;">${c.valor} 🪙</span></div>
+                        <div style="font-size:13px; margin-bottom:10px;">${reqs}</div>
+                        <button class="btn-aceitar" ${pode?'':'disabled'} onclick="completarContrato(${idx})">Entregar Carga</button>
+                        <button class="btn-recusar" onclick="recusarContrato(${idx})">Recusar</button>
+                    </div>
+                `;
+            });
+            document.getElementById('contratos-modal').style.display = 'block';
+        }
+
+        function completarContrato(idx) {
+            let c = listaContratosAtivos[idx];
+            for(let key in c.pedido) {
+                let t = key.split('_')[1];
+                if(key.startsWith("frt_")) estoqueFrutas[t] -= c.pedido[key];
+                else estoqueAnimaisAdultos[t] -= c.pedido[key];
+            }
+            moedas += c.valor; listaContratosAtivos[idx] = null;
+            abrirContratos(); atualizarInterface();
+        }
+
+        function recusarContrato(idx) { listaContratosAtivos[idx] = null; abrirContratos(); }
+
+        function abrirMochila() {
+            fecharModais();
+            document.getElementById('m-agua').innerText = agua;
+            document.getElementById('m-racao').innerText = racao;
+            
+            let grid = document.getElementById('mochila-produtos-grid');
+            grid.innerHTML = '';
+            for(let k in estoqueFrutas) {
+                grid.innerHTML += `<div class="mochila-item"><span>${frutasInfo[k].icone}</span><div><span class="label">${frutasInfo[k].nome}</span><br>Estoque: <b>${estoqueFrutas[k]}</b></div></div>`;
+            }
+            for(let k in estoqueAnimaisAdultos) {
+                grid.innerHTML += `<div class="mochila-item"><span>${animaisInfo[k].icone}</span><div><span class="label">${animaisInfo[k].nome} M.</span><br>Estoque: <b>${estoqueAnimaisAdultos[k]}</b></div></div>`;
+            }
+            document.getElementById('mochila-modal').style.display = 'block';
+        }
+
+        function atualizarInterface() {
+            document.getElementById('moedas').innerText = moedas;
+            document.getElementById('hud-agua').innerText = agua;
+            document.getElementById('hud-racao').innerText = racao;
+
+            let slot1 = document.getElementById('slot-hot-laranja');
+            let slot2 = document.getElementById('slot-hot-maca');
+            let slot3 = document.getElementById('slot-hot-banana');
+            let slot4 = document.getElementById('slot-hot-melancia');
+
+            if (modoAtual === "plantio") {
+                document.getElementById('txt-ico-1').innerText = "🍊"; document.getElementById('hot-qtd-1').innerText = estoqueSementes.laranja;
+                document.getElementById('txt-ico-2').innerText = "🍎"; document.getElementById('hot-qtd-2').innerText = estoqueSementes.maca;
+                document.getElementById('txt-ico-3').innerText = "🍌"; document.getElementById('hot-qtd-3').innerText = estoqueSementes.banana;
+                document.getElementById('txt-ico-4').innerText = "🍉"; document.getElementById('hot-qtd-4').innerText = estoqueSementes.melancia;
+                slot4.style.display = "flex";
+                document.getElementById('semente-selecionada').innerText = frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone;
+            } else {
+                document.getElementById('txt-ico-1').innerText = "🐔"; document.getElementById('hot-qtd-1').innerText = estoqueFilhotes.galinha;
+                document.getElementById('txt-ico-2').innerText = "🐷"; document.getElementById('hot-qtd-2').innerText = estoqueFilhotes.porco;
+                document.getElementById('txt-ico-3').innerText = "🐮"; document.getElementById('hot-qtd-3').innerText = estoqueFilhotes.vaca;
+                slot4.style.display = "none";
+                document.getElementById('semente-selecionada').innerText = "Filhote: " + animaisInfo[sementeSelecionada].nome + " " + animaisInfo[sementeSelecionada].icone;
+            }
+
+            document.querySelectorAll('.hotbar-slot').forEach(s => s.classList.remove('ativo'));
+            let idSel = sementeSelecionada === 'laranja' || sementeSelecionada === 'galinha' ? 'laranja' :
+                        sementeSelecionada === 'maca' || sementeSelecionada === 'porco' ? 'maca' : 
+                        sementeSelecionada === 'banana' || sementeSelecionada === 'vaca' ? 'banana' : 'melancia';
+            document.getElementById(`slot-hot-${idSel}`).classList.add('ativo');
+
+            let btnBicho = document.getElementById('btn-ir-animais');
+            if (pecuariaDesbloqueada) {
+                btnBicho.innerHTML = "Rancho de Animais 🐾 (Entrar)";
+                btnBicho.style.background = "#2ecc71";
+                btnBicho.style.borderColor = "#27ae60";
+            } else {
+                btnBicho.innerHTML = "Desbloquear Pecuária (20.000 🪙)";
+                btnBicho.style.background = "#e67e22";
+                btnBicho.style.borderColor = "#d35400";
+            }
+        }
+
+        function selecionarSlot(tipo) {
+            if (modoAtual === "plantio") { sementeSelecionada = tipo; } 
+            else { sementeSelecionada = tipo === 'laranja' ? 'galinha' : tipo === 'maca' ? 'porco' : 'vaca'; }
+            atualizarInterface();
+        }
+
+        atualizarInterface();
+        loopJogo();
+    </script>
+</body>
+</html>
