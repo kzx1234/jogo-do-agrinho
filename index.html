@@ -18,7 +18,7 @@
             color: #f5f6fa;
         }
 
-        /* CHÃO RÚSTICO PROFISSIONAL (Textura de terra e grama realista via CSS) */
+        /* CHÃO RÚSTICO PROFISSIONAL */
         #cenario {
             position: relative;
             width: 100vw;
@@ -51,7 +51,7 @@
         #hud-status h2 { margin: 0 0 10px 0; color: #4cd137; font-size: 22px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         #hud-status p { margin: 6px 0; font-size: 15px; display: flex; align-items: center; justify-content: space-between; color: #dcdde1; }
 
-        /* PAINEL ADM PREMIUM */
+        /* PAINEL CHEAT ADMINISTRATIVO */
         #painel-adm {
             position: absolute;
             top: 25px;
@@ -78,11 +78,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
             text-align: left;
-            display: flex;
+            display: none;
             justify-content: space-between;
         }
-        .btn-adm:hover { background: rgba(255,255,255,0.15); }
         .btn-adm.ativo { background: #2ecc71; border-color: #2ecc71; color: #fff; }
+        #btn-autenticar-adm {
+            width: 100%; background: #f1c40f; color: #1a252f; border: none; padding: 10px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; font-size: 12px;
+        }
 
         /* NAVEGAÇÃO LATERAL ELEGANTE */
         .container-navegacao {
@@ -104,11 +106,12 @@
             border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s;
         }
         .btn-navegacao:hover { background: #2ecc71; transform: translateY(-2px); }
         #btn-ir-animais { background: #d35400; }
         #btn-ir-animais:hover { background: #e67e22; }
+        #btn-manual { background: #2980b9; }
 
         #btn-voltar-sede {
             display: none;
@@ -127,7 +130,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
         }
 
-        /* CALÇADÃO INDUSTRIAL E ESTRUTURAS ÚTEIS (ZONA NORTE) */
+        /* HUB INDUSTRIAL E ESTRUTURAS ÚTEIS (ZONA NORTE) */
         .hub-industrial {
             position: absolute;
             top: 25px;
@@ -140,66 +143,43 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 10px 30px;
+            padding: 10px 15px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             z-index: 2;
         }
 
-        /* DESIGN PROFISSIONAL DOS BLOCOS DE ESTRUTURA */
         .estrutura-bloco {
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
             background: rgba(0,0,0,0.3);
-            padding: 10px;
+            padding: 8px;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.05);
-            min-width: 110px;
+            min-width: 100px;
         }
         .predio-avatar {
-            font-size: 38px;
+            font-size: 34px;
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
             cursor: pointer;
             transition: transform 0.2s;
         }
         .predio-avatar:hover { transform: scale(1.1); }
         
-        /* Grafismo de Barras Dinâmicas nos Silos */
         .medidor-barra {
-            width: 70px;
-            height: 6px;
-            background: #444;
-            border-radius: 3px;
-            margin-top: 6px;
-            overflow: hidden;
+            width: 70px; height: 6px; background: #444; border-radius: 3px; margin-top: 6px; overflow: hidden;
         }
         .medidor-fill { width: 50%; height: 100%; background: #3498db; transition: width 0.3s; }
 
         .npc-trabalhador {
-            position: absolute;
-            bottom: -15px;
-            font-size: 22px;
-            background: #1e1b18;
-            border: 1px solid #d35400;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: absolute; bottom: -15px; font-size: 20px; background: #1e1b18; border: 1px solid #d35400; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center;
         }
-
         .tag-identificadora {
-            margin-top: 15px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #f1c40f;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-top: 15px; font-size: 10px; font-weight: 700; color: #f1c40f; text-transform: uppercase; letter-spacing: 0.5px;
         }
 
-        /* O FAZENDEIRO (Design de Personagem Destacado) */
+        /* PERSONAGEM PRINCIPAL */
         #player {
             position: absolute;
             width: 58px;
@@ -211,34 +191,38 @@
             justify-content: center;
             align-items: center;
             font-size: 34px;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.5), inset 0 -5px 0 rgba(0,0,0,0.2);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5);
             z-index: 5;
-            transition: transform 0.1s ease;
         }
 
-        /* ROBÔ AGRI-BOT (Elemento Visual Autónomo) */
-        #agribot {
+        /* 🚜 TRATOR INDUSTRIAL PROFISSIONAL */
+        #trator {
             position: absolute;
-            width: 44px;
-            height: 44px;
-            background: radial-gradient(circle, #00d2d3 20%, #0abde3 90%);
-            border: 2px solid #fff;
-            border-radius: 12px;
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            border: 4px solid #1e1b18;
+            border-radius: 16px;
             display: none;
             justify-content: center;
             align-items: center;
-            font-size: 24px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            font-size: 38px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             z-index: 4;
-            transition: all 0.3s linear;
+            transition: transform 0.1s ease;
+        }
+        #trator::after { content: '🚜'; }
+
+        #agribot {
+            position: absolute; width: 44px; height: 44px; background: radial-gradient(circle, #00d2d3 20%, #0abde3 90%); border: 2px solid #fff; border-radius: 12px; display: none; justify-content: center; align-items: center; font-size: 24px; box-shadow: 0 8px 16px rgba(0,0,0,0.4); z-index: 4;
         }
 
         /* GRADES DE PRODUÇÃO */
-        #zona-plantio-arena, #zona-pecuaria {
+        #zona-plantio-arena, #zona-pecuaria, #zona-agro-industrial {
             display: none;
             position: absolute;
             left: 50%;
-            top: 60%;
+            top: 58%;
             transform: translate(-50%, -40%);
             grid-template-columns: repeat(5, 100px);
             grid-gap: 14px;
@@ -247,114 +231,51 @@
             border-radius: 24px;
             border: 5px solid #27170b;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.7);
-        }
-        #zona-pecuaria { background: #4a3625; border-color: #d35400; grid-template-columns: repeat(3, 115px); }
-
-        .slot {
-            width: 100px;
-            height: 100px;
-            background: #573c25;
-            border: 2px solid #27170b;
-            border-radius: 14px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
-            box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
-        }
-        .slot:hover { background-color: #63462d; transform: scale(1.05) translateY(-2px); }
-        .slot.slot-bicho { width: 115px; height: 115px; background-color: #694b34; }
-        
-        .slot .status { 
-            font-size: 10px; 
-            margin-top: 8px; 
-            background: rgba(0, 0, 0, 0.85); 
-            padding: 3px 8px; 
-            border-radius: 10px;
-            font-weight: 700;
-            width: 85%;
-            text-align: center;
-        }
-
-        /* INTERFACE INFERIOR (HOTBAR) */
-        #hotbar-container {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 15, 10, 0.9);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.1);
-            padding: 8px;
-            display: flex;
-            gap: 10px;
-            border-radius: 20px;
-            z-index: 10;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
-        }
-        .hotbar-slot {
-            width: 70px;
-            height: 70px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .hotbar-slot:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-4px); }
-        .hotbar-slot .slot-num { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #aaa; font-weight: 800; }
-        .hotbar-slot .slot-qtd {
-            position: absolute;
-            bottom: 4px;
-            right: 6px;
-            font-size: 11px;
-            color: #fff;
-            font-weight: 700;
-            background: #27ae60;
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-        .hotbar-slot.ativo {
-            background: rgba(46, 204, 113, 0.15);
-            border: 2px solid #2ecc71;
-            box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
-        }
-
-        /* DIALÓGOS / MODAIS ESTILO GLASSMORPHISM */
-        .modal-janela {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(15, 22, 15, 0.96);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 30px 70px rgba(0,0,0,0.9);
-            z-index: 100;
-            width: 500px;
-            max-height: 80vh;
+            max-height: 65vh;
             overflow-y: auto;
         }
-        .modal-janela h3 { margin-top: 0; text-align: center; font-size: 24px; color: #4cd137; font-weight: 700; }
-        
-        .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; }
-        .btn-comprar, .btn-vender-unidade { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: background 0.2s; }
-        .btn-comprar:hover { background: #2980b9; }
-        .btn-fechar { width: 100%; background: rgba(255, 255, 255, 0.08); color: #ff7675; border: none; padding: 14px; margin-top: 15px; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        #zona-pecuaria { background: #4a3625; border-color: #d35400; grid-template-columns: repeat(3, 115px); }
+        #zona-agro-industrial { background: #2c3e50; border-color: #34495e; grid-template-columns: repeat(4, 110px); }
 
-        #controles { position: absolute; bottom: 30px; left: 25px; background: rgba(10, 15, 10, 0.85); padding: 15px; border-radius: 14px; font-size: 12px; border-left: 4px solid #2ecc71; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .slot {
+            width: 100px; height: 100px; background: #573c25; border: 2px solid #27170b; border-radius: 14px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; position: relative; box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
+        }
+        .slot.slot-industrial { width: 110px; height: 110px; background: #34495e; border-color: #1a252f; }
+        .slot .status { 
+            font-size: 10px; margin-top: 8px; background: rgba(0, 0, 0, 0.85); padding: 3px 8px; border-radius: 10px; font-weight: 700; width: 85%; text-align: center;
+        }
+        .tag-tipo-lote {
+            position: absolute; top: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; padding: 2px 5px; border-radius: 4px;
+        }
+
+        /* HOTBAR SYSTEM */
+        #hotbar-container {
+            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(10, 15, 10, 0.9); backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); padding: 8px; display: flex; gap: 10px; border-radius: 20px; z-index: 10; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        .hotbar-slot {
+            width: 70px; height: 70px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 28px; position: relative; cursor: pointer;
+        }
+        .hotbar-slot .slot-num { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #aaa; font-weight: 800; }
+        .hotbar-slot .slot-qtd {
+            position: absolute; bottom: 4px; right: 6px; font-size: 11px; color: #fff; font-weight: 700; background: #27ae60; padding: 2px 6px; border-radius: 6px;
+        }
+        .hotbar-slot.ativo {
+            background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+        }
+
+        /* MODAIS GLASSMORPHISM */
+        .modal-janela {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(15, 22, 15, 0.96); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 30px; border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,0.9); z-index: 100; width: 560px; max-height: 80vh; overflow-y: auto;
+        }
+        .modal-janela h3 { margin-top: 0; text-align: center; font-size: 24px; color: #4cd137; }
+        .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; }
+        .btn-comprar, .btn-vender-unidade { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+        .btn-fechar { width: 100%; background: rgba(255, 255, 255, 0.08); color: #ff7675; border: none; padding: 14px; margin-top: 15px; border-radius: 12px; cursor: pointer; font-weight: 700; }
+        
+        .tutorial-conteudo { font-size: 14px; line-height: 1.6; color: #dcdde1; }
+        .tutorial-conteudo h4 { color: #f1c40f; margin-top: 15px; margin-bottom: 5px; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3px; }
+
+        #controles { position: absolute; bottom: 30px; left: 25px; background: rgba(10, 15, 10, 0.85); padding: 15px; border-radius: 14px; font-size: 12px; border-left: 4px solid #2ecc71; }
         #titulo-arena-hud { display: none; position: absolute; top: 190px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); padding: 8px 25px; border-radius: 20px; font-weight: 700; color: #ffd700; border: 1px solid #ffd700; z-index: 5;}
     </style>
 </head>
@@ -372,6 +293,7 @@
 
         <div id="painel-adm">
             <h3>Controles Admin ⚙️</h3>
+            <button id="btn-autenticar-adm" onclick="solicitarAcessoAdm()">🔓 Acessar Panel</button>
             <button class="btn-adm" id="cheat-moedas" onclick="toggleCheat('moedas')"><span>Moedas Infinitas</span><b>OFF</b></button>
             <button class="btn-adm" id="cheat-agua" onclick="toggleCheat('agua')"><span>Água Infinita</span><b>OFF</b></button>
             <button class="btn-adm" id="cheat-racao" onclick="toggleCheat('racao')"><span>Ração Infinita</span><b>OFF</b></button>
@@ -379,6 +301,7 @@
         </div>
 
         <div class="container-navegacao" id="menu-navegacao">
+            <button class="btn-navegacao" id="btn-manual" onclick="abrirTutorial()">Guia Técnico & Manual [?]</button>
             <button class="btn-navegacao" onclick="abrirMenuArenas()">Zonas de Expansão [H]</button>
             <button class="btn-navegacao" id="btn-ir-animais" onclick="irParaPecuaria()">Setor de Pecuária 🐾</button>
         </div>
@@ -386,75 +309,71 @@
         <div id="titulo-arena-hud">Sede Principal</div>
 
         <div class="hub-industrial" id="zona-comercial-npcs">
-            <div class="estrutura-bloco">
-                <div class="predio-avatar" onclick="abrirLoja()">🪣</div>
+            <div class="estrutura-bloco" onclick="abrirLoja()">
+                <div class="predio-avatar">🪣</div>
                 <div class="medidor-barra"><div class="medidor-fill" id="bar-agua-fill"></div></div>
                 <div class="npc-trabalhador">👨‍🌾</div>
                 <div class="tag-identificadora">Lojinha [L]</div>
             </div>
-            <div class="estrutura-bloco">
-                <div class="predio-avatar" onclick="abrirAmbulante()">📦</div>
+            <div class="estrutura-bloco" onclick="abrirAmbulante()">
+                <div class="predio-avatar">📦</div>
                 <div class="npc-trabalhador" style="border-color:#f1c40f">💰</div>
                 <div class="tag-identificadora">Ambulante [V]</div>
             </div>
-            <div class="estrutura-bloco">
-                <div class="predio-avatar" onclick="abrirUpgrades()">🏭</div>
-                <button id="btn-toggle-bot" style="margin-top:5px; font-size:9px; font-weight:bold; background:#16a085; border:none; color:white; border-radius:4px; cursor:pointer;" onclick="toggleAgribot()">AGRI-BOT: OFF</button>
-                <div class="npc-trabalhador" style="border-color:#9b59b6">🛠️</div>
+            <div class="estrutura-bloco" onclick="abrirUpgrades()">
+                <div class="predio-avatar">🛠️</div>
+                <div class="npc-trabalhador" style="border-color:#9b59b6">🔧</div>
                 <div class="tag-identificadora">Oficina [U]</div>
             </div>
-            <div class="estrutura-bloco">
-                <div class="predio-avatar" onclick="abrirContratos()">🏢</div>
-                <div class="npc-trabalhador" style="border-color:#2ecc71">💼</div>
-                <div class="tag-identificadora">Contratos [G]</div>
+            <div class="estrutura-bloco" onclick="abrirExportacao()">
+                <div class="predio-avatar">🏢</div>
+                <div class="npc-trabalhador" style="border-color:#2ecc71">👔</div>
+                <div class="tag-identificadora">Exportação [E]</div>
             </div>
         </div>
 
         <div id="player">🤠</div>
+        <div id="trator"></div>
         <div id="agribot">🤖</div>
 
         <div id="zona-plantio-arena"></div>
         <div id="zona-pecuaria"></div>
+        <div id="zona-agro-industrial"></div>
 
         <div id="hotbar-container">
-            <div class="hotbar-slot" id="slot-hot-laranja" onclick="selecionarSlot('laranja')"><span class="slot-num">1</span><span id="txt-ico-1">🍊</span><span class="slot-qtd" id="hot-qtd-1">0</span></div>
-            <div class="hotbar-slot" id="slot-hot-maca" onclick="selecionarSlot('maca')"><span class="slot-num">2</span><span id="txt-ico-2">🍎</span><span class="slot-qtd" id="hot-qtd-2">0</span></div>
-            <div class="hotbar-slot" id="slot-hot-banana" onclick="selecionarSlot('banana')"><span class="slot-num">3</span><span id="txt-ico-3">🍌</span><span class="slot-qtd" id="hot-qtd-3">0</span></div>
-            <div class="hotbar-slot" id="slot-hot-melancia" onclick="selecionarSlot('melancia')"><span class="slot-num">4</span><span id="txt-ico-4">🍉</span><span class="slot-qtd" id="hot-qtd-4">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-1" onclick="selecionarSlotIndex(0)"><span class="slot-num">1</span><span id="ico-slot-1">🍊</span><span class="slot-qtd" id="qtd-slot-1">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-2" onclick="selecionarSlotIndex(1)"><span class="slot-num">2</span><span id="ico-slot-2">🍎</span><span class="slot-qtd" id="qtd-slot-2">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-3" onclick="selecionarSlotIndex(2)"><span class="slot-num">3</span><span id="ico-slot-3">🍌</span><span class="slot-qtd" id="qtd-slot-3">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-4" onclick="selecionarSlotIndex(3)"><span class="slot-num">4</span><span id="ico-slot-4">🍉</span><span class="slot-qtd" id="hot-qtd-4">0</span></div>
         </div>
 
         <div id="controles">
             <strong style="color: #2ecc71; font-size: 13px;">Sistemas de Campo:</strong><br>
-            • Controle de Movimento: <b>W, A, S, D</b><br>
-            • Menus Rápidos: Lojinha <b>[L]</b> | Vendas <b>[V]</b> | Oficina <b>[U]</b> | Contratos <b>[G]</b> | Mochila <b>[R]</b>
+            • Controle Geral: <b>W, A, S, D</b><br>
+            • Maquinários: Entrar Trator <b>[Z]</b> | Sair Trator <b>[X]</b> | Semear Trator <b>[M]</b>
         </div>
     </div>
 
-    <div id="loja-modal" class="modal-janela"><h3 style="color:#3498db">Lojinha de Insumos Corporativos 🛒</h3><div id="lista-itens"></div><button class="btn-fechar" onclick="fecharModais()">Sair da Loja</button></div>
-    <div id="ambulante-modal" class="modal-janela"><h3>Bolsa de Valores Ambulante 💰</h3><div id="lista-vendas-individuais"></div><button class="btn-fechar" onclick="fecharModais()">Encerrar Vendas</button></div>
-    <div id="upgrades-modal" class="modal-janela"><h3 style="color:#9b59b6">Departamento de Engenharia 🛠️</h3><div id="lista-upgrades"></div><button class="btn-fechar" onclick="fecharModais()">Fechar Oficina</button></div>
-    <div id="contratos-modal" class="modal-janela"><h3 style="color:#2ecc71">Mesa Executiva de Contratos 💼</h3><div id="lista-contratos"></div><button class="btn-fechar" onclick="fecharModais()">Fechar Alianças</button></div>
-    <div id="arenas-modal" class="modal-janela"><h3>Adquirir Direitos de Lote Territorial 🚜</h3><div class="arenas-grid" id="grid-botoes-arenas"></div><button class="btn-fechar" onclick="fecharModais()">Cancelar Viagem</button></div>
+    <div id="tutorial-modal" class="modal-janela">
+        <h3>Manual Técnico de Operações 📖</h3>
+        <div class="tutorial-conteudo">
+            <h4>1. Pilotagem de Maquinários Pesados (Tratores)</h4>
+            <p>Na grande **Gleba de Alta Tecnologia**, você possui um trator industrial dedicado. Comandos:</p>
+            <ul>
+                <li><b>Embarcar [Z]:</b> Sobe no trator quando estiver no mapa tecnológico.</li>
+                <li><b>Desembarcar [X]:</b> Desce do veículo para andar a pé.</li>
+                <li><b>Direção [W, A, S, D]:</b> Move o veículo industrial de forma realista.</li>
+                <li><b>Semeadeira Industrial [M]:</b> Planta mecanicamente o grão equipado ao passar sobre o seu lote exclusivo correspondente.</li>
+            </ul>
+            <h4>2. Setor Corporativo de Exportação [E]</h4>
+            <p>Fale com o Diretor de Exportação no painel para fechar contratos de grãos de grande escala. As corporações exigirão cargas exclusivas de Soja, Café ou remessas mistas sob valores muito mais valorizados que o comércio ambulante comum.</p>
+        </div>
+        <button class="btn-fechar" onclick="fecharModais()">Sair do Guia</button>
+    </div>
 
-    <script>
-        let jogador = { x: 150, y: 300, velocidad: 6 };
-        let moedas = 150; let agua = 10; let maxAgua = 10; let racao = 0;
-        let sementeSelecionada = "laranja"; let modoAtual = "plantio";
-
-        // Agri-Bot Status Lógico
-        let agribotAtivo = false;
-        let agribotPos = { x: 400, y: 200 };
-
-        let cheats = { moedas: false, agua: false, racao: false };
-        let upgrades = { botas: false, baldeGrande: false, fertilizante: false };
-
-        const frutasInfo = {
-            laranja: { nome: "Laranja", custo: 15, icone: "🍊", tempo: 3000 },
-            maca: { nome: "Maçã", custo: 30, icone: "🍎", tempo: 5000 },
-            banana: { nome: "Banana", custo: 55, icone: "🍌", tempo: 7000 },
-            melancia: { nome: "Melancia", custo: 90, icone: "🍉", tempo: 10000 }
-        };
-
-        const animaisInfo = {
-            galinha: { nome: "Galinha", custo: 150, icone: "🐔", tempo: 10000, valorVendaBase: 800 },
-            porco: { nome: "Porco", custo: 400
+    <div id="loja-modal" class="modal-janela"><h3>Lojinha de Insumos Corporativos 🛒</h3><div id="lista-itens"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
+    <div id="ambulante-modal" class="modal-janela"><h3>Bolsa de Valores Ambulante 💰</h3><div id="lista-vendas-individuais"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
+    <div id="upgrades-modal" class="modal-janela"><h3>Departamento de Engenharia 🛠️</h3><div id="lista-upgrades"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
+    <div id="exportacao-modal" class="modal-janela"><h3 style="color:#2ecc71">Mesa Logística de Exportação 🏢</h3><div id="lista-contratos-exportacao"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
+    <div id="arenas-modal" class="modal-janela"><h3>Direitos de Lote Territorial 🚜</h3><div class="arenas-grid" id="grid-botoes-arenas"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
+    <div id="expansao-lote-modal" class="modal-janela"><h3>Definir Destinação do Novo Lote</h3><p>Escolha a cultura permanente deste novo espaço por 500 moedas:</p><div style="display:flex; gap:20px; justify-content:center;"><button class="btn-comprar" style="background:#2ecc71" onclick="confirmarCompraLoteAgro('soja')">🌿 Dedicar à Soja</button><button class="btn-comprar" style="background:#e67e22" onclick="confirmarComp
