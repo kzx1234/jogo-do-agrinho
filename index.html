@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazenda do Agrinho</title>
+    <title>Fazenda do Agrinho: Pro Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,165 +12,250 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #1a330e;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0d1a05;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             overflow: hidden;
-            color: #fff;
+            color: #f5f6fa;
         }
 
-        /* HUD de Status Moderno */
-        #hud-status {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(8px);
-            padding: 15px 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            z-index: 10;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-        }
-        #hud-status h2 { margin: 0 0 8px 0; color: #2ecc71; font-size: 20px; font-weight: 600; }
-        #hud-status p { margin: 4px 0; font-size: 15px; display: flex; align-items: center; gap: 8px; color: #e0e0e0; }
-
-        /* Botões de Navegação Superior */
-        .container-navegacao {
-            position: absolute;
-            top: 20px;
-            left: 320px;
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-        .btn-navegacao {
-            background: #2ecc71;
-            color: white;
-            border: 2px solid #27ae60;
-            padding: 15px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-        .btn-navegacao:hover {
-            background: #27ae60;
-            transform: scale(1.03);
-        }
-        #btn-ir-animais { background: #e67e22; border-color: #d35400; }
-        #btn-ir-animais:hover { background: #d35400; }
-
-        /* Botão de Voltar */
-        #btn-voltar-sede {
-            display: none;
-            position: absolute;
-            top: 20px;
-            left: 320px;
-            background: #e74c3c;
-            color: white;
-            border: 2px solid #c0392b;
-            padding: 15px 25px;
-            font-size: 15px;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: all 0.2s ease;
-        }
-        #btn-voltar-sede:hover { background: #c0392b; transform: scale(1.03); }
-
-        /* Cenário */
+        /* CHÃO RÚSTICO PROFISSIONAL (Textura de terra e grama realista via CSS) */
         #cenario {
             position: relative;
             width: 100vw;
             height: 100vh;
-            background: #4d7a27;
+            background: #556b2f;
             background-image: 
-                radial-gradient(#436b22 15%, transparent 16%),
-                radial-gradient(#436b22 15%, transparent 16%);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
-            border: 16px solid #3d281a;
-            outline: none; /* Remove a borda de foco padrão */
+                radial-gradient(rgba(34, 139, 34, 0.4) 15%, transparent 20%),
+                radial-gradient(rgba(107, 142, 35, 0.3) 15%, transparent 20%),
+                linear-gradient(45deg, #4d6027 25%, transparent 25%), 
+                linear-gradient(-45deg, #4d6027 25%, transparent 25%);
+            background-size: 40px 40px, 60px 60px, 20px 20px, 20px 20px;
+            border: 20px solid #2c1d11;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            outline: none;
         }
 
-        #titulo-arena-hud {
-            display: none;
+        /* HEADERS E INFRAESTRUTURA UI */
+        #hud-status {
             position: absolute;
-            top: 20px;
-            right: 40px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px 20px;
+            top: 25px;
+            left: 25px;
+            background: linear-gradient(135deg, rgba(20, 30, 15, 0.95), rgba(10, 15, 5, 0.95));
+            border: 2px solid #6b8e23;
+            padding: 18px 25px;
+            border-radius: 16px;
+            z-index: 10;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+            min-width: 280px;
+        }
+        #hud-status h2 { margin: 0 0 10px 0; color: #4cd137; font-size: 22px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        #hud-status p { margin: 6px 0; font-size: 15px; display: flex; align-items: center; justify-content: space-between; color: #dcdde1; }
+
+        /* PAINEL ADM PREMIUM */
+        #painel-adm {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(26, 37, 48, 0.95));
+            border: 2px solid #f1c40f;
+            padding: 15px;
+            border-radius: 16px;
+            z-index: 20;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            width: 240px;
+        }
+        #painel-adm h3 { margin: 0 0 12px 0; font-size: 13px; text-align: center; color: #f1c40f; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 800; }
+        .btn-adm {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            color: #f5f6fa;
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 9px;
+            margin-bottom: 6px;
             border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #ffd700;
-            border: 1px solid #ffd700;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-adm:hover { background: rgba(255,255,255,0.15); }
+        .btn-adm.ativo { background: #2ecc71; border-color: #2ecc71; color: #fff; }
+
+        /* NAVEGAÇÃO LATERAL ELEGANTE */
+        .container-navegacao {
+            position: absolute;
+            top: 210px;
+            left: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             z-index: 10;
         }
+        .btn-navegacao {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-navegacao:hover { background: #2ecc71; transform: translateY(-2px); }
+        #btn-ir-animais { background: #d35400; }
+        #btn-ir-animais:hover { background: #e67e22; }
 
-        /* Personagens e NPCs */
-        .character {
+        #btn-voltar-sede {
+            display: none;
             position: absolute;
-            width: 55px;
-            height: 55px;
+            top: 25px;
+            left: 25px;
+            background: #c0392b;
+            color: white;
+            border: none;
+            padding: 16px 28px;
+            font-size: 14px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* CALÇADÃO INDUSTRIAL E ESTRUTURAS ÚTEIS (ZONA NORTE) */
+        .hub-industrial {
+            position: absolute;
+            top: 25px;
+            left: 340px;
+            right: 290px;
+            height: 140px;
+            background: linear-gradient(to bottom, rgba(50,35,20,0.85), rgba(40,25,15,0.85));
+            border-bottom: 6px solid #1a100a;
+            border-radius: 0 0 24px 24px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            z-index: 2;
+        }
+
+        /* DESIGN PROFISSIONAL DOS BLOCOS DE ESTRUTURA */
+        .estrutura-bloco {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.05);
+            min-width: 110px;
+        }
+        .predio-avatar {
+            font-size: 38px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .predio-avatar:hover { transform: scale(1.1); }
+        
+        /* Grafismo de Barras Dinâmicas nos Silos */
+        .medidor-barra {
+            width: 70px;
+            height: 6px;
+            background: #444;
+            border-radius: 3px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+        .medidor-fill { width: 50%; height: 100%; background: #3498db; transition: width 0.3s; }
+
+        .npc-trabalhador {
+            position: absolute;
+            bottom: -15px;
+            font-size: 22px;
+            background: #1e1b18;
+            border: 1px solid #d35400;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tag-identificadora {
+            margin-top: 15px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #f1c40f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* O FAZENDEIRO (Design de Personagem Destacado) */
+        #player {
+            position: absolute;
+            width: 58px;
+            height: 58px;
+            background: radial-gradient(circle, #fbc531 30%, #e1b12c 90%);
+            border: 3px solid #fff;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 32px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            font-size: 34px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.5), inset 0 -5px 0 rgba(0,0,0,0.2);
+            z-index: 5;
+            transition: transform 0.1s ease;
         }
-        #player { background: #3498db; border: 2px solid #2980b9; z-index: 5; }
-        #vendedor { background: #e67e22; border: 2px solid #d35400; left: 20%; top: 45%; }
-        #ambulante { background: #f1c40f; border: 2px solid #f39c12; left: 36%; top: 55%; }
-        #engenheiro { background: #9b59b6; border: 2px solid #8e44ad; left: 50%; top: 30%; }
-        #central-vendas { background: #2ecc71; border: 2px solid #27ae60; left: 66%; top: 45%; }
-        
-        .balao-npc {
-            position: absolute;
-            top: -45px;
-            background: #111;
-            color: #fff;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            white-space: nowrap;
-            border: 1px solid #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        #vendedor .balao-npc { border-color: #e67e22; }
-        #ambulante .balao-npc { border-color: #f1c40f; color: #f1c40f; }
-        #engenheiro .balao-npc { border-color: #9b59b6; }
-        #central-vendas .balao-npc { border-color: #2ecc71; }
 
-        /* Grades de Plantio e Animais */
+        /* ROBÔ AGRI-BOT (Elemento Visual Autónomo) */
+        #agribot {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            background: radial-gradient(circle, #00d2d3 20%, #0abde3 90%);
+            border: 2px solid #fff;
+            border-radius: 12px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            z-index: 4;
+            transition: all 0.3s linear;
+        }
+
+        /* GRADES DE PRODUÇÃO */
         #zona-plantio-arena, #zona-pecuaria {
             display: none;
             position: absolute;
             left: 50%;
-            top: 52%;
-            transform: translate(-50%, -50%);
-            grid-template-columns: repeat(5, 95px);
-            grid-gap: 12px;
-            background: #23170e;
+            top: 60%;
+            transform: translate(-50%, -40%);
+            grid-template-columns: repeat(5, 100px);
+            grid-gap: 14px;
+            background: #3a2514;
             padding: 25px;
-            border-radius: 20px;
-            border: 6px dashed #ffd700;
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 16px 32px rgba(0,0,0,0.6);
+            border-radius: 24px;
+            border: 5px solid #27170b;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.7);
         }
-        #zona-pecuaria { background: #543d2b; border-color: #e67e22; grid-template-columns: repeat(3, 110px); }
+        #zona-pecuaria { background: #4a3625; border-color: #d35400; grid-template-columns: repeat(3, 115px); }
 
         .slot {
-            width: 95px;
-            height: 95px;
-            background-color: #4f3521;
-            border: 2px dashed #2e1f13;
-            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            background: #573c25;
+            border: 2px solid #27170b;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -178,161 +263,157 @@
             cursor: pointer;
             position: relative;
             transition: all 0.2s ease;
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.4);
         }
-        .slot:hover { background-color: #5c3f28; transform: scale(1.04); }
-        .slot.slot-bicho { width: 110px; height: 110px; background-color: #70523a; }
+        .slot:hover { background-color: #63462d; transform: scale(1.05) translateY(-2px); }
+        .slot.slot-bicho { width: 115px; height: 115px; background-color: #694b34; }
         
         .slot .status { 
             font-size: 10px; 
-            margin-top: 6px; 
-            background: rgba(0, 0, 0, 0.75); 
-            padding: 3px 6px; 
-            border-radius: 20px;
-            font-weight: bold;
+            margin-top: 8px; 
+            background: rgba(0, 0, 0, 0.85); 
+            padding: 3px 8px; 
+            border-radius: 10px;
+            font-weight: 700;
+            width: 85%;
             text-align: center;
-            width: 90%;
-            white-space: nowrap;
-            overflow: hidden;
         }
 
-        /* Hotbar */
+        /* INTERFACE INFERIOR (HOTBAR) */
         #hotbar-container {
             position: absolute;
-            bottom: 25px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(15, 15, 15, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 6px;
+            background: rgba(10, 15, 10, 0.9);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.1);
+            padding: 8px;
             display: flex;
-            gap: 8px;
-            border-radius: 16px;
+            gap: 10px;
+            border-radius: 20px;
             z-index: 10;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
         .hotbar-slot {
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 26px;
+            font-size: 28px;
             position: relative;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
-        .hotbar-slot:hover { background: rgba(255, 255, 255, 0.1); }
-        .hotbar-slot .slot-num { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #888; font-weight: bold; }
+        .hotbar-slot:hover { background: rgba(255, 255, 255, 0.12); transform: translateY(-4px); }
+        .hotbar-slot .slot-num { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #aaa; font-weight: 800; }
         .hotbar-slot .slot-qtd {
             position: absolute;
             bottom: 4px;
             right: 6px;
             font-size: 11px;
             color: #fff;
-            font-weight: bold;
-            background: rgba(0,0,0,0.6);
-            padding: 1px 4px;
-            border-radius: 4px;
+            font-weight: 700;
+            background: #27ae60;
+            padding: 2px 6px;
+            border-radius: 6px;
         }
         .hotbar-slot.ativo {
-            background: rgba(46, 204, 113, 0.2);
+            background: rgba(46, 204, 113, 0.15);
             border: 2px solid #2ecc71;
-            box-shadow: 0 0 12px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
         }
 
-        /* Modais */
+        /* DIALÓGOS / MODAIS ESTILO GLASSMORPHISM */
         .modal-janela {
             display: none;
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(20, 20, 20, 0.96);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 22, 15, 0.96);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             color: #fff;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            padding: 30px;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.9);
             z-index: 100;
-            width: 480px;
-            max-height: 85vh;
+            width: 500px;
+            max-height: 80vh;
             overflow-y: auto;
         }
-        .modal-janela h3 { margin-top: 0; text-align: center; font-size: 22px; margin-bottom: 15px;}
+        .modal-janela h3 { margin-top: 0; text-align: center; font-size: 24px; color: #4cd137; font-weight: 700; }
         
-        .arenas-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 12px; margin-top: 15px; }
-        .btn-arena-card {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15);
-            padding: 15px; border-radius: 12px; color: #fff; font-weight: bold; cursor: pointer; text-align: center; transition: all 0.2s;
-        }
-        .btn-arena-card:hover { background: rgba(46, 204, 113, 0.2); border-color: #2ecc71; transform: translateY(-2px); }
-        .btn-arena-card.bloqueado { border-color: #e74c3c; background: rgba(231, 76, 60, 0.05); }
+        .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; }
+        .btn-comprar, .btn-vender-unidade { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: background 0.2s; }
+        .btn-comprar:hover { background: #2980b9; }
+        .btn-fechar { width: 100%; background: rgba(255, 255, 255, 0.08); color: #ff7675; border: none; padding: 14px; margin-top: 15px; border-radius: 12px; cursor: pointer; font-weight: 700; }
 
-        .mochila-secao { background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .mochila-secao h4 { margin: 0 0 10px 0; font-size: 13px; color: #aaa; text-transform: uppercase;}
-        .mochila-grid { display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 10px; }
-        .mochila-item { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; }
-
-        #lista-contratos { display: flex; flex-direction: column; gap: 15px; }
-        .contrato-box { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 15px; }
-        .contrato-box.completavel { border-color: rgba(46, 204, 113, 0.5); background: rgba(46, 204, 113, 0.03); }
-        .contrato-header { display: flex; justify-content: space-between; font-weight: bold; color: #3498db; margin-bottom: 10px; }
-        .contrato-box.completavel .contrato-header { color: #2ecc71; }
-        
-        .btn-aceitar { background: #2ecc71; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; }
-        .btn-aceitar:disabled { background: #555; color: #aaa; cursor: not-allowed; }
-        .btn-recusar { background: rgba(255, 255, 255, 0.05); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-
-        .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; }
-        .btn-comprar { background: #3498db; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .btn-comprar:disabled { background: #555; cursor: not-allowed; }
-        .btn-vender-unidade { background: #e67e22; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .btn-vender-unidade:hover { background: #d35400; }
-        .btn-fechar { width: 100%; background: rgba(255, 255, 255, 0.08); color: #ff7675; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px; margin-top: 15px; border-radius: 10px; cursor: pointer; }
-
-        #controles { position: absolute; bottom: 25px; left: 20px; background: rgba(15, 15, 15, 0.85); padding: 15px; border-radius: 12px; font-size: 13px; border-left: 4px solid #3498db; }
+        #controles { position: absolute; bottom: 30px; left: 25px; background: rgba(10, 15, 10, 0.85); padding: 15px; border-radius: 14px; font-size: 12px; border-left: 4px solid #2ecc71; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        #titulo-arena-hud { display: none; position: absolute; top: 190px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); padding: 8px 25px; border-radius: 20px; font-weight: 700; color: #ffd700; border: 1px solid #ffd700; z-index: 5;}
     </style>
 </head>
 <body>
 
     <div id="cenario" tabindex="0">
+        
         <div id="hud-status">
             <h2>Fazenda do Agrinho 🌾</h2>
-            <p>Moedas: <span id="moedas" style="color: #ffd700; font-weight: bold;">150</span> 🪙</p>
-            <p>Água / Ração: <span id="hud-agua" style="color: #3498db; font-weight: bold;">10</span> 💧 | <span id="hud-racao" style="color: #f1c40f; font-weight: bold;">0</span> 🌾</p>
-            <p>Selecionado: <span id="semente-selecionada" style="color: #2ecc71;">Laranja</span></p>
+            <p>Patrimônio: <span id="moedas" style="color: #f1c40f; font-weight: bold;">150</span> 🪙</p>
+            <p>Reservatório de Água: <span id="hud-agua" style="color: #3498db; font-weight: bold;">10/10</span> 💧</p>
+            <p>Armazém de Ração: <span id="hud-racao" style="color: #e67e22; font-weight: bold;">0</span> 🌾</p>
+            <p>Equipado: <span id="semente-selecionada" style="color: #4cd137; font-weight: bold;">Laranja</span></p>
+        </div>
+
+        <div id="painel-adm">
+            <h3>Controles Admin ⚙️</h3>
+            <button class="btn-adm" id="cheat-moedas" onclick="toggleCheat('moedas')"><span>Moedas Infinitas</span><b>OFF</b></button>
+            <button class="btn-adm" id="cheat-agua" onclick="toggleCheat('agua')"><span>Água Infinita</span><b>OFF</b></button>
+            <button class="btn-adm" id="cheat-racao" onclick="toggleCheat('racao')"><span>Ração Infinita</span><b>OFF</b></button>
+            <button class="btn-adm" style="background:#c0392b; justify-content: center; margin-top:10px;" onclick="resetarJogo()">Resetar Tudo</button>
         </div>
 
         <div class="container-navegacao" id="menu-navegacao">
-            <button class="btn-navegacao" onclick="abrirMenuArenas()">Expansões Rurais [H] 🌱</button>
-            <button class="btn-navegacao" id="btn-ir-animais" onclick="irParaPecuaria()">Rancho de Animais 🐾</button>
+            <button class="btn-navegacao" onclick="abrirMenuArenas()">Zonas de Expansão [H]</button>
+            <button class="btn-navegacao" id="btn-ir-animais" onclick="irParaPecuaria()">Setor de Pecuária 🐾</button>
         </div>
-        <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Voltar para Sede Principal</button>
-        
+        <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Retornar ao Centro Logístico</button>
         <div id="titulo-arena-hud">Sede Principal</div>
 
-        <div id="controles">
-            <strong style="color: #3498db; font-size: 14px;">Comandos Principais:</strong><br>
-            • Movimentação: <b>W, A, S, D</b><br>
-            • Lojinha: <b>[ L ]</b> | Ambulante: <b>[ V ]</b> | Oficina: <b>[ U ]</b><br>
-            • Central de Vendas / Contratos: <b>[ G ]</b><br>
-            • Inventário / Mochila: <b>[ R ]</b><br>
-            • Seleção de Sementes/Animais: Teclas <b>1, 2, 3, 4</b>
+        <div class="hub-industrial" id="zona-comercial-npcs">
+            <div class="estrutura-bloco">
+                <div class="predio-avatar" onclick="abrirLoja()">🪣</div>
+                <div class="medidor-barra"><div class="medidor-fill" id="bar-agua-fill"></div></div>
+                <div class="npc-trabalhador">👨‍🌾</div>
+                <div class="tag-identificadora">Lojinha [L]</div>
+            </div>
+            <div class="estrutura-bloco">
+                <div class="predio-avatar" onclick="abrirAmbulante()">📦</div>
+                <div class="npc-trabalhador" style="border-color:#f1c40f">💰</div>
+                <div class="tag-identificadora">Ambulante [V]</div>
+            </div>
+            <div class="estrutura-bloco">
+                <div class="predio-avatar" onclick="abrirUpgrades()">🏭</div>
+                <button id="btn-toggle-bot" style="margin-top:5px; font-size:9px; font-weight:bold; background:#16a085; border:none; color:white; border-radius:4px; cursor:pointer;" onclick="toggleAgribot()">AGRI-BOT: OFF</button>
+                <div class="npc-trabalhador" style="border-color:#9b59b6">🛠️</div>
+                <div class="tag-identificadora">Oficina [U]</div>
+            </div>
+            <div class="estrutura-bloco">
+                <div class="predio-avatar" onclick="abrirContratos()">🏢</div>
+                <div class="npc-trabalhador" style="border-color:#2ecc71">💼</div>
+                <div class="tag-identificadora">Contratos [G]</div>
+            </div>
         </div>
 
-        <div id="player" class="character" style="left: 150px; top: 150px;">🤠</div>
-        <div id="vendedor" class="character">👨‍🌾<div class="balao-npc">Sementes [L]</div></div>
-        <div id="ambulante" class="character">💰<div class="balao-npc">Ambulante [V]</div></div>
-        <div id="engenheiro" class="character">🛠️<div class="balao-npc">Upgrades [U]</div></div>
-        <div id="central-vendas" class="character">🏢<div class="balao-npc">Contratos [G]</div></div>
+        <div id="player">🤠</div>
+        <div id="agribot">🤖</div>
 
         <div id="zona-plantio-arena"></div>
-
         <div id="zona-pecuaria"></div>
 
         <div id="hotbar-container">
@@ -341,492 +422,39 @@
             <div class="hotbar-slot" id="slot-hot-banana" onclick="selecionarSlot('banana')"><span class="slot-num">3</span><span id="txt-ico-3">🍌</span><span class="slot-qtd" id="hot-qtd-3">0</span></div>
             <div class="hotbar-slot" id="slot-hot-melancia" onclick="selecionarSlot('melancia')"><span class="slot-num">4</span><span id="txt-ico-4">🍉</span><span class="slot-qtd" id="hot-qtd-4">0</span></div>
         </div>
-    </div>
 
-    <div id="arenas-modal" class="modal-janela">
-        <h3>Zonas de Expansão Rural 🚜</h3>
-        <p style="text-align:center; font-size:13px; color:#aaa;">Custo de expansão: 3.000 moedas cada.</p>
-        <div class="arenas-grid" id="grid-botoes-arenas"></div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Menu</button>
-    </div>
-
-    <div id="upgrades-modal" class="modal-janela">
-        <h3>Oficina de Tecnologia Agrícola 🛠️</h3>
-        <div id="lista-upgrades"></div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Oficina</button>
-    </div>
-
-    <div id="loja-modal" class="modal-janela">
-        <h3>Lojinha do Agricultor 🛒</h3>
-        <div id="lista-itens"></div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Loja</button>
-    </div>
-
-    <div id="ambulante-modal" class="modal-janela">
-        <h3>Comprador Ambulante 💰</h3>
-        <p style="text-align:center; font-size:13px; color:#f1c40f; margin-bottom:15px;">Vendo direto aqui você ganha exatamente 10 moedas de lucro por fruta!</p>
-        <div id="lista-vendas-individuais"></div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Negociações</button>
-    </div>
-
-    <div id="contratos-modal" class="modal-janela">
-        <h3>Mesa de Contratos Corporativos 💼</h3>
-        <div id="lista-contratos"></div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Contratos</button>
-    </div>
-
-    <div id="mochila-modal" class="modal-janela">
-        <h3>Mochila e Estoque 🎒</h3>
-        <div class="mochila-secao">
-            <h4>Insumos</h4>
-            <div class="mochila-grid">
-                <div class="mochila-item"><span>💧</span><div><span class="label">Água</span><br><b id="m-agua">0</b></div></div>
-                <div class="mochila-item"><span>🌾</span><div><span class="label">Ração</span><br><b id="m-racao">0</b></div></div>
-            </div>
+        <div id="controles">
+            <strong style="color: #2ecc71; font-size: 13px;">Sistemas de Campo:</strong><br>
+            • Controle de Movimento: <b>W, A, S, D</b><br>
+            • Menus Rápidos: Lojinha <b>[L]</b> | Vendas <b>[V]</b> | Oficina <b>[U]</b> | Contratos <b>[G]</b> | Mochila <b>[R]</b>
         </div>
-        <div class="mochila-secao">
-            <h4>Produtos Prontos</h4>
-            <div class="mochila-grid" id="mochila-produtos-grid"></div>
-        </div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Mochila</button>
     </div>
+
+    <div id="loja-modal" class="modal-janela"><h3 style="color:#3498db">Lojinha de Insumos Corporativos 🛒</h3><div id="lista-itens"></div><button class="btn-fechar" onclick="fecharModais()">Sair da Loja</button></div>
+    <div id="ambulante-modal" class="modal-janela"><h3>Bolsa de Valores Ambulante 💰</h3><div id="lista-vendas-individuais"></div><button class="btn-fechar" onclick="fecharModais()">Encerrar Vendas</button></div>
+    <div id="upgrades-modal" class="modal-janela"><h3 style="color:#9b59b6">Departamento de Engenharia 🛠️</h3><div id="lista-upgrades"></div><button class="btn-fechar" onclick="fecharModais()">Fechar Oficina</button></div>
+    <div id="contratos-modal" class="modal-janela"><h3 style="color:#2ecc71">Mesa Executiva de Contratos 💼</h3><div id="lista-contratos"></div><button class="btn-fechar" onclick="fecharModais()">Fechar Alianças</button></div>
+    <div id="arenas-modal" class="modal-janela"><h3>Adquirir Direitos de Lote Territorial 🚜</h3><div class="arenas-grid" id="grid-botoes-arenas"></div><button class="btn-fechar" onclick="fecharModais()">Cancelar Viagem</button></div>
 
     <script>
-        let jogador = { x: 150, y: 150, velocidad: 5 }; 
-        let moedas = 150; 
-        let agua = 10; 
-        let racao = 0;
-        let sementeSelecionada = "laranja"; 
-        let modoAtual = "plantio"; 
+        let jogador = { x: 150, y: 300, velocidad: 6 };
+        let moedas = 150; let agua = 10; let maxAgua = 10; let racao = 0;
+        let sementeSelecionada = "laranja"; let modoAtual = "plantio";
 
+        // Agri-Bot Status Lógico
+        let agribotAtivo = false;
+        let agribotPos = { x: 400, y: 200 };
+
+        let cheats = { moedas: false, agua: false, racao: false };
         let upgrades = { botas: false, baldeGrande: false, fertilizante: false };
 
         const frutasInfo = {
-            laranja: { nome: "Laranja", custo: 15, icone: "🍊", tempo: 4000, valorVendaBase: 75 },
-            maca: { nome: "Maçã", custo: 30, icone: "🍎", tempo: 6000, valorVendaBase: 140 },
-            banana: { nome: "Banana", custo: 55, icone: "🍌", tempo: 9000, valorVendaBase: 250 },
-            melancia: { nome: "Melancia", custo: 90, icone: "🍉", tempo: 13000, valorVendaBase: 420 }
+            laranja: { nome: "Laranja", custo: 15, icone: "🍊", tempo: 3000 },
+            maca: { nome: "Maçã", custo: 30, icone: "🍎", tempo: 5000 },
+            banana: { nome: "Banana", custo: 55, icone: "🍌", tempo: 7000 },
+            melancia: { nome: "Melancia", custo: 90, icone: "🍉", tempo: 10000 }
         };
 
         const animaisInfo = {
-            galinha: { nome: "Galinha", custo: 150, icone: "🐔", tempo: 15000, valorVendaBase: 800 },
-            porco: { nome: "Porco", custo: 400, icone: "🐷", tempo: 25000, valorVendaBase: 2200 },
-            vaca: { nome: "Vaca", custo: 900, icone: "🐮", tempo: 40000, valorVendaBase: 5000 }
-        };
-
-        let estoqueSementes = { laranja: 5, maca: 0, banana: 0, melancia: 0 };
-        let estoqueFrutas = { laranja: 0, maca: 0, banana: 0, melancia: 0 };
-        
-        let estoqueFilhotes = { galinha: 0, porco: 0, vaca: 0 };
-        let estoqueAnimaisAdultos = { galinha: 0, porco: 0, vaca: 0 };
-
-        let arenaAtual = null; 
-        let pecuariaDesbloqueada = false; 
-        
-        let arenasDesbloqueadas = { 1: true, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
-        const CUSTO_EXPANSAO = 3000;
-        const CUSTO_PECUARIA = 20000;
-
-        let arenasDados = {};
-        for (let a = 1; a <= 10; a++) {
-            arenasDados[a] = Array(20).fill(null).map(() => ({ status: "vazio", fruta: null, timer: null }));
-        }
-        let pecuariaSlots = Array(9).fill(null).map(() => ({ status: "vazio", animal: null, timer: null }));
-
-        let listaContratosAtivos = [null, null, null];
-        const empresas = ["Frigorífico Real", "Granja Ideal", "Laticínios Ouro", "Natura Alimentos", "BioAgro Corp"];
-        const teclas = {};
-
-        // GARANTE O FOCO NO JOGO AO CARREGAR
-        window.currentTargetKeyboard = document.getElementById('cenario');
-        window.onload = function() {
-            window.currentTargetKeyboard.focus();
-        };
-
-        // EVENTOS DE TECLADO CORRIGIDOS
-        window.addEventListener('keydown', (e) => {
-            const t = e.key.toLowerCase();
-            teclas[t] = true;
-
-            if (t === 'h') abrirMenuArenas();
-            if (arenaAtual === null) {
-                if (t === 'l') abrirLoja();
-                if (t === 'v') abrirAmbulante();
-                if (t === 'g') abrirContratos();
-                if (t === 'u') abrirUpgrades();
-            }
-            if (t === 'r') abrirMochila();
-
-            if (modoAtual === "plantio" && ["1","2","3","4"].includes(e.key)) {
-                const arr = ["laranja", "maca", "banana", "melancia"];
-                sementeSelecionada = arr[parseInt(e.key) - 1];
-                atualizarInterface();
-            } else if (modoAtual === "pecuaria" && ["1","2","3"].includes(e.key)) {
-                const arr = ["galinha", "porco", "vaca"];
-                sementeSelecionada = arr[parseInt(e.key) - 1];
-                atualizarInterface();
-            }
-        });
-        
-        window.addEventListener('keyup', (e) => { 
-            teclas[e.key.toLowerCase()] = false; 
-        });
-
-        function loopJogo() {
-            let v = upgrades.botas ? 9 : 5;
-            if (teclas['w']) jogador.y -= v; if (teclas['s']) jogador.y += v;
-            if (teclas['a']) jogador.x -= v; if (teclas['d']) jogador.x += v;
-
-            if (jogador.x < 20) jogador.x = 20; if (jogador.y < 20) pointerY = 20;
-            if (jogador.x > window.innerWidth - 75) jogador.x = window.innerWidth - 75;
-            if (jogador.y > window.innerHeight - 75) jogador.y = window.innerHeight - 75;
-
-            document.getElementById('player').style.left = jogador.x + 'px';
-            document.getElementById('player').style.top = jogador.y + 'px';
-            requestAnimationFrame(loopJogo);
-        }
-
-        // FECHAR MODAIS DEVOLVENDO O FOCO PARA A MOVIMENTAÇÃO
-        function fecharModais() {
-            document.querySelectorAll('.modal-janela').forEach(m => m.style.display = 'none');
-            window.currentTargetKeyboard.focus(); // Devolve o foco das teclas para a tela do jogo
-        }
-
-        function abrirMenuArenas() {
-            if (arenaAtual !== null) return;
-            fecharModais();
-            const grid = document.getElementById('grid-botoes-arenas');
-            grid.innerHTML = '';
-            for (let i = 1; i <= 10; i++) {
-                if (arenasDesbloqueadas[i]) {
-                    grid.innerHTML += `<button class="btn-arena-card" onclick="viajarParaArena(${i})">Zona #${i}<br><span style="color:#2ecc71;font-size:11px;">🔓 Livre</span></button>`;
-                } else {
-                    grid.innerHTML += `<button class="btn-arena-card bloqueado" onclick="comprarArena(${i})">Zona #${i}<br><span style="color:#e74c3c;font-size:11px;">🔒 Bloqueada<br>${CUSTO_EXPANSAO} 🪙</span></button>`;
-                }
-            }
-            document.getElementById('arenas-modal').style.display = 'block';
-        }
-
-        function comprarArena(num) {
-            if (moedas >= CUSTO_EXPANSAO) {
-                moedas -= CUSTO_EXPANSAO;
-                arenasDesbloqueadas[num] = true;
-                atualizarInterface(); abrirMenuArenas();
-            } else { alert("Moedas insuficientes!"); }
-        }
-
-        function viajarParaArena(num) {
-            arenaAtual = num; modoAtual = "plantio"; fecharModais();
-            ajustarElementosCenariaVisibility(false);
-            document.getElementById('titulo-arena-hud').innerText = `Zona Rural #${num} 🌱`;
-            renderizarCanteirosPlantio();
-            document.getElementById('zona-plantio-arena').style.display = 'grid';
-        }
-
-        function irParaPecuaria() {
-            if (!pecuariaDesbloqueada) {
-                if (moedas >= CUSTO_PECUARIA) {
-                    moedas -= CUSTO_PECUARIA;
-                    pecuariaDesbloqueada = true;
-                    alert("Rancho de Animais Desbloqueado com sucesso! 🐮🐷");
-                    atualizarInterface();
-                } else {
-                    alert(`O Rancho de Animais está trancado! Pague as ${CUSTO_PECUARIA} moedas necessárias para desbloquear.`);
-                    return;
-                }
-            }
-            arenaAtual = "pecuaria"; modoAtual = "pecuaria"; sementeSelecionada = "galinha"; fecharModais();
-            ajustarElementosCenariaVisibility(false);
-            document.getElementById('titulo-arena-hud').innerText = `Rancho de Pecuária 🐾`;
-            renderizarCanteirosPecuaria();
-            document.getElementById('zona-pecuaria').style.display = 'grid';
-            atualizarInterface();
-        }
-
-        function voltarParaSede() {
-            arenaAtual = null; modoAtual = "plantio"; sementeSelecionada = "laranja";
-            ajustarElementosCenariaVisibility(true);
-            document.getElementById('zona-plantio-arena').style.display = 'none';
-            document.getElementById('zona-pecuaria').style.display = 'none';
-            fecharModais();
-            atualizarInterface();
-        }
-
-        function ajustarElementosCenariaVisibility(mostrar) {
-            let displayVal = mostrar ? 'flex' : 'none';
-            document.getElementById('vendedor').style.display = displayVal;
-            document.getElementById('ambulante').style.display = displayVal;
-            document.getElementById('engenheiro').style.display = displayVal;
-            document.getElementById('central-vendas').style.display = displayVal;
-            document.getElementById('menu-navegacao').style.display = mostrar ? 'flex' : 'none';
-            document.getElementById('btn-voltar-sede').style.display = mostrar ? 'none' : 'block';
-            document.getElementById('titulo-arena-hud').style.display = mostrar ? 'none' : 'block';
-        }
-
-        function abrirLoja() {
-            fecharModais();
-            let container = document.getElementById('lista-itens');
-            container.innerHTML = `
-                <div class="item-loja"><span>💧 Balde de Água</span><button class="btn-comprar" onclick="comprarItem('agua')">Comprar por ${upgrades.baldeGrande?'25':'5'} 🪙 (+${upgrades.baldeGrande?'5':'1'})</button></div>
-                <div class="item-loja"><span>🌾 Sako de Ração</span><button class="btn-comprar" style="background:#f1c40f;" onclick="comprarItem('racao')">Comprar por 20 🪙</button></div>
-                <hr style="border:1px solid rgba(255,255,255,0.05)">
-            `;
-            for(let key in frutasInfo) {
-                container.innerHTML += `<div class="item-loja"><span>${frutasInfo[key].icone} Semente ${frutasInfo[key].nome}</span><button class="btn-comprar" onclick="comprarItem('sem_'+key)">${frutasInfo[key].custo} 🪙</button></div>`;
-            }
-            for(let key in animaisInfo) {
-                container.innerHTML += `<div class="item-loja"><span>${animaisInfo[key].icone} Filhote de ${animaisInfo[key].nome}</span><button class="btn-comprar" style="background:#e67e22;" onclick="comprarItem('ani_'+key)">${animaisInfo[key].custo} 🪙</button></div>`;
-            }
-            document.getElementById('loja-modal').style.display = 'block';
-        }
-
-        function comprarItem(id) {
-            if (id === 'agua') {
-                let cost = upgrades.baldeGrande ? 25 : 5;
-                if (moedas >= cost) { moedas -= cost; agua += upgrades.baldeGrande ? 5 : 1; }
-            } else if (id === 'racao') {
-                if (moedas >= 20) { moedas -= 20; racao += 1; }
-            } else if (id.startsWith('sem_')) {
-                let t = id.split('_')[1];
-                if (moedas >= frutasInfo[t].custo) { moedas -= frutasInfo[t].custo; estoqueSementes[t]++; }
-            } else if (id.startsWith('ani_')) {
-                let t = id.split('_')[1];
-                if (moedas >= animaisInfo[t].custo) { moedas -= animaisInfo[t].custo; estoqueFilhotes[t]++; }
-            }
-            atualizarInterface(); abrirLoja();
-        }
-
-        function abrirAmbulante() {
-            fecharModais();
-            let container = document.getElementById('lista-vendas-individuais');
-            container.innerHTML = '';
-            
-            for(let key in frutasInfo) {
-                let precoVendaIndividual = frutasInfo[key].custo + 10; 
-                let qtdDisponivel = estoqueFrutas[key];
-                
-                container.innerHTML += `
-                    <div class="item-loja">
-                        <span>${frutasInfo[key].icone} <b>${frutasInfo[key].nome}</b> (Possui: ${qtdDisponivel})</span>
-                        <button class="btn-vender-unidade" ${qtdDisponivel <= 0 ? 'disabled style="background:#555;"' : ''} onclick="venderFrutaIndividual('${key}')">
-                            Vender 1 por +${precoVendaIndividual} 🪙
-                        </button>
-                    </div>
-                `;
-            }
-            document.getElementById('ambulante-modal').style.display = 'block';
-        }
-
-        function venderFrutaIndividual(tipo) {
-            if(estoqueFrutas[tipo] > 0) {
-                estoqueFrutas[tipo]--;
-                let ganho = frutasInfo[tipo].custo + 10;
-                moedas += ganho;
-                atualizarInterface();
-                abrirAmbulante();
-            }
-        }
-
-        function abrirUpgrades() {
-            fecharModais();
-            let container = document.getElementById('lista-upgrades');
-            container.innerHTML = `
-                <div class="item-loja"><span>👟 Botas de Velocidade (Passivo)</span><button class="btn-comprar" ${upgrades.botas?'disabled':''} onclick="comprarUpgrade('botas')">${upgrades.botas?'Adquirido':'1.500 🪙'}</button></div>
-                <div class="item-loja"><span>🪣 Super Balde Hidráulico (+5 águas)</span><button class="btn-comprar" ${upgrades.baldeGrande?'disabled':''} onclick="comprarUpgrade('baldeGrande')">${upgrades.baldeGrande?'Adquirido':'2.000 🪙'}</button></div>
-                <div class="item-loja"><span>🧪 Fertilizante Bio-Acelerador (-30% Tempo)</span><button class="btn-comprar" ${upgrades.fertilizante?'disabled':''} onclick="comprarUpgrade('fertilizante')">${upgrades.fertilizante?'Adquirido':'3.500 🪙'}</button></div>
-            `;
-            document.getElementById('upgrades-modal').style.display = 'block';
-        }
-
-        function comprarUpgrade(id) {
-            let custos = { botas: 1500, baldeGrande: 2000, fertilizante: 3500 };
-            if (moedas >= custos[id]) {
-                moedas -= custos[id]; upgrades[id] = true;
-                atualizarInterface(); abrirUpgrades();
-            } else { alert("Moedas insuficientes!"); }
-        }
-
-        function renderizarCanteirosPlantio() {
-            const container = document.getElementById('zona-plantio-arena');
-            container.innerHTML = '';
-            arenasDados[arenaAtual].forEach((c, idx) => {
-                let html = `🟫<span class="status">Vazio</span>`;
-                if (c.status === "plantado") html = `🌱 <span class="status" style="background:#e67e22;">Regar!</span>`;
-                else if (c.status === "regado") html = `💧 <span class="status" style="background:#3498db;">Crescendo</span>`;
-                else if (c.status === "pronto") html = `${frutasInfo[c.fruta].icone} <span class="status" style="background:#2ecc71;">Colher</span>`;
-                container.innerHTML += `<div class="slot" onclick="clickSlotPlantio(${idx})">${html}</div>`;
-            });
-        }
-
-        function clickSlotPlantio(idx) {
-            let c = arenasDados[arenaAtual][idx];
-            if (c.status === "vazio" && estoqueSementes[sementeSelecionada] > 0) {
-                estoqueSementes[sementeSelecionada]--; c.status = "plantado"; c.fruta = sementeSelecionada;
-            } else if (c.status === "plantado" && agua > 0) {
-                agua--; c.status = "regado";
-                let t = upgrades.fertilizante ? frutasInfo[c.fruta].tempo * 0.7 : frutasInfo[c.fruta].tempo;
-                c.timer = setTimeout(() => { c.status = "pronto"; if(arenaAtual===arenaAtual) renderizarCanteirosPlantio(); }, t);
-            } else if (c.status === "pronto") {
-                estoqueFrutas[c.fruta]++; c.status = "vazio"; c.fruta = null;
-            }
-            renderizarCanteirosPlantio(); atualizarInterface();
-        }
-
-        function renderizarCanteirosPecuaria() {
-            const container = document.getElementById('zona-pecuaria');
-            container.innerHTML = '';
-            pecuariaSlots.forEach((c, idx) => {
-                let html = `🪵<span class="status">Cercado Vazio</span>`;
-                if (c.status === "filhote") html = `🐣 <span class="status" style="background:#e67e22;">Alimentar!</span>`;
-                else if (c.status === "alimentado") html = `⏳ <span class="status" style="background:#3498db;">Engordando</span>`;
-                else if (c.status === "adulto") html = `${animaisInfo[c.animal].icone} <span class="status" style="background:#2ecc71;">Recolher</span>`;
-                container.innerHTML += `<div class="slot slot-bicho" onclick="clickSlotPecuaria(${idx})">${html}</div>`;
-            });
-        }
-
-        function clickSlotPecuaria(idx) {
-            let c = pecuariaSlots[idx];
-            if (c.status === "vazio" && estoqueFilhotes[sementeSelecionada] > 0) {
-                estoqueFilhotes[sementeSelecionada]--; c.status = "filhote"; c.animal = sementeSelecionada;
-            } else if (c.status === "filhote" && racao > 0) {
-                racao--; c.status = "alimentado";
-                let t = animaisInfo[c.animal].tempo;
-                c.timer = setTimeout(() => { c.status = "adulto"; if(arenaAtual==='pecuaria') renderizarCanteirosPecuaria(); }, t);
-            } else if (c.status === "adulto") {
-                estoqueAnimaisAdultos[c.animal]++; c.status = "vazio"; c.animal = null;
-            }
-            renderizarCanteirosPecuaria(); atualizarInterface();
-        }
-
-        function abrirContratos() {
-            fecharModais();
-            const container = document.getElementById('lista-contratos');
-            container.innerHTML = '';
-
-            for (let i = 0; i < 3; i++) {
-                if (listaContratosAtivos[i] === null) {
-                    let emp = empresas[Math.floor(Math.random() * empresas.length)];
-                    let isPecuaria = pecuariaDesbloqueada && Math.random() > 0.5;
-                    let pedido = {}, val = 0;
-
-                    if (isPecuaria) {
-                        let k = Object.keys(animaisInfo)[Math.floor(Math.random()*3)];
-                        let q = Math.floor(Math.random()*3)+1;
-                        pedido["ani_" + k] = q; val = q * animaisInfo[k].valorVendaBase * 1.25;
-                    } else {
-                        let k = Object.keys(frutasInfo)[Math.floor(Math.random()*4)];
-                        let q = Math.floor(Math.random()*6)+5;
-                        pedido["frt_" + k] = q; val = q * frutasInfo[k].valorVendaBase * 1.15;
-                    }
-                    listaContratosAtivos[i] = { emp, pedido, valor: Math.round(val) };
-                }
-            }
-
-            listaContratosAtivos.forEach((c, idx) => {
-                let reqs = '', pode = true;
-                for(let key in c.pedido) {
-                    let qNeed = c.pedido[key], qHave = 0, name = "", ico = "";
-                    if(key.startsWith("frt_")) {
-                        let t = key.split('_')[1]; qHave = estoqueFrutas[t]; name = frutasInfo[t].nome; ico = frutasInfo[t].icone;
-                    } else {
-                        let t = key.split('_')[1]; qHave = estoqueAnimaisAdultos[t]; name = "Adulto de " + animaisInfo[t].nome; ico = animaisInfo[t].icone;
-                    }
-                    if(qHave < qNeed) pode = false;
-                    reqs += `• ${ico} ${name}: <b style="color:${qHave>=qNeed?'#2ecc71':'#e74c3c'}">${qHave}/${qNeed}</b><br>`;
-                }
-
-                container.innerHTML += `
-                    <div class="contrato-box ${pode?'completavel':''}">
-                        <div class="contrato-header"><span>🏢 ${c.emp}</span><span style="color:#ffd700;">${c.valor} 🪙</span></div>
-                        <div style="font-size:13px; margin-bottom:10px;">${reqs}</div>
-                        <button class="btn-aceitar" ${pode?'':'disabled'} onclick="completarContrato(${idx})">Entregar Carga</button>
-                        <button class="btn-recusar" onclick="recusarContrato(${idx})">Recusar</button>
-                    </div>
-                `;
-            });
-            document.getElementById('contratos-modal').style.display = 'block';
-        }
-
-        function completarContrato(idx) {
-            let c = listaContratosAtivos[idx];
-            for(let key in c.pedido) {
-                let t = key.split('_')[1];
-                if(key.startsWith("frt_")) estoqueFrutas[t] -= c.pedido[key];
-                else estoqueAnimaisAdultos[t] -= c.pedido[key];
-            }
-            moedas += c.valor; listaContratosAtivos[idx] = null;
-            abrirContratos(); atualizarInterface();
-        }
-
-        function recusarContrato(idx) { listaContratosAtivos[idx] = null; abrirContratos(); }
-
-        function abrirMochila() {
-            fecharModais();
-            document.getElementById('m-agua').innerText = agua;
-            document.getElementById('m-racao').innerText = racao;
-            
-            let grid = document.getElementById('mochila-produtos-grid');
-            grid.innerHTML = '';
-            for(let k in estoqueFrutas) {
-                grid.innerHTML += `<div class="mochila-item"><span>${frutasInfo[k].icone}</span><div><span class="label">${frutasInfo[k].nome}</span><br>Estoque: <b>${estoqueFrutas[k]}</b></div></div>`;
-            }
-            for(let k in estoqueAnimaisAdultos) {
-                grid.innerHTML += `<div class="mochila-item"><span>${animaisInfo[k].icone}</span><div><span class="label">${animaisInfo[k].nome} M.</span><br>Estoque: <b>${estoqueAnimaisAdultos[k]}</b></div></div>`;
-            }
-            document.getElementById('mochila-modal').style.display = 'block';
-        }
-
-        function atualizarInterface() {
-            document.getElementById('moedas').innerText = moedas;
-            document.getElementById('hud-agua').innerText = agua;
-            document.getElementById('hud-racao').innerText = racao;
-
-            let slot1 = document.getElementById('slot-hot-laranja');
-            let slot2 = document.getElementById('slot-hot-maca');
-            let slot3 = document.getElementById('slot-hot-banana');
-            let slot4 = document.getElementById('slot-hot-melancia');
-
-            if (modoAtual === "plantio") {
-                document.getElementById('txt-ico-1').innerText = "🍊"; document.getElementById('hot-qtd-1').innerText = estoqueSementes.laranja;
-                document.getElementById('txt-ico-2').innerText = "🍎"; document.getElementById('hot-qtd-2').innerText = estoqueSementes.maca;
-                document.getElementById('txt-ico-3').innerText = "🍌"; document.getElementById('hot-qtd-3').innerText = estoqueSementes.banana;
-                document.getElementById('txt-ico-4').innerText = "🍉"; document.getElementById('hot-qtd-4').innerText = estoqueSementes.melancia;
-                slot4.style.display = "flex";
-                document.getElementById('semente-selecionada').innerText = frutasInfo[sementeSelecionada].nome + " " + frutasInfo[sementeSelecionada].icone;
-            } else {
-                document.getElementById('txt-ico-1').innerText = "🐔"; document.getElementById('hot-qtd-1').innerText = estoqueFilhotes.galinha;
-                document.getElementById('txt-ico-2').innerText = "🐷"; document.getElementById('hot-qtd-2').innerText = estoqueFilhotes.porco;
-                document.getElementById('txt-ico-3').innerText = "🐮"; document.getElementById('hot-qtd-3').innerText = estoqueFilhotes.vaca;
-                slot4.style.display = "none";
-                document.getElementById('semente-selecionada').innerText = "Filhote: " + animaisInfo[sementeSelecionada].nome + " " + animaisInfo[sementeSelecionada].icone;
-            }
-
-            document.querySelectorAll('.hotbar-slot').forEach(s => s.classList.remove('ativo'));
-            let idSel = sementeSelecionada === 'laranja' || sementeSelecionada === 'galinha' ? 'laranja' :
-                        sementeSelecionada === 'maca' || sementeSelecionada === 'porco' ? 'maca' : 
-                        sementeSelecionada === 'banana' || sementeSelecionada === 'vaca' ? 'banana' : 'melancia';
-            document.getElementById(`slot-hot-${idSel}`).classList.add('ativo');
-
-            let btnBicho = document.getElementById('btn-ir-animais');
-            if (pecuariaDesbloqueada) {
-                btnBicho.innerHTML = "Rancho de Animais 🐾 (Entrar)";
-                btnBicho.style.background = "#2ecc71";
-                btnBicho.style.borderColor = "#27ae60";
-            } else {
-                btnBicho.innerHTML = "Desbloquear Pecuária (20.000 🪙)";
-                btnBicho.style.background = "#e67e22";
-                btnBicho.style.borderColor = "#d35400";
-            }
-        }
-
-        function selecionarSlot(tipo) {
-            if (modoAtual === "plantio") { sementeSelecionada = tipo; } 
-            else { sementeSelecionada = tipo === 'laranja' ? 'galinha' : tipo === 'maca' ? 'porco' : 'vaca'; }
-            atualizarInterface();
-        }
-
-        atualizarInterface();
-        loopJogo();
-    </script>
-</body>
-</html>
+            galinha: { nome: "Galinha", custo: 150, icone: "🐔", tempo: 10000, valorVendaBase: 800 },
+            porco: { nome: "Porco", custo: 400
