@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazenda do Agrinho: Multi-Abas Edition</title>
+    <title>Fazenda do Agrinho: Professional Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -74,7 +74,7 @@
             width: 100%; background: #f1c40f; color: #1a252f; border: none; padding: 10px; font-weight: bold; border-radius: 8px; cursor: pointer; text-align: center; font-size: 12px;
         }
 
-        /* NAVEGAÇÃO / ABAS DA TELA INICIAL */
+        /* NAVEGAÇÃO / ABAS */
         .container-navegacao {
             position: absolute;
             top: 210px;
@@ -128,16 +128,17 @@
         }
         #trator::after { content: '🚜'; }
 
-        /* GRADES DAS ARENAS DE CAMPOS */
+        /* GRADES OPERACIONAIS */
         #zona-plantio-arena, #zona-agro-industrial {
             display: grid; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -40%);
             grid-template-columns: repeat(5, 100px); grid-gap: 14px; background: #3a2514; padding: 25px;
             border-radius: 24px; border: 5px solid #27170b; box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 20px 50px rgba(0,0,0,0.7);
             max-height: 50vh; overflow-y: auto;
         }
+        #zona-plantio-arena { display: none; } /* Só aparece na aba de Frutas */
         #zona-agro-industrial { display: none; }
 
-        /* SUB-ABAS INTERNAS DA GLEBA TECNOLÓGICA */
+        /* SUB-ABAS INTERNAS */
         .sub-abas-container {
             display: none; position: absolute; top: 135px; left: 50%; transform: translateX(-50%);
             gap: 10px; z-index: 6;
@@ -157,15 +158,16 @@
         .slot .status { font-size: 10px; margin-top: 8px; background: rgba(0, 0, 0, 0.85); padding: 3px 8px; border-radius: 10px; font-weight: 700; width: 85%; text-align: center; }
         .tag-tipo-lote { position: absolute; top: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; padding: 2px 5px; border-radius: 4px; }
 
-        /* GESTÃO DOS ANIMAIS (MODAL CLASSIFICADO) */
+        /* ANIMAIS INTERATIVOS */
         .container-animais-modal {
-            display: flex; justify-content: center; gap: 20px; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 16px;
+            display: flex; flex-direction: column; gap: 15px; margin: 20px 0; padding: 10px;
         }
-        .slot-animal-aba {
-            width: 110px; height: 120px; background: #273c75; border: 2px solid #fbc531; border-radius: 16px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 32px; box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        .item-animal-gerenciável {
+            display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04);
+            padding: 12px 20px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);
         }
-        .slot-animal-aba span { font-size: 11px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.6); padding: 3px 6px; border-radius: 6px; margin-top: 8px; text-transform: uppercase; }
+        .animal-perfil { display: flex; align-items: center; gap: 15px; font-size: 28px; }
+        .animal-info-status { font-size: 13px; color: #dcdde1; }
 
         /* HOTBAR */
         #hotbar-container {
@@ -174,18 +176,18 @@
             padding: 8px; display: flex; gap: 10px; border-radius: 20px; z-index: 10; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
         .hotbar-slot {
-            width: 70px; height: 70px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 28px; position: relative; cursor: pointer;
+            width: 60px; height: 60px; background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 24px; position: relative; cursor: pointer;
         }
-        .hotbar-slot .slot-num { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #aaa; font-weight: 800; }
-        .hotbar-slot .slot-qtd { position: absolute; bottom: 4px; right: 6px; font-size: 11px; color: #fff; font-weight: 700; background: #27ae60; padding: 2px 6px; border-radius: 6px; }
+        .hotbar-slot .slot-num { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #aaa; font-weight: 800; }
+        .hotbar-slot .slot-qtd { position: absolute; bottom: 2px; right: 4px; font-size: 10px; color: #fff; font-weight: 700; background: #27ae60; padding: 1px 4px; border-radius: 4px; }
         .hotbar-slot.ativo { background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
 
         /* MODAIS */
         .modal-janela {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: rgba(15, 22, 15, 0.96); backdrop-filter: blur(20px); border: 2px solid rgba(255, 255, 255, 0.1);
-            color: #fff; padding: 30px; border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,0.9); z-index: 100; width: 560px; max-height: 80vh; overflow-y: auto;
+            color: #fff; padding: 30px; border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,0.9); z-index: 100; width: 580px; max-height: 80vh; overflow-y: auto;
         }
         .modal-janela h3 { margin-top: 0; text-align: center; font-size: 24px; color: #4cd137; }
         .item-loja { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 14px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 14px; }
@@ -218,16 +220,15 @@
 
         <div class="container-navegacao" id="menu-navegacao">
             <button class="btn-navegacao" onclick="abrirMenuArenas()">Zonas de Expansão [H]</button>
-            <button class="btn-navegacao btn-aba-animal" onclick="abrirAbaAnimais()">Pecuária (Animais) 🐄</button>
+            <button class="btn-navegacao btn-aba-animal" onclick="abrirAbaAnimais()">Pecuária Interativa 🐄</button>
         </div>
         
         <button id="btn-voltar-sede" onclick="voltarParaSede()">⬅ Retornar ao Centro Logístico</button>
-        <div id="titulo-arena-hud">Sede Principal (Plantação Manual)</div>
+        <div id="titulo-arena-hud">Centro Logístico (Sede)</div>
 
         <div class="sub-abas-container" id="sub-abas-maquinas">
-            <button class="btn-sub-aba ativa" id="aba-filtro-tudo" onclick="filtrarGleba('tudo')">Mostrar Tudo</button>
-            <button class="btn-sub-aba" id="aba-filtro-soja" onclick="filtrarGleba('soja')">Setor de Soja 🌿</button>
-            <button class="btn-sub-aba" id="aba-filtro-cafe" onclick="filtrarGleba('cafe')">Setor de Café ☕</button>
+            <button class="btn-sub-aba ativa" id="aba-filtro-soja" onclick="filtrarGleba('soja')">Plantação de Soja 🌿</button>
+            <button class="btn-sub-aba" id="aba-filtro-cafe" onclick="filtrarGleba('cafe')">Plantação de Café ☕</button>
         </div>
 
         <div class="hub-industrial" id="zona-comercial-npcs">
@@ -252,19 +253,20 @@
         <div id="player">🤠</div>
         <div id="trator"></div>
 
-        <div id="zona-plantio-arena"></div>
-        <div id="zona-agro-industrial"></div>
-
-        <div id="hotbar-container">
-            <div class="hotbar-slot ativo" id="slot-hot-1" onclick="selecionarSlotIndex(0)"><span class="slot-num">1</span><span id="ico-slot-1">🌿</span><span class="slot-qtd" id="qtd-slot-1">5</span></div>
-            <div class="hotbar-slot" id="slot-hot-2" onclick="selecionarSlotIndex(1)"><span class="slot-num">2</span><span id="ico-slot-2">☕</span><span class="slot-qtd" id="qtd-slot-2">3</span></div>
+        <div id="zona-plantio-arena"></div> <div id="zona-agro-industrial"></div> <div id="hotbar-container">
+            <div class="hotbar-slot ativo" id="slot-hot-1" onclick="selecionarSlotIndex(0)"><span class="slot-num">1</span><span>🌿</span><span class="slot-qtd" id="qtd-slot-1">5</span></div>
+            <div class="hotbar-slot" id="slot-hot-2" onclick="selecionarSlotIndex(1)"><span class="slot-num">2</span><span>☕</span><span class="slot-qtd" id="qtd-slot-2">3</span></div>
+            <div class="hotbar-slot" id="slot-hot-3" onclick="selecionarSlotIndex(2)"><span class="slot-num">3</span><span>🍊</span><span class="slot-qtd" id="qtd-slot-3">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-4" onclick="selecionarSlotIndex(3)"><span class="slot-num">4</span><span>🍌</span><span class="slot-qtd" id="qtd-slot-4">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-5" onclick="selecionarSlotIndex(4)"><span class="slot-num">5</span><span>🍉</span><span class="slot-qtd" id="qtd-slot-5">0</span></div>
+            <div class="hotbar-slot" id="slot-hot-6" style="background:rgba(211, 84, 0, 0.2)"><span class="slot-num">6</span><span>🌾</span><span class="slot-qtd" id="qtd-slot-6" style="background:#d35400">0</span></div>
         </div>
 
         <div id="controles">
-            <strong style="color: #2ecc71; font-size: 13px;">Sistemas de Campo:</strong><br>
-            • Controle Geral: <b>W, A, S, D</b><br>
-            • Sede: Clique na terra para Plantar/Regar/Colher<br>
-            • Gleba/Pomar: Entrar Trator <b>[Z]</b> | Sair <b>[X]</b> | Semear Trator <b>[M]</b>
+            <strong style="color: #2ecc71; font-size: 13px;">Sistemas Ativos:</strong><br>
+            • Movimento: <b>W, A, S, D</b><br>
+            • Gleba Mecanizada: Entrar Trator <b>[Z]</b> | Sair <b>[X]</b> | Semear <b>[M] (Obrigatório Trator)</b><br>
+            • Pomar de Frutas: Clique nos canteiros para Plantar, Regar e Colher.
         </div>
     </div>
 
@@ -273,23 +275,18 @@
     <div id="exportacao-modal" class="modal-janela"><h3 style="color:#2ecc71">Mesa Logística de Exportação 🏢</h3><div id="lista-contratos-exportacao"></div><button class="btn-fechar" onclick="fecharModais()">Sair</button></div>
     
     <div id="animais-modal" class="modal-janela">
-        <h3>Aba de Gestão: Canteiro de Animais 🐾</h3>
-        <p style="text-align:center; color:#aaa;">Animais ativos e monitorados no centro pecuário:</p>
-        <div class="container-animais-modal">
-            <div class="slot-animal-aba">🐄<span>Nelore</span></div>
-            <div class="slot-animal-aba">🐔<span>Galinha</span></div>
-            <div class="slot-animal-aba">🐖<span>Porco</span></div>
-        </div>
-        <button class="btn-fechar" onclick="fecharModais()">Fechar Aba de Animais</button>
+        <h3>Canteiro de Pecuária Interativa 🐾</h3>
+        <p style="text-align:center; color:#aaa;">Alimente seus animais com ração. Eles exigem <b>Nível 3</b> para comercialização.</p>
+        <div class="container-animais-modal" id="box-animais-interativos"></div>
+        <button class="btn-fechar" onclick="fecharModais()">Fechar Painel Pecuário</button>
     </div>
 
     <div id="arenas-modal" class="modal-janela">
         <h3>Mudar de Região Territorial 🚜</h3>
-        <div class="arenas-grid" id="grid-botoes-arenas">
-            <button class="btn-navegacao" style="background:#855e42;" onclick="voltarParaSede()">Sede Principal (Manual)</button>
-            <button class="btn-navegacao" style="background:#2c3e50;" onclick="viajarParaAgro()">Gleba Tecnológica (Soja e Café)</button>
-            <div id="bloqueio-pomar-container">
-                </div>
+        <div class="arenas-grid">
+            <button class="btn-navegacao" style="background:#855e42;" onclick="voltarParaSede()">Centro Logístico (Sede)</button>
+            <button class="btn-navegacao" style="background:#2c3e50;" onclick="viajarParaAgro()">Gleba Tecnológica (Soja / Café)</button>
+            <button class="btn-navegacao" style="background:#9b59b6;" onclick="viajarParaPomar()">Aba de Expansão: Pomar de Frutas (Grátis ✨)</button>
         </div>
         <button class="btn-fechar" onclick="fecharModais()">Sair</button>
     </div>
@@ -301,25 +298,31 @@
         let trator = { x: 300, y: 350, ativo: false };
         let moedas = 150; let agua = 10; let maxAgua = 10;
         let sementeSelecionada = "soja"; let arenaAtual = "sede"; let slotAtivoIdx = 0;
-        let filtroGlebaAtual = "tudo";
-
-        // DESBLOQUEIOS DAS ABAS DE EXPANSÃO
-        let pomarFrutasLiberado = false;
+        let filtroGlebaAtual = "soja";
 
         let cheats = { moedas: false, agua: false };
 
         const frutasInfo = {
             soja: { nome: "Soja Industrial", custo: 120, icone: "🌿", tempo: 8000 },
-            cafe: { nome: "Café Gourmet", custo: 200, icone: "☕", tempo: 12000 }
+            cafe: { nome: "Café Gourmet", custo: 200, icone: "☕", tempo: 12000 },
+            laranja: { nome: "Laranja Doce", custo: 50, icone: "🍊", tempo: 6000 },
+            banana: { nome: "Banana Prata", custo: 60, icone: "🍌", tempo: 7000 },
+            melancia: { nome: "Melancia Doce", custo: 90, icone: "🍉", tempo: 10000 }
         };
 
-        let estoqueSementes = { soja: 5, cafe: 3 };
-        let estoqueFrutas = { soja: 0, cafe: 0 };
+        let estoqueSementes = { soja: 5, cafe: 3, laranja: 2, banana: 2, melancia: 2, racao: 2 };
+        let estoqueFrutas = { soja: 0, cafe: 0, laranja: 0, banana: 0, melancia: 0 };
 
-        // GRADES DE PRODUÇÃO ORIGINAIS PRESERVADAS
-        let sedeSlots = Array(10).fill(null).map(() => ({ status: "vazio", fruta: null }));
+        // SISTEMA DE ANIMAIS COM MANEJO DE NÍVEL E RAÇÃO
+        let dadosAnimais = [
+            { id: 0, nome: "Boi Nelore", icone: "🐄", nivel: 1, precoVenda: 1200 },
+            { id: 1, nome: "Galinha Poedeira", icone: "🐔", nivel: 1, precoVenda: 300 },
+            { id: 2, nome: "Porco Caipira", icone: "🐖", nivel: 1, precoVenda: 750 }
+        ];
+
+        // GRADES DE PRODUÇÃO E EXPANSÕES REESTRUTURADAS
+        let pomarSlots = Array(10).fill(null).map(() => ({ status: "vazio", fruta: null }));
         let agroIndustrialSlots = [
-            { tipoLote: "soja", status: "vazio", fruta: null },
             { tipoLote: "soja", status: "vazio", fruta: null },
             { tipoLote: "soja", status: "vazio", fruta: null },
             { tipoLote: "cafe", status: "vazio", fruta: null },
@@ -327,10 +330,10 @@
         ];
 
         let listaContratosExportacao = [null, null, null];
-        const tradings = ["Amaggi S.A.", "Louis Dreyfus", "Cargill Global", "Bunge Latam"];
+        const tradings = ["Cutrale Ltda", "Citrosuco", "Amaggi Frutas", "Cargill Logistics"];
         const teclas = {};
 
-        // CAPTURA DE TECLADO IMPEDINDO BLOQUEIOS DE FOCO DOS MENUS
+        // CONTROLES GLOBAIS DE CAMPO
         window.addEventListener('keydown', (e) => {
             const t = e.key.toLowerCase(); 
             teclas[t] = true;
@@ -338,17 +341,14 @@
             if (t === 'h') abrirMenuArenas();
             if (t === 'z' && (arenaAtual === "agro" || arenaAtual === "pomar")) { trator.ativo = true; }
             if (t === 'x' && (arenaAtual === "agro" || arenaAtual === "pomar")) { trator.ativo = false; jogador.x = trator.x + 45; jogador.y = trator.y; }
-            if (t === 'm' && trator.ativo) {
-                if(arenaAtual === "agro") executarSemeaduraTrator();
-                if(arenaAtual === "pomar") executarSemeaduraPomar();
-            }
+            if (t === 'm' && trator.ativo && arenaAtual === "agro") { executarSemeaduraTrator(); }
             
             if (arenaAtual === "sede") {
                 if (t === 'l') abrirLoja(); 
                 if (t === 'v') abrirAmbulante();
                 if (t === 'e') abrirExportacao();
             }
-            if (["1","2"].includes(e.key)) { selecionarSlotIndex(parseInt(e.key)-1); }
+            if (["1","2","3","4","5"].includes(e.key)) { selecionarSlotIndex(parseInt(e.key)-1); }
             atualizarInterface();
         });
         
@@ -398,58 +398,128 @@
             requestAnimationFrame(loopJogo);
         }
 
-        // ABA DE ANIMAIS (TELA INICIAL)
+        // GERENCIAMENTO DA PECUÁRIA INTERATIVA
         function abrirAbaAnimais() {
             fecharModais();
+            renderizarPainelPecuaria();
             document.getElementById('animais-modal').style.display = 'block';
         }
 
-        // Plantação Manual Sede
-        function renderizarCanteirosSede() {
-            const container = document.getElementById('zona-plantio-arena'); container.innerHTML = '';
-            sedeSlots.forEach((c, idx) => {
-                let html = `🟫<span class="status">Vazio</span>`;
-                if (c.status === "plantado") html = `🌱<span class="status" style="background:#e67e22;">Seco</span>`;
-                else if (c.status === "regado") html = `💧🌱<span class="status" style="background:#3498db;">Crescendo</span>`;
-                else if (c.status === "pronto") html = `${frutasInfo[c.fruta].icone}<span class="status" style="background:#2ecc71;">Colher</span>`;
-                container.innerHTML += `<div class="slot" onclick="clickSlotSede(${idx})">${html}</div>`;
+        function renderizarPainelPecuaria() {
+            const container = document.getElementById('box-animais-interativos');
+            container.innerHTML = '';
+            dadosAnimais.forEach(an => {
+                let statusVenda = an.nivel >= 3 ? `<button class="btn-comprar" style="background:#2ecc71" onclick="venderAnimal(${an.id})">Vender (+${an.precoVenda} 🪙)</button>` : `<button class="btn-comprar" style="background:#7f8c8d" disabled>Exige Nível 3 para Venda</button>`;
+                container.innerHTML += `
+                    <div class="item-animal-gerenciável">
+                        <div class="animal-perfil">
+                            <div>${an.icone}</div>
+                            <div class="animal-info-status">
+                                <b>${an.nome}</b><br>
+                                <span style="color:#f1c40f">⭐ Nível de Manejo: ${an.nivel}/3</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn-comprar" style="background:#e67e22" onclick="alimentarAnimal(${an.id})">Alimentar (1x Ração 🌾)</button>
+                            ${statusVenda}
+                        </div>
+                    </div>`;
             });
         }
 
-        function clickSlotSede(idx) {
-            let c = sedeSlots[idx];
+        function alimentarAnimal(id) {
+            if (estoqueSementes.racao > 0) {
+                estoqueSementes.racao--;
+                if(dadosAnimais[id].nivel < 3) dadosAnimais[id].nivel++;
+                renderizarPainelPecuaria();
+                atualizarInterface();
+            } else {
+                alert("Você não possui ração no estoque! Compre mais na Lojinha.");
+            }
+        }
+
+        function venderAnimal(id) {
+            moedas += dadosAnimais[id].precoVenda;
+            dadosAnimais[id].nivel = 1; // Reseta o ciclo de engorda
+            renderizarPainelPecuaria();
+            atualizarInterface();
+        }
+
+        // ABA DE FRUTAS (POMAR TOTALMENTE INTERATIVO E MANUAl COM REGA OBRIGATÓRIA)
+        function viajarParaPomar() {
+            arenaAtual = "pomar"; fecharModais(); ajustarVisibilidadeCenario(false);
+            document.getElementById('titulo-arena-hud').innerText = `Zona de Expansão: Pomar de Frutas Coletivas 🍊🍌🍉`;
+            document.getElementById('trator').style.display = 'flex';
+            document.getElementById('zona-agro-industrial').style.display = 'none';
+            document.getElementById('sub-abas-maquinas').style.display = 'none';
+            
+            renderizarCanteirosPomar();
+            document.getElementById('zona-plantio-arena').style.display = 'grid';
+        }
+
+        function renderizarCanteirosPomar() {
+            const container = document.getElementById('zona-plantio-arena'); container.innerHTML = '';
+            pomarSlots.forEach((c, idx) => {
+                let html = `🟫<span class="status">Vazio</span>`;
+                if (c.status === "plantado") html = `🌱<span class="status" style="background:#e67e22;">Exige Água</span>`;
+                else if (c.status === "regado") html = `💧🌱<span class="status" style="background:#3498db;">Crescendo</span>`;
+                else if (c.status === "pronto") html = `${frutasInfo[c.fruta].icone}<span class="status" style="background:#2ecc71;">Colher</span>`;
+                container.innerHTML += `<div class="slot" onclick="clickSlotPomar(${idx})">${html}</div>`;
+            });
+        }
+
+        function clickSlotPomar(idx) {
+            let c = pomarSlots[idx];
+            // Verifica se está com fruta de pomar selecionada
             if (c.status === "vazio") {
-                if (estoqueSementes[sementeSelecionada] > 0) {
+                if (["laranja", "banana", "melancia"].includes(sementeSelecionada) && estoqueSementes[sementeSelecionada] > 0) {
                     estoqueSementes[sementeSelecionada]--;
                     c.status = "plantado"; c.fruta = sementeSelecionada;
+                } else if (!["laranja", "banana", "melancia"].includes(sementeSelecionada)) {
+                    alert("Selecione uma fruta válida (Laranja, Banana ou Melancia) na Hotbar!");
                 }
             } else if (c.status === "plantado") {
                 if (agua > 0) {
                     if (!cheats.agua) agua--;
                     c.status = "regado";
-                    setTimeout(() => { c.status = "pronto"; renderizarCanteirosSede(); }, frutasInfo[c.fruta].tempo);
+                    setTimeout(() => { c.status = "pronto"; if(arenaAtual === "pomar") renderizarCanteirosPomar(); }, frutasInfo[c.fruta].tempo);
+                } else {
+                    alert("Reservatório vazio! Abasteça na Lojinha.");
                 }
             } else if (c.status === "pronto") {
                 estoqueFrutas[c.fruta]++; c.status = "vazio"; c.fruta = null;
             }
-            renderizarCanteirosSede(); atualizarInterface();
+            renderizarCanteirosPomar(); atualizarInterface();
         }
 
-        // FILTRAR GLEBA ENTRE AS ABAS (SOJA E CAFÉ)
+        // GLEBA TECNOLÓGICA (ABAS FILTRADAS E USO OBRIGATÓRIO DO TRATOR)
         function filtrarGleba(tipo) {
             filtroGlebaAtual = tipo;
             document.querySelectorAll('.btn-sub-aba').forEach(b => b.classList.remove('ativa'));
-            if(tipo === 'tudo') document.getElementById('aba-filtro-tudo').classList.add('ativa');
             if(tipo === 'soja') document.getElementById('aba-filtro-soja').classList.add('ativa');
             if(tipo === 'cafe') document.getElementById('aba-filtro-cafe').classList.add('ativa');
             renderizarCanteirosAgro();
         }
 
-        // Semeadura Trator Agro
+        function viajarParaAgro() {
+            arenaAtual = "agro"; fecharModais(); ajustarVisibilidadeCenario(false);
+            document.getElementById('titulo-arena-hud').innerText = `Gleba Tecnológica (Uso Obrigatório do Trator) 🚜`;
+            document.getElementById('trator').style.display = 'flex';
+            document.getElementById('zona-plantio-arena').style.display = 'none';
+            document.getElementById('sub-abas-maquinas').style.display = 'flex';
+            filtrarGleba('soja');
+        }
+
         function executarSemeaduraTrator() {
+            if (!trator.ativo) return; // Trator obrigatório
+            if (sementeSelecionada !== filtroGlebaAtual) {
+                alert(`Mude a aba ou selecione a cultura correspondente à aba aberta (${filtroGlebaAtual})!`);
+                return;
+            }
             if (estoqueSementes[sementeSelecionada] <= 0) return;
+
             let canteirosEls = document.querySelectorAll('#zona-agro-industrial .slot');
-            canteirosEls.forEach((el, idx) => {
+            canteirosEls.forEach((el) => {
                 let rect = el.getBoundingClientRect();
                 let dist = Math.hypot((rect.left + 50) - (trator.x + 35), (rect.top + 50) - (trator.y + 35));
                 if (dist < 150) {
@@ -458,7 +528,7 @@
                     if (c && c.status === "vazio" && c.tipoLote === sementeSelecionada) {
                         estoqueSementes[sementeSelecionada]--;
                         c.status = "plantado"; c.fruta = sementeSelecionada;
-                        setTimeout(() => { c.status = "pronto"; renderizarCanteirosAgro(); }, frutasInfo[c.fruta].tempo);
+                        setTimeout(() => { c.status = "pronto"; if(arenaAtual === "agro") renderizarCanteirosAgro(); }, frutasInfo[c.fruta].tempo);
                     }
                 }
             });
@@ -468,8 +538,7 @@
         function renderizarCanteirosAgro() {
             const container = document.getElementById('zona-agro-industrial'); container.innerHTML = '';
             agroIndustrialSlots.forEach((c, idx) => {
-                // Filtro de abas (soja/café) aplicados aqui
-                if (filtroGlebaAtual !== "tudo" && c.tipoLote !== filtroGlebaAtual) return;
+                if (c.tipoLote !== filtroGlebaAtual) return;
 
                 let cor = c.tipoLote === "soja" ? "#2ecc71" : "#e67e22";
                 let html = `<div class="tag-tipo-lote" style="background:${cor}">${c.tipoLote}</div>🟫<span class="status">Vazio</span>`;
@@ -481,7 +550,7 @@
         }
 
         function clickSlotAgroManualmente(idx) {
-            if (trator.ativo) return;
+            if (trator.ativo) return; // Colheita manual a pé
             let c = agroIndustrialSlots[idx];
             if (c && c.status === "pronto") {
                 estoqueFrutas[c.fruta]++; c.status = "vazio"; c.fruta = null; renderizarCanteirosAgro(); atualizarInterface();
@@ -497,68 +566,29 @@
             }
         }
 
-        // EXCLUSIVO: EXPANSÃO DO SEGUNDO CANTEIRO DE FRUTAS (POMAR COLETIVO)
-        function comprarAbaPomar() {
-            if (moedas >= 10000) {
-                if (!cheats.moedas) moedas -= 10000;
-                pomarFrutasLiberado = true;
-                abrirMenuArenas();
-            } else {
-                alert("Moedas insuficientes! Você precisa de 10.000 moedas.");
-            }
-        }
-
-        function viajarParaPomar() {
-            arenaAtual = "pomar"; fecharModais(); ajustarVisibilidadeCenario(false);
-            document.getElementById('titulo-arena-hud').innerText = `Zona de Expansão: Pomar de Frutas 🍓`;
-            document.getElementById('trator').style.display = 'flex';
-            document.getElementById('zona-agro-industrial').style.display = 'none';
-            document.getElementById('sub-abas-maquinas').style.display = 'none';
-            
-            // O Pomar usa a grade da sede mas permite operar em modo avançado
-            renderizarCanteirosSede();
-            document.getElementById('zona-plantio-arena').style.display = 'grid';
-        }
-
-        function executarSemeaduraPomar() {
-            // Permite o trator semear na grade do pomar coletivo
-            if (estoqueSementes[sementeSelecionada] <= 0) return;
-            let canteirosEls = document.querySelectorAll('#zona-plantio-arena .slot');
-            canteirosEls.forEach((el, idx) => {
-                let rect = el.getBoundingClientRect();
-                let dist = Math.hypot((rect.left + 50) - (trator.x + 35), (rect.top + 50) - (trator.y + 35));
-                if (dist < 150) {
-                    let c = sedeSlots[idx];
-                    if (c && c.status === "vazio") {
-                        estoqueSementes[sementeSelecionada]--;
-                        c.status = "plantado"; c.fruta = sementeSelecionada;
-                        setTimeout(() => { c.status = "pronto"; if(arenaAtual === "pomar") renderizarCanteirosSede(); }, frutasInfo[c.fruta].tempo);
-                    }
-                }
-            });
-            renderizarCanteirosSede(); atualizarInterface();
-        }
-
-        // Logística e Contratos
+        // INTERFACES LOGÍSTICAS E CONTRATOS RECONSTRUÍDOS PARA NOVAS FRUTAS
         function abrirExportacao() {
             fecharModais(); const container = document.getElementById('lista-contratos-exportacao'); container.innerHTML = '';
             for (let i = 0; i < 3; i++) {
                 if (listaContratosExportacao[i] === null) {
                     let emp = tradings[Math.floor(Math.random() * tradings.length)];
-                    let poolTipos = ["soja_pura", "cafe_puro", "misto"];
-                    let modoContrato = poolTipos[Math.floor(Math.random() * poolTipos.length)];
-                    let reqSoja = modoContrato !== "cafe_puro" ? Math.floor(Math.random() * 4) + 2 : 0;
-                    let reqCafe = modoContrato !== "soja_pura" ? Math.floor(Math.random() * 3) + 2 : 0;
-                    let valorTotal = (reqSoja * (frutasInfo.soja.custo + 60)) + (reqCafe * (frutasInfo.cafe.custo + 60));
-                    listaContratosExportacao[i] = { emp, reqSoja, reqCafe, valor: valorTotal };
+                    let reqLaranja = Math.floor(Math.random() * 4) + 2;
+                    let reqBanana = Math.floor(Math.random() * 3) + 1;
+                    let reqMelancia = Math.floor(Math.random() * 2) + 1;
+                    let valorTotal = (reqLaranja * 90) + (reqBanana * 100) + (reqMelancia * 150);
+                    listaContratosExportacao[i] = { emp, reqLaranja, reqBanana, reqMelancia, valor: valorTotal };
                 }
             }
             listaContratosExportacao.forEach((c, idx) => {
-                let podeCumprir = estoqueFrutas.soja >= c.reqSoja && estoqueFrutas.cafe >= c.reqCafe;
+                let podeCumprir = estoqueFrutas.laranja >= c.reqLaranja && estoqueFrutas.banana >= c.reqBanana && estoqueFrutas.melancia >= c.reqMelancia;
                 container.innerHTML += `
                     <div class="item-loja" style="flex-direction:column; align-items:flex-start">
                         <div style="font-weight:bold; color:#2ecc71">🏢 ${c.emp}</div>
-                        <div style="font-size:12px; margin: 6px 0; color:#dcdde1">📦 Pedido: ${c.reqSoja}x Soja (Tem: ${estoqueFrutas.soja}) | ${c.reqCafe}x Café (Tem: ${estoqueFrutas.cafe})</div>
+                        <div style="font-size:12px; margin: 6px 0; color:#dcdde1">
+                            🍊 Laranja: ${c.reqLaranja} (Tem: ${estoqueFrutas.laranja}) | 
+                            🍌 Banana: ${c.reqBanana} (Tem: ${estoqueFrutas.banana}) | 
+                            🍉 Melancia: ${c.reqMelancia} (Tem: ${estoqueFrutas.melancia})
+                        </div>
                         <button class="btn-comprar" style="background:#2ecc71; width:100%" ${podeCumprir?'':'disabled'} onclick="completarContratoExportacao(${idx})">Cumprir Contrato (+${c.valor} 🪙)</button>
                     </div>`;
             });
@@ -567,38 +597,19 @@
 
         function completarContratoExportacao(idx) {
             let c = listaContratosExportacao[idx];
-            estoqueFrutas.soja -= c.reqSoja; estoqueFrutas.cafe -= c.reqCafe;
+            estoqueFrutas.laranja -= c.reqLaranja; estoqueFrutas.banana -= c.reqBanana; estoqueFrutas.melancia -= c.reqMelancia;
             moedas += c.valor; listaContratosExportacao[idx] = null; abrirExportacao();
         }
 
-        function abrirMenuArenas() {
-            fecharModais();
-            let containerBloqueio = document.getElementById('bloqueio-pomar-container');
-            if (pomarFrutasLiberado) {
-                containerBloqueio.innerHTML = `<button class="btn-navegacao" style="background:#9b59b6;" onclick="viajarParaPomar()">Aba de Expansão: Pomar de Frutas (Desbloqueado)</button>`;
-            } else {
-                containerBloqueio.innerHTML = `<button class="btn-navegacao" style="background:#7f8c8d;" onclick="comprarAbaPomar()">🔒 Desbloquear Aba Frutas (10.000 🪙)</button>`;
-            }
-            document.getElementById('arenas-modal').style.display = 'block';
-        }
-
-        function viajarParaAgro() {
-            arenaAtual = "agro"; fecharModais(); ajustarVisibilidadeCenario(false);
-            document.getElementById('titulo-arena-hud').innerText = `Gleba de Alta Tecnologia 🚜`;
-            document.getElementById('trator').style.display = 'flex';
-            document.getElementById('zona-plantio-arena').style.display = 'none';
-            document.getElementById('sub-abas-maquinas').style.display = 'flex';
-            filtrarGleba('tudo');
-        }
+        function abrirMenuArenas() { fecharModais(); document.getElementById('arenas-modal').style.display = 'block'; }
 
         function voltarParaSede() {
             arenaAtual = "sede"; trator.ativo = false; fecharModais(); ajustarVisibilidadeCenario(true);
-            document.getElementById('titulo-arena-hud').innerText = `Sede Principal (Plantação Manual)`;
+            document.getElementById('titulo-arena-hud').innerText = `Centro Logístico (Sede)`;
             document.getElementById('trator').style.display = 'none';
             document.getElementById('zona-agro-industrial').style.display = 'none';
+            document.getElementById('zona-plantio-arena').style.display = 'none';
             document.getElementById('sub-abas-maquinas').style.display = 'none';
-            renderizarCanteirosSede(); 
-            document.getElementById('zona-plantio-arena').style.display = 'grid';
         }
 
         function ajustarVisibilidadeCenario(mostrar) {
@@ -612,17 +623,22 @@
         function abrirLoja() {
             fecharModais(); let container = document.getElementById('lista-itens');
             container.innerHTML = `
-                <div class="item-loja"><span>💧 Abastecimento Hidráulico</span><button class="btn-comprar" onclick="comprarItem('agua')">Encher por 5 🪙</button></div>
-                <div class="item-loja"><span>🌿 Sementes de Soja Comercial</span><button class="btn-comprar" onclick="comprarItem('sem_soja')">120 🪙</button></div>
-                <div class="item-loja"><span>☕ Sementes de Café Arábica</span><button class="btn-comprar" onclick="comprarItem('sem_cafe')">200 🪙</button></div>
+                <div class="item-loja"><span>💧 Refil de Água Hidráulica</span><button class="btn-comprar" onclick="comprarItem('agua')">Encher por 5 🪙</button></div>
+                <div class="item-loja"><span>🌾 Saco de Ração de Manejo</span><button class="btn-comprar" onclick="comprarItem('racao')">30 🪙</button></div>
+                <div class="item-loja"><span>🌿 Sementes de Soja</span><button class="btn-comprar" onclick="comprarItem('soja')">120 🪙</button></div>
+                <div class="item-loja"><span>☕ Sementes de Café</span><button class="btn-comprar" onclick="comprarItem('cafe')">200 🪙</button></div>
+                <div class="item-loja"><span>🍊 Sementes de Laranja</span><button class="btn-comprar" onclick="comprarItem('laranja')">50 🪙</button></div>
+                <div class="item-loja"><span>🍌 Sementes de Banana</span><button class="btn-comprar" onclick="comprarItem('banana')">60 🪙</button></div>
+                <div class="item-loja"><span>🍉 Sementes de Melancia</span><button class="btn-comprar" onclick="comprarItem('melancia')">90 🪙</button></div>
             `;
             document.getElementById('loja-modal').style.display = 'block';
         }
 
         function comprarItem(id) {
             if (id === 'agua' && moedas >= 5) { if (!cheats.moedas) moedas -= 5; agua = maxAgua; }
-            else if (id.startsWith('sem_')) {
-                let t = id.split('_')[1]; if (moedas >= frutasInfo[t].custo) { if (!cheats.moedas) moedas -= frutasInfo[t].custo; estoqueSementes[t]++; }
+            else if (id === 'racao' && moedas >= 3) { if (!cheats.moedas) moedas -= 30; estoqueSementes.racao++; }
+            else if (frutasInfo[id]) {
+                if (moedas >= frutasInfo[id].custo) { if (!cheats.moedas) moedas -= frutasInfo[id].custo; estoqueSementes[id]++; }
             }
             abrirLoja(); atualizarInterface();
         }
@@ -630,18 +646,18 @@
         function abrirAmbulante() {
             fecharModais(); let container = document.getElementById('lista-vendas-individuais'); container.innerHTML = '';
             for(let key in estoqueFrutas) {
-                let p = frutasInfo[key].custo + 10; let q = estoqueFrutas[key];
-                container.innerHTML += `<div class="item-loja"><span>${frutasInfo[key].icone} ${frutasInfo[key].nome}: ${q}</span><button class="btn-vender-unidade" ${q<=0?'disabled':''} onclick="venderIndividual('${key}')">Vender por +${p} 🪙</button></div>`;
+                let p = frutasInfo[key].custo + 15; let q = estoqueFrutas[key];
+                container.innerHTML += `<div class="item-loja"><span>${frutasInfo[key].icone} Unidade de ${frutasInfo[key].nome}: ${q}</span><button class="btn-vender-unidade" ${q<=0?'disabled':''} onclick="venderIndividual('${key}')">Vender por +${p} 🪙</button></div>`;
             }
             document.getElementById('ambulante-modal').style.display = 'block';
         }
 
         function venderIndividual(tipo) {
-            if(estoqueFrutas[tipo] > 0) { estoqueFrutas[tipo]--; moedas += (frutasInfo[tipo].custo + 10); abrirAmbulante(); }
+            if(estoqueFrutas[tipo] > 0) { estoqueFrutas[tipo]--; moedas += (frutasInfo[tipo].custo + 15); abrirAmbulante(); }
         }
 
         function selecionarSlotIndex(idx) {
-            slotAtivoIdx = idx; let pools = ["soja", "cafe"];
+            slotAtivoIdx = idx; let pools = ["soja", "cafe", "laranja", "banana", "melancia"];
             if(pools[idx]) sementeSelecionada = pools[idx];
             document.querySelectorAll('.hotbar-slot').forEach((s, i) => {
                 if(i === idx) s.classList.add('ativo'); else s.classList.remove('ativo');
@@ -652,11 +668,14 @@
         function atualizarInterface() {
             document.getElementById(`qtd-slot-1`).innerText = estoqueSementes.soja;
             document.getElementById(`qtd-slot-2`).innerText = estoqueSementes.cafe;
-            document.getElementById('semente-selecionada').innerText = frutasInfo[sementeSelecionada].nome;
+            document.getElementById(`qtd-slot-3`).innerText = estoqueSementes.laranja;
+            document.getElementById(`qtd-slot-4`).innerText = estoqueSementes.banana;
+            document.getElementById(`qtd-slot-5`).innerText = estoqueSementes.melancia;
+            document.getElementById(`qtd-slot-6`).innerText = estoqueSementes.racao;
+            document.getElementById('semente-selecionada').innerText = frutasInfo[sementeSelecionada] ? frutasInfo[sementeSelecionada].nome : sementeSelecionada;
         }
 
-        // INICIALIZAÇÃO DO ECOSSISTEMA
-        renderizarCanteirosSede();
+        // INICIALIZAÇÃO
         atualizarInterface();
         loopJogo();
     </script>
